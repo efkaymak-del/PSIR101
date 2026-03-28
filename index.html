@@ -1,0 +1,159 @@
+# PSIR101 — Introduction to Global Politics
+### Course Companion Web App · Eastern Mediterranean University · Spring 2026
+
+---
+
+## Project Overview
+
+A comprehensive, mobile-friendly course companion app for **PSIR101 – Introduction to Global Politics** at Eastern Mediterranean University's Faculty of Business and Economics. Built as a static web app (HTML + CSS + JavaScript), it consolidates all course materials into one polished, interactive experience.
+
+---
+
+## ✅ Implemented Features
+
+### 1. Dashboard (Homepage)
+- Hero section with course overview, semester info, and animated globe
+- Quick stats (15 weeks, 9 modules, 3 lecturers, 5 study games)
+- **Current week banner** showing live course focus with key dates
+- **Assessment donut chart** (Final 40%, Midterm 30%, Participation 10%, Tutorial 10%, Assignments 10%)
+- Key academic dates timeline with past/current/future styling
+- Quick launch buttons for all 5 study tools
+- All 3 lecturer profiles with office hours and email links
+
+### 2. Course Information Page
+- Full course details table (code, credits, ECTS, prerequisites)
+- Course aims and learning outcomes
+- Assessment breakdown with color-coded percentages
+- Knowledge, Skills & Values outcomes
+- All 6 course policies (Attendance, Exams, Make-up, Mobile Phones, Academic Honesty, Readings)
+
+### 3. Weekly Modules (All 9 Modules)
+Each module card includes:
+- **Required & recommended readings** with article links
+- **Videos** (YouTube links)
+- **Key concepts** as filterable tags
+- **Key dates & holidays** with color alerts
+- **Discussion questions** (3 per week)
+- **Theory Lenses panel** showing how each IR theory interprets the topic
+- **Special interactive elements:**
+  - Week 6 (UN): 6 flip cards for the UN's principal organs
+  - Week 10 (Race): 3 case study cards (Haiti, Apartheid, Civil Rights)
+  - Weeks 8–9: Midterm period notice with prep tips
+  - Weeks 14–15: Final exam checklist
+
+Modules covered:
+- Weeks 1–2: Introduction & World Politics
+- Week 3: Globalization
+- Weeks 4–5: International Organizations
+- Week 6: The United Nations
+- Week 7: Gender in World Politics
+- Weeks 8–9: Mid-Term Period
+- Week 10: Race in World Politics
+- Week 11: Human Rights
+- Week 12: Environmental Issues & AI
+- Week 13: Cyprus Conflict
+- Weeks 14–15: Conclusion & Q&A
+
+### 4. Study Arena (5 Interactive Games)
+1. **Quick Quiz** — 20 MCQs across all 9 modules; shuffled, with instant feedback and explanations
+2. **Fill in the Blank** — 8 sentence completion exercises with drag-select word choices
+3. **Concept Matching** — 4 matching sets (IR Theories, Key Thinkers, UN Organs, Events & Dates)
+4. **Timeline Sort** — 3 drag-and-drop chronology challenges (IOs, Race/Civil Rights, Cyprus)
+5. **Theory Identifier** — 10 statements to identify as Realism/Liberalism/Constructivism/Marxism/Feminism/Post-colonialism
+
+Live score and streak counter track session performance.
+
+### 5. Essay Writing Lab (5 Tools)
+1. **Thesis Builder** — Step-by-step thesis construction with live preview, 10 PSIR101 practice topics, and a 5-point checklist
+2. **PEEL Paragraph Builder** — Color-coded Point/Evidence/Explanation/Link builder with real-time paragraph assembly and example
+3. **Essay Planner** — Full 5-block essay structure (Intro, 3×Body, Conclusion) with completeness meter and clipboard export
+4. **Paragraph Scramble** — Drag-and-drop reordering of 3 real PEEL paragraphs (UN, Globalization, Race)
+5. **Self-Assessment Scorecard** — Paste draft text; automated analysis checks for argument language, evidence signals, PEEL structure, and engagement markers; + manual 1–5 slider ratings
+
+### 6. Theory Explorer
+- Select any of 9 topics (Globalization, UN, Gender, Race, Human Rights, Environment, Cyprus, NATO, Climate)
+- 6 theory cards appear simultaneously (Realism, Liberalism, Marxism, Constructivism, Feminism, Post-colonialism) with topic-specific content
+- Random topic button
+- Theory Challenge quiz: identify which theory a statement reflects (10 statements)
+
+---
+
+## 📁 File Structure
+
+```
+index.html              Main app file (all pages)
+css/
+  style.css             Master stylesheet (responsive, mobile-first)
+js/
+  data.js               All question banks, terms, timelines, theory content (~1200 lines)
+  app.js                Core navigation, page switching, accordion, chart
+  arena.js              Study Arena — all 5 game engines
+  essay.js              Essay Lab — all 5 writing tools
+  theories.js           Theory Explorer logic
+  chart-mini.js         Assessment donut chart helper
+README.md               This file
+```
+
+---
+
+## 🌐 Entry Points
+
+| URL Path | Description |
+|---|---|
+| `index.html` | Main app — opens to Dashboard |
+| `index.html#` + `showPage('modules')` | Direct to modules |
+| `index.html#` + `showPage('arena')` | Direct to Study Arena |
+| `index.html#` + `showPage('essay')` | Direct to Essay Lab |
+
+Navigation is entirely client-side (hash-free, function-based).
+
+---
+
+## 💾 Data Storage
+
+- `localStorage` key `psir101_progress` — tracks completed activities
+- `localStorage` key `psir101_thesis` — saves thesis builder draft across sessions
+- `localStorage` key `psir101_peel` — saves PEEL paragraph draft across sessions
+- No backend, no API keys required
+
+---
+
+## 📱 Responsive Design
+
+- **Mobile** (< 520px): Sidebar collapses to hamburger; all grids go to 1 column
+- **Tablet** (< 900px): Sidebar overlay; 2-column grids
+- **Desktop**: Full 270px sidebar + main content
+
+---
+
+## 🚀 Deployment
+
+To make the app live, go to the **Publish tab** and publish with one click.
+
+The app works entirely in the browser — no server-side code, no database connections, no API keys needed for core functionality.
+
+---
+
+## 🔧 Recommended Next Steps
+
+1. **Add AI Essay Feedback** — Integrate the Gemini API (key stored in Settings) for the AI essay tutor described in course planning sessions
+2. **Week-specific slide decks** — Link to HTML slide presentations built in earlier sessions (Week 6 UN, Week 10 Race)
+3. **Progress persistence** — Expand localStorage tracking to show per-module completion badges
+4. **Instructor mode** — Add a toggle to show/hide answer keys for classroom projection
+5. **Teams integration** — Embed via Microsoft Teams Website tab using the published URL
+6. **Additional quiz sets** — Expand quiz bank to 50+ questions for final exam preparation
+7. **Add Week 3 Globalization supply-chain mapper** (described in planning sessions as an interactive visual)
+
+---
+
+## 👩‍💼 Lecturers
+
+| Name | Email | Office |
+|---|---|---|
+| Prof. Dr. Erol Kaymak | erol.kaymak@emu.edu.tr | BE154 |
+| Assoc. Prof. Dr. Umut Bozkurt | umut.bozkurt@emu.edu.tr | BE175 |
+| Assoc. Prof. Dr. Berna Numan | berna.numan@emu.edu.tr | By appointment |
+
+---
+
+*Built for Eastern Mediterranean University · Faculty of Business and Economics · Department of Political Science and International Relations · Spring 2026*
