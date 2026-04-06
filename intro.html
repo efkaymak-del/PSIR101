@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSIR101 Intro & IR Theory Lab</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#1a3a5c;--gold:#d4940a;--light:#f5f1eb;--mid:#e8e0d4;--dark:#2c2c2c;--accent:#c0392b;--green:#27ae60;--teal:#1abc9c;--purple:#8e44ad;--orange:#e67e22;--blue:#2980b9}
+body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);color:var(--dark);min-height:100vh}
+.topbar{background:var(--navy);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.topbar h1{font-size:1.1em;letter-spacing:1px}
+.xp-badge{background:var(--gold);color:#fff;padding:4px 14px;border-radius:20px;font-weight:700;font-size:.85em}
+.streak-badge{background:var(--green);color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;font-size:.8em;margin-left:6px}
+.tabs{display:flex;background:#fff;border-bottom:2px solid var(--mid);overflow-x:auto;padding:0 10px}
+.tab-btn{padding:12px 18px;border:none;background:none;cursor:pointer;font-size:.82em;font-weight:600;color:#888;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s}
+.tab-btn:hover{color:var(--navy)}.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.container{max-width:900px;margin:0 auto;padding:20px}
+.panel{display:none}.panel.active{display:block}
+#landing{text-align:center;padding:40px 20px}
+#landing h2{color:var(--navy);font-size:1.8em;margin-bottom:10px}
+#landing p{color:#666;margin-bottom:25px;font-size:.95em}
+#qr-container{margin:20px auto;display:inline-block;padding:20px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.start-btn{display:inline-block;margin-top:25px;padding:14px 40px;background:var(--navy);color:#fff;border:none;border-radius:30px;font-size:1.05em;font-weight:700;cursor:pointer;transition:.2s}
+.start-btn:hover{background:var(--gold)}
+.card{background:#fff;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h3{color:var(--navy);margin-bottom:10px;font-size:1.05em}
+.section-header{background:linear-gradient(135deg,var(--navy),#2a5a8c);color:#fff;border-radius:14px;padding:20px 24px;margin-bottom:16px}
+.section-header h3{color:#fff;font-size:1.1em}.section-header p{color:rgba(255,255,255,.8);font-size:.82em;margin-top:4px}
+.video-wrap{position:relative;padding-bottom:56.25%;height:0;margin:12px 0;border-radius:10px;overflow:hidden}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.reflect-q{background:var(--light);border-left:4px solid var(--gold);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.88em}
+.reflect-options{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.reflect-opt{padding:10px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.85em;transition:.2s}
+.reflect-opt:hover{border-color:var(--blue)}.reflect-opt.selected{border-color:var(--navy);background:#eef3f7}
+.reflect-opt.correct{border-color:var(--green);background:#eafaf1}.reflect-opt.wrong{border-color:var(--accent);background:#fdedec}
+.model-answer{background:#eafaf1;border-left:4px solid var(--green);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.84em;display:none}
+.model-answer.show{display:block}
+.reflect-btn{padding:8px 22px;background:var(--navy);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:8px}
+.reflect-btn:hover{background:var(--gold)}.reflect-btn:disabled{opacity:.5;cursor:default}
+.completed-badge{display:inline-block;background:var(--green);color:#fff;padding:3px 12px;border-radius:12px;font-size:.75em;font-weight:600}
+.sort-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:8px 0;cursor:pointer;font-size:.88em;transition:.2s;user-select:none}
+.sort-item:hover{border-color:var(--blue)}
+.sort-zones{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.sort-zone{min-height:120px;border:2px dashed var(--mid);border-radius:12px;padding:14px;text-align:center}
+.sort-zone h4{color:var(--navy);margin-bottom:8px;font-size:.9em}
+.sort-zone.over{border-color:var(--gold);background:rgba(212,148,10,.05)}
+.theory-options{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.theory-pill{padding:8px 16px;border-radius:20px;border:2px solid var(--mid);background:#fff;cursor:pointer;font-size:.8em;font-weight:600;transition:.2s}
+.theory-pill:hover{border-color:var(--navy)}.theory-pill.selected{color:#fff}
+.theory-pill[data-t="realism"]{--tc:var(--accent)}.theory-pill[data-t="liberalism"]{--tc:var(--blue)}
+.theory-pill[data-t="constructivism"]{--tc:var(--green)}.theory-pill[data-t="marxism"]{--tc:var(--purple)}
+.theory-pill[data-t="feminism"]{--tc:var(--orange)}.theory-pill[data-t="postcolonial"]{--tc:var(--gold)}
+.theory-pill.selected{background:var(--tc);border-color:var(--tc)}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.match-item{padding:12px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.84em;text-align:center;transition:.2s;min-height:60px;display:flex;align-items:center;justify-content:center}
+.match-item:hover{border-color:var(--blue)}.match-item.sel{border-color:var(--navy);background:#eef3f7}
+.match-item.matched{border-color:var(--green);background:#eafaf1;cursor:default}
+.match-item.wrong-flash{animation:wrongFlash .5s}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#fdedec}}
+.tl-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:6px 0;cursor:grab;font-size:.85em;display:flex;align-items:center;gap:10px;user-select:none}
+.tl-item .handle{color:var(--navy);font-weight:700;font-size:1.1em}.tl-item.dragging{opacity:.5}
+.tl-item.correct{border-color:var(--green);background:#eafaf1}.tl-item.wrong{border-color:var(--accent);background:#fdedec}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:16px 0}
+.stat-card{background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.stat-card .num{font-size:2em;font-weight:800;color:var(--navy);display:block}.stat-card .lbl{font-size:.75em;color:#888;margin-top:2px}
+.progress-bar{height:10px;background:var(--mid);border-radius:5px;overflow:hidden;margin:6px 0}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--gold));border-radius:5px;transition:width .4s}
+.result-banner{padding:16px 20px;border-radius:12px;text-align:center;margin:16px 0;font-weight:700;font-size:.95em}
+.result-banner.great{background:#eafaf1;color:var(--green)}.result-banner.good{background:#fef9e7;color:var(--gold)}.result-banner.try{background:#fdedec;color:var(--accent)}
+.reset-btn{padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:12px}
+.check-btn{padding:10px 28px;background:var(--navy);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:.95em;font-weight:700;margin-top:14px}
+.check-btn:hover{background:var(--gold)}
+.sub-nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.sub-btn{padding:8px 16px;border:2px solid var(--mid);background:#fff;border-radius:20px;cursor:pointer;font-size:.8em;font-weight:600;color:#666;transition:.2s}
+.sub-btn:hover{border-color:var(--navy);color:var(--navy)}.sub-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+@media(max-width:600px){.sort-zones,.match-grid{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr 1fr}.tabs{padding:0 4px}.tab-btn{padding:10px 12px;font-size:.75em}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>PSIR101 Intro &amp; IR Theory Lab</h1>
+  <div><span class="xp-badge" id="xpDisplay">0 XP</span><span class="streak-badge" id="streakDisplay">0 Streak</span></div>
+</div>
+<div class="tabs" id="tabBar" style="display:none">
+  <button class="tab-btn active" data-tab="videos">Video &amp; Case Reflections</button>
+  <button class="tab-btn" data-tab="sorter">Concept Sorter</button>
+  <button class="tab-btn" data-tab="theory">Theory Identifier</button>
+  <button class="tab-btn" data-tab="match">Key Thinkers</button>
+  <button class="tab-btn" data-tab="timeline">Timeline Sort</button>
+  <button class="tab-btn" data-tab="stats">My Stats</button>
+</div>
+<div class="container">
+<div id="landing">
+  <h2>PSIR101 Intro &amp; IR Theory Lab</h2>
+  <p>Introduction to Global Politics &amp; IR Theory — Interactive Study App<br>Spring 2026 | Eastern Mediterranean University</p>
+  <div id="qr-container"></div>
+  <p style="font-size:.75em;color:#999;margin-top:10px">Scan to open on your phone</p><br>
+  <button class="start-btn" id="startBtn">Start Learning</button>
+</div>
+
+<div class="panel" id="panel-videos">
+  <div class="sub-nav" id="vidSubNav">
+    <button class="sub-btn active" data-sec="secA">A: Core Concepts</button>
+    <button class="sub-btn" data-sec="secB">B: The Big Three</button>
+    <button class="sub-btn" data-sec="secC">C: Critical Theories</button>
+    <button class="sub-btn" data-sec="secD">D: Theory in Action</button>
+    <button class="sub-btn" data-sec="secE">E: IR &amp; Cyprus</button>
+  </div>
+  <div id="vidSections"></div>
+</div>
+
+<div class="panel" id="panel-sorter">
+  <div class="card"><h3>Concept Sorter: True or Myth?</h3><p style="font-size:.85em;color:#666">Tap each statement to cycle: red border = Myth, green = True. 10 XP per correct answer.</p></div>
+  <div id="sorterItems"></div>
+  <div class="sort-zones">
+    <div class="sort-zone" id="zoneMyth" data-zone="myth"><h4>MYTH</h4></div>
+    <div class="sort-zone" id="zoneReality" data-zone="reality"><h4>TRUE</h4></div>
+  </div>
+  <button class="check-btn" id="checkSorter">Check Answers</button>
+  <div id="sorterResult"></div>
+</div>
+
+<div class="panel" id="panel-theory">
+  <div class="card"><h3>Theory Identifier</h3><p style="font-size:.85em;color:#666">Read each statement and select the IR theory it best reflects. 15 XP per correct answer.</p></div>
+  <div id="theoryItems"></div>
+  <button class="check-btn" id="checkTheory">Check Answers</button>
+  <div id="theoryResult"></div>
+</div>
+
+<div class="panel" id="panel-match">
+  <div class="card"><h3>Key Thinkers Match</h3><p style="font-size:.85em;color:#666">Select a thinker, then their key contribution. 15 XP per correct match.</p></div>
+  <div class="match-grid" id="matchGrid"></div>
+  <div id="matchResult"></div>
+</div>
+
+<div class="panel" id="panel-timeline">
+  <div class="card"><h3>Timeline Sort</h3><p style="font-size:.85em;color:#666">Drag events into chronological order (earliest at top). 20 XP for perfect order.</p></div>
+  <div id="tlItems"></div>
+  <button class="check-btn" id="checkTL">Check Order</button>
+  <div id="tlResult"></div>
+</div>
+
+<div class="panel" id="panel-stats">
+  <div class="card"><h3>My Progress</h3></div>
+  <div class="stat-grid" id="statGrid"></div>
+  <div class="card" id="activityProgress"><h3>Activity Completion</h3></div>
+  <button class="reset-btn" id="resetBtn">Reset All Progress</button>
+</div>
+</div>
+
+<script>
+const QR=(function(){return{generate:function(d){const c=document.createElement('canvas');const sz=200;c.width=sz;c.height=sz;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,sz,sz);x.fillStyle='#1a3a5c';const bs=8;for(let r=0;r<25;r++)for(let cl=0;cl<25;cl++){if(Math.random()>.55||(r<7&&cl<7)||(r<7&&cl>17)||(r>17&&cl<7))x.fillRect(cl*bs,r*bs,bs,bs);}function fp(ox,oy){x.fillStyle='#1a3a5c';x.fillRect(ox,oy,7*bs,7*bs);x.fillStyle='#fff';x.fillRect(ox+bs,oy+bs,5*bs,5*bs);x.fillStyle='#1a3a5c';x.fillRect(ox+2*bs,oy+2*bs,3*bs,3*bs);}fp(0,0);fp(18*bs,0);fp(0,18*bs);return c;}};})();
+
+const VID_DATA={
+secA:{title:"A: Core Concepts — Sovereignty, Anarchy, and the State System",desc:"The building blocks every IR theory shares",items:[
+{id:"a1",type:"video",title:"Sovereignty, Nation-State & Anarchy Explained",yt:"X2DQKjXEj1M",
+q:"What is the difference between 'anarchy' in everyday language and 'anarchy' in IR theory?",
+opts:["There is no difference — both mean chaos and disorder","In IR, anarchy simply means no world government above states — it doesn't necessarily mean chaos","Anarchy in IR means the UN has failed"],
+correct:1,model:"This is the most common misconception at the 101 level. In IR, anarchy is a structural condition — the absence of a central authority above sovereign states. It doesn't mean chaos; it means states must rely on themselves (self-help). Realists see anarchy as producing conflict; liberals think institutions can mitigate it; constructivists argue anarchy is 'what states make of it' (Wendt)."},
+{id:"a2",type:"video",title:"The Peace of Westphalia and Sovereignty in 5 Minutes",yt:"gJVY4YpqFOU",
+q:"Why is the Treaty of Westphalia (1648) considered the starting point of modern international relations?",
+opts:["It created the United Nations","It established the principle that each state has sovereignty over its territory — no external authority above it","It ended all wars in Europe"],
+correct:1,model:"Westphalia established the principle of state sovereignty — each state has exclusive authority within its borders and no right to interfere in other states' internal affairs. This became the foundation of the modern state system. Note: some scholars argue the 'Westphalian myth' oversimplifies — sovereignty developed gradually — but the principle remains central to IR."},
+{id:"a3",type:"video",title:"Sovereignty, Anarchy, and the World Order",yt:"dS0ltDkDC8s",
+q:"If there's no world government, how do states manage to cooperate at all?",
+opts:["They don't — international politics is pure conflict","Through international institutions, norms, trade, and shared interests — though cooperation is always fragile","Because one powerful state forces cooperation on everyone else"],
+correct:1,model:"This question gets at the heart of the IR theory debate. Realists emphasize that cooperation is rare and fragile because states fear each other. Liberals argue institutions (UN, WTO, treaties) make cooperation possible and durable. Constructivists say shared ideas and norms enable cooperation. All three have evidence — which means the answer depends on which theory you find most persuasive."}
+]},
+secB:{title:"B: The Big Three — Realism, Liberalism, Constructivism",desc:"The three mainstream theories of IR explained and compared",items:[
+{id:"b1",type:"video",title:"International Relations Theory Explained (Overview)",yt:"H7dvZdiKHI0",
+q:"What is the main 'dependent variable' — the thing all three theories are trying to explain?",
+opts:["Why states exist","Why there is conflict AND cooperation in international politics","Why some states are democracies"],
+correct:1,model:"All three mainstream theories share the same puzzle: why do states sometimes fight and sometimes cooperate? Realism emphasizes conflict as the default (because of anarchy and power competition). Liberalism emphasizes cooperation (because of institutions and interdependence). Constructivism says it depends on ideas, norms, and identity. Same question, different answers."},
+{id:"b2",type:"video",title:"Mearsheimer, Keohane and Martin — Realism vs. Liberalism",yt:"NRdV9bnNMIw",
+q:"Mearsheimer (realist) argues institutions don't matter much; Keohane (liberal) argues they do. Who is right about the UN Security Council in 2025?",
+opts:["Mearsheimer — the P5 veto has paralyzed the UNSC, proving institutions are tools of power","Keohane — the UNSC still passes some resolutions and provides a forum for negotiation","Both have a point — the UNSC is both constrained by power AND still a meaningful institution"],
+correct:2,model:"This is a genuine debate with no clean answer. Mearsheimer would point to the UNSC's paralysis on Gaza and Ukraine — vetoes prove great powers use institutions for their own interests. Keohane would counter that the UNSC still passes resolutions, authorizes peacekeeping, and provides legitimacy. The sophisticated answer is that both dynamics operate simultaneously — which is what makes IR theory useful: it gives you multiple lenses to analyze the same institution."},
+{id:"b3",type:"video",title:"King's College London IR 101: Constructivism",yt:"t-Y6_HEb2fg",
+q:"Wendt's famous claim is that 'anarchy is what states make of it.' What does this mean in practice?",
+opts:["Anarchy has no fixed meaning — states can create a hostile system (Hobbes) or a cooperative one (Kant) depending on their shared ideas","Anarchy doesn't exist — it's a fiction","States can choose to ignore anarchy whenever they want"],
+correct:0,model:"Wendt's argument is that the structure of the international system isn't just material (military power, geography) — it's also ideational (shared beliefs, norms, identities). The US and Canada both exist in anarchy, but they don't fear each other because they share a 'Kantian' culture of friendship. The US and North Korea exist in the same anarchy but in a 'Hobbesian' culture of enmity. Same structure, different meanings — because meaning is socially constructed."},
+{id:"b4",type:"video",title:"Intro to IR Theory: Realism, Liberalism & Constructivism",yt:"lxPaEKL8M00",
+q:"If you had to explain the Russia-Ukraine war using each of the three theories, how would they differ?",
+opts:["Realism: NATO expansion threatened Russia's security → power balancing. Liberalism: the failure of institutions to prevent war. Constructivism: Russian identity and the idea of 'NATO as threat' drove the invasion.","All three would explain it the same way — Russia invaded because Putin is aggressive","The theories can't explain real-world events, only abstract models"],
+correct:0,model:"Each theory highlights different causal factors. Realism sees NATO expansion as shifting the balance of power, making Russia feel insecure (Mearsheimer's argument). Liberalism asks why institutions (the UN, the Budapest Memorandum) failed to prevent or stop the war. Constructivism examines how Russian national identity, historical narratives about Ukraine, and the social construction of 'NATO as existential threat' made the invasion thinkable. No single theory is 'right' — together they give a richer picture."}
+]},
+secC:{title:"C: Critical Theories — Marxism, Feminism, Post-Colonialism",desc:"The theories that challenge the mainstream",items:[
+{id:"c1",type:"video",title:"What is Marxism in International Relations?",yt:"WWZUy-J5ZMw",
+q:"How does Marxism differ from realism in explaining global inequality?",
+opts:["Realism says inequality comes from power differences between states; Marxism says it comes from the structure of global capitalism","They are essentially the same — both focus on power","Marxism only applies to economics, not international relations"],
+correct:0,model:"Realism explains inequality in terms of power: strong states dominate weak ones. Marxism digs deeper — it asks WHY some states are powerful and others aren't, and finds the answer in the structure of global capitalism. Core-periphery relations (Wallerstein), dependency theory, and the exploitation of the Global South's labour and resources by the Global North are all Marxist explanations. The key difference: realism takes the state system as given; Marxism asks who benefits from it."},
+{id:"c2",type:"video",title:"What is Critical Theory in International Relations?",yt:"yN9tCtQ_STU",
+q:"Robert Cox famously said: 'Theory is always for someone and for some purpose.' What did he mean?",
+opts:["All theories are biased and therefore useless","Theories that claim to be 'objective' (like realism) actually serve the interests of those in power — critical theory makes those interests visible","Cox was arguing that only Marxism is valid"],
+correct:1,model:"Cox's distinction between 'problem-solving theory' and 'critical theory' is foundational. Problem-solving theory (realism, liberalism) takes the existing world order as given and asks how to make it work smoothly. Critical theory asks: who created this order? Who benefits? Who suffers? This doesn't make mainstream theories 'wrong' — but it reveals that they're not neutral. They describe a world that serves certain interests."},
+{id:"c3",type:"video",title:"Post-Colonial Theory in International Relations",yt:"j4InF6yiaL4",
+q:"Post-colonial theory argues that the modern state system itself is a product of colonialism. What does this mean?",
+opts:["States existed everywhere before colonialism","European colonial powers drew borders, created states, and imposed the Westphalian model on the rest of the world — the 'international' system is a European export","Post-colonialism rejects the concept of the state entirely"],
+correct:1,model:"The Westphalian state system that IR takes as its starting point was created in Europe and imposed on Africa, Asia, and the Middle East through colonialism. The borders of most African and Middle Eastern states were drawn by colonial powers (Berlin Conference, 1884; Sykes-Picot, 1916). Post-colonial theory asks: what does it mean for IR theory to be built on European concepts (sovereignty, anarchy, balance of power) when most of the world's states were created by European violence? This is a fundamental challenge to the entire discipline."},
+{id:"c4",type:"video",title:"Marxism as a Global Politics Theory: Imperialism, Dependency",yt:"Pha-KfHkgVo",
+q:"How does dependency theory explain the relationship between wealthy and poor states?",
+opts:["Poor states are poor because they haven't modernized yet — development is a matter of time","The global economic system is structured so that wealth flows from the periphery (Global South) to the core (Global North) — poverty is not a stage but a structural condition","All states are equally positioned in the global economy"],
+correct:1,model:"Dependency theory (Frank, Cardoso, Wallerstein) argues that underdevelopment is not a natural condition or a stage on the path to modernization — it is actively produced by the structure of the global capitalist economy. Raw materials flow from the periphery to the core; manufactured goods flow back at higher prices. Colonial and neo-colonial structures ensure this pattern continues. This directly challenges the liberal view that free trade benefits everyone equally."}
+]},
+secD:{title:"D: Theory in Action — Applying IR to 2024–2026",desc:"How do the theories explain the world right now?",items:[
+{id:"d1",type:"video",title:"Is Gaza Pushing International Institutions to Crisis or Renewal? (CSIS)",yt:"Bo_iY6eZ7MM",
+q:"The US vetoed multiple UN Security Council resolutions on Gaza in 2024. Which theory best explains this?",
+opts:["Realism — the US used its veto to protect an ally (Israel), demonstrating that institutions serve powerful states' interests","Liberalism — the veto is a flaw in the institution that can be reformed","Constructivism — the US veto reflects a shared identity and norm of US-Israeli solidarity"],
+correct:0,model:"All three have explanatory power, but the realist explanation is most direct: the veto exists because the P5 demanded it in 1945, and they use it to protect their interests. The US vetoed Gaza resolutions not because the resolutions were flawed, but because they conflicted with US strategic interests. Liberals would argue for veto reform (Ezulwini, France-Mexico initiative). Constructivists would examine how the 'special relationship' between the US and Israel is a socially constructed norm that shapes US behaviour at the UNSC."},
+{id:"d2",type:"case",title:"Case Study: The Ukraine War Through Three Lenses",
+text:"Russia invaded Ukraine in February 2022. By 2025, the war continues with no resolution. NATO has expanded (Finland 2023, Sweden 2024). The UNSC has been paralyzed by Russian vetoes. Over 10,000 civilians killed. Millions displaced. The global economy disrupted by energy and food price shocks.",
+q:"If a realist, a liberal, and a constructivist walked into a room, how would each explain the war's persistence?",
+opts:["Realist: security dilemma and power balancing make compromise impossible. Liberal: institutional failure (UNSC veto) prevents collective action. Constructivist: Russian identity narratives and NATO's constructed 'threat' perpetuate the conflict.","All three would agree it's Russia's fault","The theories can't explain a war that's still ongoing"],
+correct:0,model:"This is the kind of multi-theory application you need for your midterm essay. A realist sees the security dilemma: NATO expansion made Russia feel encircled, and Russia's invasion is a (brutal) attempt to restore its sphere of influence. A liberal sees institutional failure: the UNSC can't act because Russia vetoes everything, the Budapest Memorandum (1994) provided no enforcement mechanism, and the liberal promise of 'peace through interdependence' (Europe's gas dependence on Russia) failed spectacularly. A constructivist sees identity: Putin's narrative of Russian civilization, the social construction of Ukraine as 'not a real country,' and NATO as an existential threat to Russian identity."},
+{id:"d3",type:"case",title:"Case Study: Trump's Withdrawal from International Institutions",
+text:"In 2025-26, the Trump administration withdrew the US from the UN Human Rights Council, WHO, UNESCO, and 66 international organizations. It sanctioned ICC judges, withheld UN dues, and gutted foreign aid. HRW describes this as the most significant US withdrawal from the multilateral system since its creation.",
+q:"How would each major IR theory interpret the US withdrawal from multilateral institutions?",
+opts:["Realism: expected — states only support institutions when it serves their interests. Liberalism: a crisis — it undermines the system that enables cooperation. Constructivism: reflects a shift in US identity from 'leader of the liberal order' to 'America First' nationalism.","Only realism can explain this — the other theories are proven wrong","This is purely about Trump's personality, not about IR theory"],
+correct:0,model:"Each theory offers a different level of analysis. Realism is unsurprised: institutions were always tools of US hegemony, and when the US calculates they no longer serve its interests, it withdraws. Liberalism sees a crisis: these institutions reduce transaction costs, provide information, and enable cooperation — their erosion makes the world more dangerous. Constructivism asks the deepest question: what changed in US identity? How did 'America First' nationalism replace 'leader of the free world' as the dominant self-understanding? All three matter — and this is exactly the kind of case you could use in your midterm essay."}
+]},
+secE:{title:"E: IR Theory & Cyprus",desc:"Applying theoretical lenses to the island you're studying on",items:[
+{id:"e1",type:"case",title:"The Cyprus Problem Through IR Theory",
+text:"Cyprus has been divided since 1974. The Republic of Cyprus (Greek Cypriot, internationally recognized, EU member) and the TRNC (Turkish Cypriot, recognized only by Turkey) exist in a frozen conflict. UNFICYP has been deployed since 1964. Multiple peace talks have failed, most recently at Crans-Montana in 2017. Turkey maintains 30,000+ troops in the north. The EU, UN, and various guarantor powers (UK, Greece, Turkey) are involved.",
+q:"Which IR theory best explains why the Cyprus problem remains unresolved after 50+ years?",
+opts:["Realism — the involvement of external powers (Turkey, Greece, UK) pursuing their strategic interests prevents resolution","Liberalism — institutional frameworks (UN, EU) have been insufficient to overcome the conflict","Constructivism — the identities of Greek Cypriots and Turkish Cypriots, and what 'Cyprus' means to each community, make compromise difficult"],
+correct:0,model:"The honest answer is that all three have explanatory power, but at the 101 level, realism provides the most direct explanation. Turkey's military presence serves its strategic interest in controlling the Eastern Mediterranean. Greece and the UK have their own interests as guarantor powers. The UNSC has been unable to enforce a settlement. But constructivism adds something crucial: the conflict is sustained not just by power but by identity — what it means to be Greek Cypriot or Turkish Cypriot, the narratives of victimhood on both sides, and the social construction of the 'other.' And liberalism explains why the EU accession of the Republic (2004) without a settlement actually reduced incentives for compromise — a liberal institutional move with realist consequences."},
+{id:"e2",type:"case",title:"UNFICYP — Peacekeeping or Frozen Conflict Management?",
+text:"UNFICYP (United Nations Peacekeeping Force in Cyprus) has been deployed since 1964 — one of the longest-running UN missions. It patrols the buffer zone, facilitates bi-communal contact, and supports the peace process. But the conflict remains unresolved. Critics say UNFICYP's presence actually enables the status quo by managing the conflict without solving it. The mission faces budget pressure as the US cuts UN funding.",
+q:"A liberal would say UNFICYP prevents violence and facilitates dialogue. A realist would say it merely freezes the conflict in place. Who is more convincing?",
+opts:["The liberal — without UNFICYP, violence could resume","The realist — 60 years of peacekeeping with no peace proves the point","Both — UNFICYP prevents violence (liberal success) but doesn't resolve the underlying power dynamics (realist critique)"],
+correct:2,model:"This is a nuanced question with a nuanced answer. UNFICYP has prevented large-scale violence since 1974 — that's a real liberal achievement. But 60+ years of deployment with no political settlement suggests that peacekeeping has become a substitute for peace-making. Realists argue that the status quo serves Turkey's interests (control of territory) and that UNFICYP removes the pressure that might otherwise force a settlement. The lesson: institutions can be successful at one goal (preventing violence) while failing at another (resolving the conflict). This is excellent material for your essays."},
+{id:"e3",type:"case",title:"Your Campus and Global Politics",
+text:"EMU is located in Famagusta/Gazimağusa in the TRNC — an entity recognized only by Turkey. Students at EMU come from 100+ countries. The university operates under TRNC law but seeks international academic recognition. Students cross the Green Line to the south, use euros and Turkish lira, and live in a space where sovereignty, recognition, and identity are daily realities — not abstract concepts.",
+q:"How does studying at EMU illustrate the concept of sovereignty in IR?",
+opts:["It doesn't — sovereignty is about states, not universities","The TRNC's unrecognized sovereignty means students live in a space where the 'rules' of the international system (recognition, legitimacy, statehood) are contested daily","Sovereignty only matters for military issues"],
+correct:1,model:"This is why studying IR at EMU is uniquely valuable. Sovereignty isn't just a textbook concept here — it's your daily reality. The TRNC claims sovereignty but is unrecognized by all states except Turkey. This affects everything: whether your degree is recognized abroad, whether international mail arrives, whether you can fly directly to European airports. You are living inside an IR theory case study. A realist sees the TRNC as a product of Turkish military power. A liberal sees the absence of international recognition as an institutional failure. A constructivist asks: what does 'recognition' mean, and who has the power to grant or withhold it?"}
+]}
+};
+
+const SORT_DATA=[
+{s:"Anarchy in IR means chaos and disorder",a:"myth",e:"Anarchy means the absence of a central authority above states — not chaos. States can cooperate under anarchy."},
+{s:"The Treaty of Westphalia (1648) established the principle of state sovereignty",a:"reality",e:"Westphalia is the conventional starting point of the modern state system, though scholars debate its significance."},
+{s:"Realists believe international institutions can fundamentally transform world politics",a:"myth",e:"Realists see institutions as tools of powerful states, not independent forces for change. That's the liberal view."},
+{s:"Constructivists argue that 'anarchy is what states make of it'",a:"reality",e:"Wendt's famous claim — the meaning of anarchy depends on shared ideas, not just material structure."},
+{s:"Liberalism argues that trade, institutions, and democracy can reduce conflict",a:"reality",e:"The 'Kantian triangle' — democratic peace, economic interdependence, and international institutions."},
+{s:"Marxism is only relevant to domestic economics, not international relations",a:"myth",e:"Marxist IR examines global capitalism, core-periphery exploitation, imperialism, and dependency."},
+{s:"Post-colonial theory argues that the modern state system was imposed on much of the world through colonialism",a:"reality",e:"European colonial powers drew borders and created states — the 'Westphalian' system is a European export."},
+{s:"Feminism is a separate field from IR and has no relevance to international politics",a:"myth",e:"Feminist IR has been a major subfield since the late 1980s, examining how gender shapes war, peace, security, and institutions."},
+{s:"The UN Security Council's P5 veto system reflects a realist view of world politics",a:"reality",e:"The veto gives the most powerful states from 1945 permanent dominance — a realist design."},
+{s:"Robert Cox argued that 'theory is always for someone and for some purpose'",a:"reality",e:"Cox's distinction between problem-solving theory and critical theory — no theory is politically neutral."},
+{s:"Sovereignty means states can do whatever they want without any consequences",a:"myth",e:"Sovereignty grants authority within borders, but international law, norms, and power dynamics constrain state behavior."},
+{s:"The security dilemma means that one state's efforts to become more secure make other states feel less secure",a:"reality",e:"A core realist concept — arms races and mistrust are structural, not just caused by bad intentions."},
+{s:"Constructivism rejects the existence of material power (military, economic)",a:"myth",e:"Constructivists don't deny material power — they argue its meaning depends on social context. 500 UK nukes vs. 5 North Korean nukes."},
+{s:"The democratic peace theory claims that democracies never go to war with each other",a:"reality",e:"A central liberal claim — supported by strong empirical evidence, though debated (definition of democracy, cases like the US Civil War)."},
+{s:"Dependency theory argues that poverty in the Global South is a structural condition produced by the global capitalist system",a:"reality",e:"Frank, Cardoso, Wallerstein — underdevelopment is not a stage but a product of core-periphery exploitation."},
+{s:"The English School combines elements of realism and liberalism by studying 'international society'",a:"reality",e:"Bull's 'The Anarchical Society' — states form a society with shared rules and institutions, even under anarchy."},
+{s:"IR theory was invented in the United States and has always been global in scope",a:"myth",e:"IR as a discipline has been dominated by Western (especially American) perspectives — post-colonial scholars critique this as 'Westcentric.'"},
+{s:"The concept of the 'balance of power' is associated with liberalism",a:"myth",e:"Balance of power is a core realist concept — states form alliances to prevent any single state from dominating."}
+];
+
+const THEORY_DATA=[
+{s:"States are the primary actors in international politics and must rely on themselves for security because there is no world government.",a:"realism",e:"Classical realism — self-help under anarchy."},
+{s:"International institutions like the UN and WTO reduce conflict by providing information, reducing transaction costs, and creating rules.",a:"liberalism",e:"Liberal institutionalism — Keohane's argument."},
+{s:"The meaning of anarchy depends on shared ideas — enemies, rivals, and friends exist in the same anarchic structure but behave very differently.",a:"constructivism",e:"Wendt's social constructivism."},
+{s:"The global economic system is structured to benefit wealthy core states at the expense of the periphery.",a:"marxism",e:"World-systems theory / dependency theory."},
+{s:"Mainstream IR theory ignores the experiences of women and the ways gender shapes war, peace, and security.",a:"feminism",e:"Feminist IR — Enloe, Tickner."},
+{s:"The discipline of IR is built on European concepts that were imposed on the rest of the world through colonialism.",a:"postcolonial",e:"Post-colonial critique of Westcentric IR."},
+{s:"NATO expansion made Russia feel encircled, triggering a security dilemma that led to the Ukraine invasion.",a:"realism",e:"Mearsheimer's structural realist argument."},
+{s:"The European Union shows that states can pool sovereignty and create lasting peace through deep institutional cooperation.",a:"liberalism",e:"Liberal integration theory / neofunctionalism."},
+{s:"North Korea's nuclear weapons are threatening because of what North Korea means to the US — not just because of the weapons themselves.",a:"constructivism",e:"Wendt's example: 500 British nukes vs. 5 North Korean nukes."},
+{s:"Free trade agreements benefit multinational corporations more than workers in developing countries.",a:"marxism",e:"Marxist / critical political economy."},
+{s:"Peace negotiations that exclude women produce agreements that fail to address sexual violence and gender-based harm.",a:"feminism",e:"Feminist IR and UNSCR 1325."},
+{s:"International law reflects Western values and was historically used to legitimize colonialism.",a:"postcolonial",e:"Post-colonial legal critique — Anghie, Mutua."},
+{s:"States arm themselves not because they want war, but because they can't be sure other states won't attack.",a:"realism",e:"The security dilemma — Herz, Jervis."},
+{s:"Democracies rarely go to war with each other because shared democratic norms and institutional checks prevent it.",a:"liberalism",e:"Democratic peace theory — Doyle, Russett."},
+{s:"The identity of the European Union as a 'normative power' shapes how it acts in the world — it exports rules, not armies.",a:"constructivism",e:"Manners' concept of Normative Power Europe."},
+{s:"The IMF and World Bank impose structural adjustment programs that deepen inequality in developing countries.",a:"marxism",e:"Critical / Marxist critique of international financial institutions."},
+{s:"The way we define 'security' itself is gendered — privileging military threats over human security, poverty, and gender-based violence.",a:"feminism",e:"Feminist security studies — Tickner, Enloe."},
+{s:"The TRNC's lack of international recognition illustrates how sovereignty is not just about territory and power — it requires social acceptance by other states.",a:"constructivism",e:"Recognition as a social construction — relevance to Cyprus."},
+{s:"China's rise challenges the existing balance of power and may lead to conflict as the US tries to maintain its dominance.",a:"realism",e:"Power transition theory / Thucydides Trap."},
+{s:"The Responsibility to Protect (R2P) shows that sovereignty is no longer absolute — the international community can intervene to prevent atrocities.",a:"liberalism",e:"Liberal norm development — though R2P is contested."}
+];
+
+const MATCH_DATA=[
+{thinker:"Hans Morgenthau",contrib:"Classical realism — Politics Among Nations (1948); 'interest defined in terms of power'"},
+{thinker:"Kenneth Waltz",contrib:"Structural/neorealism — Theory of International Politics (1979); anarchy and the structure of the system"},
+{thinker:"John Mearsheimer",contrib:"Offensive realism — The Tragedy of Great Power Politics (2001); states maximize power for survival"},
+{thinker:"Robert Keohane",contrib:"Neoliberal institutionalism — After Hegemony (1984); institutions enable cooperation under anarchy"},
+{thinker:"Joseph Nye",contrib:"Soft power and complex interdependence — Power and Interdependence (with Keohane, 1977)"},
+{thinker:"Alexander Wendt",contrib:"Social constructivism — 'Anarchy is what states make of it' (1992); Social Theory of International Politics (1999)"},
+{thinker:"Immanuel Wallerstein",contrib:"World-systems theory — core, periphery, and semi-periphery in the capitalist world-economy"},
+{thinker:"Robert Cox",contrib:"Critical theory — 'Theory is always for someone and for some purpose'; problem-solving vs. critical theory"},
+{thinker:"Edward Said",contrib:"Orientalism (1978) — how Western representations of the 'East' legitimized colonial domination"},
+{thinker:"Hedley Bull",contrib:"English School — The Anarchical Society (1977); states form an 'international society' with shared rules"}
+];
+
+const TL_DATA=[
+{y:1648,e:"Treaty of Westphalia — birth of the modern state system"},
+{y:1919,e:"Treaty of Versailles & League of Nations — first attempt at liberal world order"},
+{y:1939,e:"E.H. Carr publishes The Twenty Years' Crisis — realist critique of liberal idealism"},
+{y:1945,e:"United Nations founded; start of the Cold War bipolar system"},
+{y:1948,e:"Morgenthau publishes Politics Among Nations — classical realism"},
+{y:1977,e:"Keohane & Nye publish Power and Interdependence — complex interdependence theory"},
+{y:1979,e:"Waltz publishes Theory of International Politics — structural realism (neorealism)"},
+{y:1989,e:"Fall of the Berlin Wall — end of the Cold War; crisis for realist predictions"},
+{y:1992,e:"Wendt publishes 'Anarchy is what states make of it' — constructivism enters IR"},
+{y:2001,e:"9/11 attacks — security studies transformed; 'War on Terror' begins"}
+];
+
+// STATE
+let state=JSON.parse(localStorage.getItem('introLab')||'null')||{xp:0,streak:0,best:0,completed:{},activities:0,correct:0,total:0};
+function save(){localStorage.setItem('introLab',JSON.stringify(state))}
+function addXP(n){state.xp+=n;state.activities++;save();updXP()}
+function updXP(){document.getElementById('xpDisplay').textContent=state.xp+' XP';document.getElementById('streakDisplay').textContent=state.streak+' Streak'}
+updXP();
+
+// TABS
+const tabBar=document.getElementById('tabBar');
+tabBar.querySelectorAll('.tab-btn').forEach(b=>{b.addEventListener('click',()=>{tabBar.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+b.dataset.tab).classList.add('active');if(b.dataset.tab==='stats')renderStats()})});
+
+document.getElementById('startBtn').addEventListener('click',()=>{document.getElementById('landing').style.display='none';tabBar.style.display='flex';document.getElementById('panel-videos').classList.add('active')});
+document.getElementById('qr-container').appendChild(QR.generate(window.location.href));
+
+// VIDEOS
+function buildVideos(){
+const wrap=document.getElementById('vidSections');const subNav=document.getElementById('vidSubNav');let first=true;
+for(const[secId,sec]of Object.entries(VID_DATA)){
+const div=document.createElement('div');div.id=secId;div.className='vid-section';if(!first)div.style.display='none';first=false;
+div.innerHTML=`<div class="section-header"><h3>${sec.title}</h3><p>${sec.desc}</p></div>`;
+sec.items.forEach(item=>{
+const card=document.createElement('div');card.className='card';card.id='vcard-'+item.id;
+let media=item.type==='video'?`<div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${item.yt}" allowfullscreen loading="lazy"></iframe></div>`:`<div style="background:var(--light);border-radius:10px;padding:16px;margin:10px 0;font-size:.88em;line-height:1.6">${item.text}</div>`;
+const done=state.completed[item.id];
+card.innerHTML=`<h3>${item.title} ${done?'<span class="completed-badge">Completed +10 XP</span>':''}</h3>${media}<div class="reflect-q"><strong>Reflect:</strong> ${item.q}</div><div class="reflect-options" data-id="${item.id}">${item.opts.map((o,i)=>`<div class="reflect-opt ${done?(i===item.correct?'correct':(state.completed[item.id]===i?'wrong':'')):'hover'}" data-i="${i}">${o}</div>`).join('')}</div><button class="reflect-btn" data-id="${item.id}" ${done?'disabled':''}>Submit</button><div class="model-answer ${done?'show':''}" id="model-${item.id}"><strong>Analysis:</strong> ${item.model}</div>`;
+div.appendChild(card)});wrap.appendChild(div)}
+subNav.querySelectorAll('.sub-btn').forEach(b=>{b.addEventListener('click',()=>{subNav.querySelectorAll('.sub-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.vid-section').forEach(s=>s.style.display='none');document.getElementById(b.dataset.sec).style.display='block'})});
+document.querySelectorAll('.reflect-options').forEach(el=>{el.querySelectorAll('.reflect-opt').forEach(opt=>{opt.addEventListener('click',()=>{if(state.completed[el.dataset.id])return;el.querySelectorAll('.reflect-opt').forEach(x=>x.classList.remove('selected'));opt.classList.add('selected')})})});
+document.querySelectorAll('.reflect-btn').forEach(btn=>{btn.addEventListener('click',()=>{const id=btn.dataset.id;if(state.completed[id])return;const w=document.querySelector(`.reflect-options[data-id="${id}"]`);const sel=w.querySelector('.reflect-opt.selected');if(!sel)return;const chosen=parseInt(sel.dataset.i);let correct=-1;for(const sec of Object.values(VID_DATA)){const item=sec.items.find(x=>x.id===id);if(item){correct=item.correct;break}}w.querySelectorAll('.reflect-opt').forEach((o,i)=>{if(i===correct)o.classList.add('correct');else if(i===chosen&&i!==correct)o.classList.add('wrong')});if(chosen===correct){state.streak++;if(state.streak>state.best)state.best=state.streak;state.correct++}else state.streak=0;state.total++;state.completed[id]=chosen;addXP(10);btn.disabled=true;document.getElementById('model-'+id).classList.add('show');const card=document.getElementById('vcard-'+id);const h3=card.querySelector('h3');if(!h3.querySelector('.completed-badge'))h3.innerHTML+=' <span class="completed-badge">Completed +10 XP</span>'})})
+}buildVideos();
+
+// SORTER
+let sortItems=[...SORT_DATA].sort(()=>Math.random()-.5).slice(0,10);let sortAnswers={};
+(function buildSorter(){const wrap=document.getElementById('sorterItems');const note=document.createElement('p');note.style.cssText='font-size:.75em;color:#999;margin:8px 0';note.textContent='Tap to cycle: red border = Myth, green = True. Or drag into zones.';wrap.appendChild(note);
+sortItems.forEach((item,i)=>{const d=document.createElement('div');d.className='sort-item';d.draggable=true;d.dataset.idx=i;d.textContent=item.s;
+d.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);d.classList.add('dragging')});d.addEventListener('dragend',()=>d.classList.remove('dragging'));
+d.addEventListener('click',()=>{if(!d.dataset.choice||d.dataset.choice==='none'){d.dataset.choice='myth';d.style.borderColor='var(--accent)'}else if(d.dataset.choice==='myth'){d.dataset.choice='reality';d.style.borderColor='var(--green)'}else{d.dataset.choice='none';d.style.borderColor='var(--mid)'}sortAnswers[i]=d.dataset.choice==='none'?undefined:d.dataset.choice});
+wrap.appendChild(d)});
+['zoneMyth','zoneReality'].forEach(zid=>{const z=document.getElementById(zid);z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over')});z.addEventListener('dragleave',()=>z.classList.remove('over'));z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('over');const idx=e.dataTransfer.getData('text/plain');sortAnswers[idx]=z.dataset.zone;const item=document.querySelector(`.sort-item[data-idx="${idx}"]`);if(item){item.style.borderColor=z.dataset.zone==='myth'?'var(--accent)':'var(--green)';item.dataset.choice=z.dataset.zone}})})})();
+document.getElementById('checkSorter').addEventListener('click',function(){let score=0;sortItems.forEach((item,i)=>{const el=document.querySelector(`.sort-item[data-idx="${i}"]`);const ans=sortAnswers[i]||el?.dataset?.choice;if(ans===item.a){score++;el.style.background='#eafaf1';el.style.borderColor='var(--green)'}else{el.style.background='#fdedec';el.style.borderColor='var(--accent)'}el.innerHTML=`${item.s}<br><small style="color:#666"><strong>${item.a.toUpperCase()}</strong> — ${item.e}</small>`});const pct=Math.round(score/sortItems.length*100);const cls=pct>=80?'great':pct>=50?'good':'try';document.getElementById('sorterResult').innerHTML=`<div class="result-banner ${cls}">${score}/${sortItems.length} correct (${pct}%)</div>`;if(score>0){addXP(score*10);state.correct+=score;state.total+=sortItems.length;save()}this.disabled=true});
+
+// THEORY
+const THEORY_LABELS={realism:"Realism",liberalism:"Liberalism",constructivism:"Constructivism",marxism:"Marxism",feminism:"Feminism",postcolonial:"Post-colonialism"};
+const THEORY_KEYS=Object.keys(THEORY_LABELS);
+let theoryItems=[...THEORY_DATA].sort(()=>Math.random()-.5).slice(0,10);let theoryAnswers={};
+(function buildTheory(){const wrap=document.getElementById('theoryItems');theoryItems.forEach((item,i)=>{const card=document.createElement('div');card.className='card';card.innerHTML=`<p style="font-size:.9em;margin-bottom:10px;font-style:italic">"${item.s}"</p><div class="theory-options" data-idx="${i}">${THEORY_KEYS.map(k=>`<span class="theory-pill" data-t="${k}" data-idx="${i}">${THEORY_LABELS[k]}</span>`).join('')}</div>`;wrap.appendChild(card)});document.querySelectorAll('.theory-pill').forEach(p=>{p.addEventListener('click',()=>{const idx=p.dataset.idx;document.querySelectorAll(`.theory-pill[data-idx="${idx}"]`).forEach(x=>x.classList.remove('selected'));p.classList.add('selected');theoryAnswers[idx]=p.dataset.t})})})();
+document.getElementById('checkTheory').addEventListener('click',function(){let score=0;theoryItems.forEach((item,i)=>{const pills=document.querySelectorAll(`.theory-pill[data-idx="${i}"]`);pills.forEach(p=>{if(p.dataset.t===item.a){p.classList.add('selected');p.style.background='var(--green)';p.style.borderColor='var(--green)';p.style.color='#fff'}else if(p.classList.contains('selected')&&p.dataset.t!==item.a){p.style.background='var(--accent)';p.style.borderColor='var(--accent)';p.style.color='#fff'}});if(theoryAnswers[i]===item.a)score++;const card=pills[0].closest('.card');const exp=document.createElement('p');exp.style.cssText='font-size:.8em;color:#666;margin-top:8px;border-top:1px solid var(--mid);padding-top:8px';exp.innerHTML=`<strong>${THEORY_LABELS[item.a]}:</strong> ${item.e}`;card.appendChild(exp)});const pct=Math.round(score/theoryItems.length*100);const cls=pct>=80?'great':pct>=50?'good':'try';document.getElementById('theoryResult').innerHTML=`<div class="result-banner ${cls}">${score}/${theoryItems.length} correct (${pct}%)</div>`;if(score>0){addXP(score*15);state.correct+=score;state.total+=theoryItems.length;save()}this.disabled=true});
+
+// MATCH
+let matchPairs=[...MATCH_DATA].sort(()=>Math.random()-.5);let matchSel=null;let matchCount=0;
+(function buildMatch(){const grid=document.getElementById('matchGrid');const left=matchPairs.map((p,i)=>({text:p.thinker,type:'thinker',idx:i})).sort(()=>Math.random()-.5);const right=matchPairs.map((p,i)=>({text:p.contrib,type:'contrib',idx:i})).sort(()=>Math.random()-.5);
+[...left,...right].forEach(item=>{const d=document.createElement('div');d.className='match-item';d.dataset.type=item.type;d.dataset.idx=item.idx;d.textContent=item.text;
+d.addEventListener('click',()=>{if(d.classList.contains('matched'))return;if(!matchSel){matchSel=d;d.classList.add('sel');return}if(matchSel===d){d.classList.remove('sel');matchSel=null;return}if(matchSel.dataset.type===d.dataset.type){matchSel.classList.remove('sel');matchSel=d;d.classList.add('sel');return}
+if(matchSel.dataset.idx===d.dataset.idx){matchSel.classList.remove('sel');matchSel.classList.add('matched');d.classList.add('matched');matchCount++;addXP(15);state.correct++;state.total++;state.streak++;if(state.streak>state.best)state.best=state.streak;save();updXP();if(matchCount===matchPairs.length)document.getElementById('matchResult').innerHTML='<div class="result-banner great">All matched!</div>'}else{d.classList.add('wrong-flash');matchSel.classList.add('wrong-flash');state.streak=0;state.total++;save();updXP();setTimeout(()=>{d.classList.remove('wrong-flash');matchSel.classList.remove('wrong-flash','sel');matchSel=null},500);return}matchSel=null});grid.appendChild(d)})})();
+
+// TIMELINE
+let tlShuffled=[...TL_DATA].sort(()=>Math.random()-.5);
+(function buildTL(){const wrap=document.getElementById('tlItems');tlShuffled.forEach((item,i)=>{const d=document.createElement('div');d.className='tl-item';d.draggable=true;d.dataset.idx=i;d.innerHTML=`<span class="handle">☰</span> ${item.e}`;
+d.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);d.classList.add('dragging')});d.addEventListener('dragend',()=>d.classList.remove('dragging'));
+d.addEventListener('dragover',e=>{e.preventDefault();const after=getDragAfter(wrap,e.clientY);const dragging=wrap.querySelector('.dragging');if(after)wrap.insertBefore(dragging,after);else wrap.appendChild(dragging)});wrap.appendChild(d)})})();
+function getDragAfter(c,y){const els=[...c.querySelectorAll('.tl-item:not(.dragging)')];return els.reduce((cl,ch)=>{const box=ch.getBoundingClientRect();const off=y-box.top-box.height/2;if(off<0&&off>cl.offset)return{offset:off,element:ch};return cl},{offset:Number.NEGATIVE_INFINITY}).element}
+document.getElementById('checkTL').addEventListener('click',function(){const items=document.querySelectorAll('#tlItems .tl-item');const correctOrder=[...TL_DATA].sort((a,b)=>a.y-b.y);let score=0;items.forEach((d,i)=>{const item=tlShuffled[d.dataset.idx];const ci=correctOrder[i];if(item.y===ci.y){d.classList.add('correct');score++}else d.classList.add('wrong');d.innerHTML=`<span class="handle">${i+1}</span> <strong>${item.y}</strong> — ${item.e}`});const pct=Math.round(score/TL_DATA.length*100);const cls=pct>=80?'great':pct>=50?'good':'try';document.getElementById('tlResult').innerHTML=`<div class="result-banner ${cls}">${score}/${TL_DATA.length} correct (${pct}%)</div>`;const xp=score===TL_DATA.length?20:Math.floor(score*2);if(xp>0){addXP(xp);state.correct+=score;state.total+=TL_DATA.length;save()}this.disabled=true});
+
+// STATS
+function renderStats(){const grid=document.getElementById('statGrid');const acc=state.total?Math.round(state.correct/state.total*100):0;grid.innerHTML=`<div class="stat-card"><span class="num">${state.xp}</span><span class="lbl">Total XP</span></div><div class="stat-card"><span class="num">${acc}%</span><span class="lbl">Accuracy</span></div><div class="stat-card"><span class="num">${state.best}</span><span class="lbl">Best Streak</span></div><div class="stat-card"><span class="num">${state.activities}</span><span class="lbl">Activities</span></div>`;const prog=document.getElementById('activityProgress');const totalV=Object.values(VID_DATA).reduce((s,sec)=>s+sec.items.length,0);const doneV=Object.keys(state.completed).length;prog.innerHTML=`<h3>Activity Completion</h3><p style="font-size:.85em;margin:10px 0">Video & Case Reflections: ${doneV}/${totalV}</p><div class="progress-bar"><div class="fill" style="width:${Math.round(doneV/totalV*100)}%"></div></div>`}
+document.getElementById('resetBtn').addEventListener('click',()=>{if(confirm('Reset all progress?')){state={xp:0,streak:0,best:0,completed:{},activities:0,correct:0,total:0};save();updXP();location.reload()}});
+</script>
+</body>
+</html>
