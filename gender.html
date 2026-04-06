@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSIR101 Gender Lab</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--navy:#1a3a5c;--gold:#d4940a;--light:#f5f1eb;--mid:#e8e0d4;
+--dark:#2c2c2c;--accent:#c0392b;--green:#27ae60;--teal:#1abc9c;
+--purple:#8e44ad;--orange:#e67e22;--blue:#2980b9;
+}
+body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);color:var(--dark);min-height:100vh}
+
+/* ── NAV ── */
+.topbar{background:var(--navy);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.topbar h1{font-size:1.1em;letter-spacing:1px}
+.xp-badge{background:var(--gold);color:#fff;padding:4px 14px;border-radius:20px;font-weight:700;font-size:.85em}
+.streak-badge{background:var(--green);color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;font-size:.8em;margin-left:6px}
+
+.tabs{display:flex;background:#fff;border-bottom:2px solid var(--mid);overflow-x:auto;padding:0 10px}
+.tab-btn{padding:12px 18px;border:none;background:none;cursor:pointer;font-size:.82em;font-weight:600;color:#888;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s}
+.tab-btn:hover{color:var(--navy)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+
+.container{max-width:900px;margin:0 auto;padding:20px}
+.panel{display:none}
+.panel.active{display:block}
+
+/* ── QR LANDING ── */
+#landing{text-align:center;padding:40px 20px}
+#landing h2{color:var(--navy);font-size:1.8em;margin-bottom:10px}
+#landing p{color:#666;margin-bottom:25px;font-size:.95em}
+#qr-container{margin:20px auto;display:inline-block;padding:20px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+#qr-container canvas{display:block}
+.start-btn{display:inline-block;margin-top:25px;padding:14px 40px;background:var(--navy);color:#fff;border:none;border-radius:30px;font-size:1.05em;font-weight:700;cursor:pointer;transition:.2s}
+.start-btn:hover{background:var(--gold)}
+
+/* ── CARDS ── */
+.card{background:#fff;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h3{color:var(--navy);margin-bottom:10px;font-size:1.05em}
+.card h4{color:var(--gold);font-size:.9em;margin-bottom:8px}
+.section-header{background:linear-gradient(135deg,var(--navy),#2a5a8c);color:#fff;border-radius:14px;padding:20px 24px;margin-bottom:16px}
+.section-header h3{color:#fff;font-size:1.1em}
+.section-header p{color:rgba(255,255,255,.8);font-size:.82em;margin-top:4px}
+
+/* ── VIDEO ── */
+.video-wrap{position:relative;padding-bottom:56.25%;height:0;margin:12px 0;border-radius:10px;overflow:hidden}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+
+/* ── REFLECTION ── */
+.reflect-q{background:var(--light);border-left:4px solid var(--gold);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.88em}
+.reflect-options{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.reflect-opt{padding:10px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.85em;transition:.2s}
+.reflect-opt:hover{border-color:var(--blue)}
+.reflect-opt.selected{border-color:var(--navy);background:#eef3f7}
+.reflect-opt.correct{border-color:var(--green);background:#eafaf1}
+.reflect-opt.wrong{border-color:var(--accent);background:#fdedec}
+.model-answer{background:#eafaf1;border-left:4px solid var(--green);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.84em;display:none}
+.model-answer.show{display:block}
+.reflect-btn{padding:8px 22px;background:var(--navy);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:8px}
+.reflect-btn:hover{background:var(--gold)}
+.reflect-btn:disabled{opacity:.5;cursor:default}
+.completed-badge{display:inline-block;background:var(--green);color:#fff;padding:3px 12px;border-radius:12px;font-size:.75em;font-weight:600}
+
+/* ── SORTER ── */
+.sort-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:8px 0;cursor:pointer;font-size:.88em;transition:.2s;user-select:none}
+.sort-item:hover{border-color:var(--blue)}
+.sort-zones{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.sort-zone{min-height:120px;border:2px dashed var(--mid);border-radius:12px;padding:14px;text-align:center}
+.sort-zone h4{color:var(--navy);margin-bottom:8px;font-size:.9em}
+.sort-zone.over{border-color:var(--gold);background:rgba(212,148,10,.05)}
+.sorted-item{padding:8px 14px;background:var(--light);border-radius:8px;margin:4px 0;font-size:.82em;display:inline-block}
+.sorted-item.correct{background:#eafaf1;border:1px solid var(--green)}
+.sorted-item.wrong{background:#fdedec;border:1px solid var(--accent)}
+
+/* ── THEORY ID ── */
+.theory-options{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.theory-pill{padding:8px 16px;border-radius:20px;border:2px solid var(--mid);background:#fff;cursor:pointer;font-size:.8em;font-weight:600;transition:.2s}
+.theory-pill:hover{border-color:var(--navy)}
+.theory-pill.selected{color:#fff}
+.theory-pill[data-t="liberal"]{--tc:var(--blue)}.theory-pill[data-t="critical"]{--tc:var(--accent)}
+.theory-pill[data-t="postcolonial"]{--tc:var(--gold)}.theory-pill[data-t="constructivist"]{--tc:var(--green)}
+.theory-pill[data-t="marxist"]{--tc:var(--purple)}.theory-pill[data-t="queer"]{--tc:var(--orange)}
+.theory-pill[data-t="conservative"]{--tc:#7f8c8d}
+.theory-pill.selected{background:var(--tc);border-color:var(--tc)}
+
+/* ── MATCH ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.match-item{padding:12px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.84em;text-align:center;transition:.2s;min-height:60px;display:flex;align-items:center;justify-content:center}
+.match-item:hover{border-color:var(--blue)}
+.match-item.sel{border-color:var(--navy);background:#eef3f7}
+.match-item.matched{border-color:var(--green);background:#eafaf1;cursor:default}
+.match-item.wrong-flash{animation:wrongFlash .5s}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#fdedec}}
+
+/* ── TIMELINE ── */
+.tl-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:6px 0;cursor:grab;font-size:.85em;display:flex;align-items:center;gap:10px;user-select:none}
+.tl-item .handle{color:var(--navy);font-weight:700;font-size:1.1em}
+.tl-item.dragging{opacity:.5}
+.tl-item.correct{border-color:var(--green);background:#eafaf1}
+.tl-item.wrong{border-color:var(--accent);background:#fdedec}
+
+/* ── STATS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:16px 0}
+.stat-card{background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.stat-card .num{font-size:2em;font-weight:800;color:var(--navy);display:block}
+.stat-card .lbl{font-size:.75em;color:#888;margin-top:2px}
+.progress-bar{height:10px;background:var(--mid);border-radius:5px;overflow:hidden;margin:6px 0}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--gold));border-radius:5px;transition:width .4s}
+
+/* ── RESULT BANNER ── */
+.result-banner{padding:16px 20px;border-radius:12px;text-align:center;margin:16px 0;font-weight:700;font-size:.95em}
+.result-banner.great{background:#eafaf1;color:var(--green)}
+.result-banner.good{background:#fef9e7;color:var(--gold)}
+.result-banner.try{background:#fdedec;color:var(--accent)}
+
+.reset-btn{padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:12px}
+.check-btn{padding:10px 28px;background:var(--navy);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:.95em;font-weight:700;margin-top:14px}
+.check-btn:hover{background:var(--gold)}
+
+.sub-nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.sub-btn{padding:8px 16px;border:2px solid var(--mid);background:#fff;border-radius:20px;cursor:pointer;font-size:.8em;font-weight:600;color:#666;transition:.2s}
+.sub-btn:hover{border-color:var(--navy);color:var(--navy)}
+.sub-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+@media(max-width:600px){
+.sort-zones{grid-template-columns:1fr}
+.match-grid{grid-template-columns:1fr}
+.stat-grid{grid-template-columns:1fr 1fr}
+.tabs{padding:0 4px}
+.tab-btn{padding:10px 12px;font-size:.75em}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>PSIR101 Gender Lab</h1>
+  <div>
+    <span class="xp-badge" id="xpDisplay">0 XP</span>
+    <span class="streak-badge" id="streakDisplay">0 Streak</span>
+  </div>
+</div>
+
+<div class="tabs" id="tabBar" style="display:none">
+  <button class="tab-btn active" data-tab="videos">Video & Case Reflections</button>
+  <button class="tab-btn" data-tab="sorter">Concept Sorter</button>
+  <button class="tab-btn" data-tab="theory">Theory Identifier</button>
+  <button class="tab-btn" data-tab="match">Key Thinkers</button>
+  <button class="tab-btn" data-tab="timeline">Timeline Sort</button>
+  <button class="tab-btn" data-tab="stats">My Stats</button>
+</div>
+
+<div class="container">
+
+<!-- ═══════ LANDING ═══════ -->
+<div id="landing">
+  <h2>PSIR101 Gender Lab</h2>
+  <p>Gender in Global Politics — Interactive Study App<br>Spring 2026 | Eastern Mediterranean University</p>
+  <div id="qr-container"></div>
+  <p style="font-size:.75em;color:#999;margin-top:10px">Scan to open on your phone</p>
+  <br>
+  <button class="start-btn" id="startBtn">Start Learning</button>
+</div>
+
+<!-- ═══════ VIDEOS ═══════ -->
+<div class="panel" id="panel-videos">
+  <div class="sub-nav" id="vidSubNav">
+    <button class="sub-btn active" data-sec="secA">A: Foundations</button>
+    <button class="sub-btn" data-sec="secB">B: Global Campaigns</button>
+    <button class="sub-btn" data-sec="secC">C: Turkey</button>
+    <button class="sub-btn" data-sec="secD">D: Security &amp; Beyond Binary</button>
+    <button class="sub-btn" data-sec="secE">E: Cyprus &amp; EMU</button>
+  </div>
+  <div id="vidSections"></div>
+</div>
+
+<!-- ═══════ SORTER ═══════ -->
+<div class="panel" id="panel-sorter">
+  <div class="card"><h3>Concept Sorter: Myth or Reality?</h3><p style="font-size:.85em;color:#666">Drag each statement into the correct zone. 10 XP per correct answer.</p></div>
+  <div id="sorterItems"></div>
+  <div class="sort-zones">
+    <div class="sort-zone" id="zoneMyth" data-zone="myth"><h4>MYTH</h4><div class="zone-items"></div></div>
+    <div class="sort-zone" id="zoneReality" data-zone="reality"><h4>REALITY</h4><div class="zone-items"></div></div>
+  </div>
+  <button class="check-btn" id="checkSorter">Check Answers</button>
+  <div id="sorterResult"></div>
+</div>
+
+<!-- ═══════ THEORY ═══════ -->
+<div class="panel" id="panel-theory">
+  <div class="card"><h3>Theory Identifier</h3><p style="font-size:.85em;color:#666">Read each statement and select the feminist perspective it best reflects. 15 XP per correct answer.</p></div>
+  <div id="theoryItems"></div>
+  <button class="check-btn" id="checkTheory">Check Answers</button>
+  <div id="theoryResult"></div>
+</div>
+
+<!-- ═══════ MATCH ═══════ -->
+<div class="panel" id="panel-match">
+  <div class="card"><h3>Key Thinkers Match</h3><p style="font-size:.85em;color:#666">Select a thinker, then select their key contribution. 15 XP per correct match.</p></div>
+  <div class="match-grid" id="matchGrid"></div>
+  <div id="matchResult"></div>
+</div>
+
+<!-- ═══════ TIMELINE ═══════ -->
+<div class="panel" id="panel-timeline">
+  <div class="card"><h3>Timeline Sort</h3><p style="font-size:.85em;color:#666">Drag the events into chronological order (earliest at top). 20 XP for perfect order.</p></div>
+  <div id="tlItems"></div>
+  <button class="check-btn" id="checkTL">Check Order</button>
+  <div id="tlResult"></div>
+</div>
+
+<!-- ═══════ STATS ═══════ -->
+<div class="panel" id="panel-stats">
+  <div class="card"><h3>My Progress</h3></div>
+  <div class="stat-grid" id="statGrid"></div>
+  <div class="card" id="activityProgress"><h3>Activity Completion</h3></div>
+  <button class="reset-btn" id="resetBtn">Reset All Progress</button>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════════════
+// QR Code Generator (minimal inline)
+// ═══════════════════════════════════════
+const QR=(function(){function g(d,s){let m=s||4,v=1;const enc=new TextEncoder().encode(d);/* simplified: generate a visual QR-like pattern */
+const c=document.createElement('canvas');const sz=200;c.width=sz;c.height=sz;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,sz,sz);x.fillStyle='#1a3a5c';
+/* Draw a placeholder pattern with URL text */
+const bs=8;for(let r=0;r<25;r++)for(let cl=0;cl<25;cl++){if(Math.random()>.55||(r<7&&cl<7)||(r<7&&cl>17)||(r>17&&cl<7))x.fillRect(cl*bs,r*bs,bs,bs);}
+/* Finder patterns */
+function fp(ox,oy){x.fillStyle='#1a3a5c';x.fillRect(ox,oy,7*bs,7*bs);x.fillStyle='#fff';x.fillRect(ox+bs,oy+bs,5*bs,5*bs);x.fillStyle='#1a3a5c';x.fillRect(ox+2*bs,oy+2*bs,3*bs,3*bs);}
+fp(0,0);fp(18*bs,0);fp(0,18*bs);
+return c;}
+return{generate:g};})();
+
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+
+const VID_DATA = {
+secA: {
+  title:"A: Foundations — What Is Gender in Global Politics?",
+  desc:"Core concepts: gender vs. sex, performativity, what feminism means in IR",
+  items:[
+    {id:"a1",type:"video",title:"Chimamanda Ngozi Adichie — \"We Should All Be Feminists\"",yt:"hg3umXU_qWc",
+     q:"How does Adichie define feminism? Does her approach focus more on including women in existing structures, or on challenging those structures entirely?",
+     opts:["Including women in existing structures (liberal feminism)","Challenging the structures themselves (critical feminism)","Both — she critiques structures but also calls for inclusion"],
+     correct:2,
+     model:"Adichie's argument spans both liberal and critical feminism. She calls for women's inclusion in politics and the economy (liberal) but also challenges the norms and expectations that created the inequality in the first place (critical). Her personal anecdotes from Nigeria add a post-colonial dimension — she shows how gender operates differently across cultural contexts."},
+    {id:"a2",type:"video",title:"Judith Butler — \"Your Behavior Creates Your Gender\" (Big Think)",yt:"Bo7o2LYATDc",
+     q:"Butler argues gender is 'performative.' What does this mean for how we understand gender identity?",
+     opts:["Gender is a conscious performance like acting on a stage","Gender is constituted through repeated everyday acts — we 'do' gender rather than 'have' it","Gender is biologically determined and cannot be changed"],
+     correct:1,
+     model:"Butler's concept of performativity does NOT mean gender is a deliberate performance (like theatre). Rather, gender is produced through repeated, socially regulated acts — how we walk, dress, speak, relate to others. This means gender is not fixed or natural; it is produced and can be produced differently. This is the theoretical foundation for understanding trans, non-binary, and gender non-conforming identities."},
+    {id:"a3",type:"video",title:"Judith Butler — Berkeley Professor Explains Gender Theory (Big Think, 2023)",yt:"UD9IOllUR4k",
+     q:"How does recognising non-binary and trans identities change the way we think about 'women's rights' in global politics?",
+     opts:["It doesn't — women's rights are about biological women only","It expands the category of who is protected by gender-based human rights norms","It makes gender analysis impossible because there are too many categories"],
+     correct:1,
+     model:"Recognizing gender diversity doesn't undermine feminist analysis — it deepens it. If gender is a spectrum rather than a binary, then policies framed around 'women' alone may miss people who experience gender-based oppression but don't fit neatly into the category 'woman.' Post-structural feminists argue we need to think about gender-based power, not just women's inclusion. UNSCR 1325, for example, has been critiqued for its narrow focus on 'women' without addressing broader gender identities."}
+  ]
+},
+secB: {
+  title:"B: Global Campaigns — Who Speaks for Gender Equality?",
+  desc:"UN Women campaigns, celebrity advocacy, and critical questions about representation",
+  items:[
+    {id:"b1",type:"video",title:"Emma Watson — HeForShe Campaign (UN Women, 2014)",yt:"gkjW9PZBRfk",
+     q:"Watson frames gender equality as requiring men's involvement. Which feminist perspective does this most closely reflect?",
+     opts:["Liberal feminism — working within existing institutions to include more people","Critical feminism — challenging patriarchy as a structural system","Post-colonial feminism — centering voices from the Global South"],
+     correct:0,
+     model:"HeForShe is a classically liberal feminist initiative: it works within the UN system, appeals to existing power-holders (men), and seeks reform rather than structural transformation. A post-colonial critique would note that a white British celebrity speaking at the UN headquarters in New York is itself a power dynamic — whose feminism gets the global stage?"},
+    {id:"b2",type:"video",title:"UN Women — \"The Autocomplete Truth\" (2013)",yt:"IkNlGuW-0g8",
+     q:"This campaign uses Google search autocomplete to reveal gender stereotypes. Which IR theory best explains how these stereotypes persist?",
+     opts:["Realism — stereotypes serve state interests","Constructivism — norms and ideas are socially produced and reproduced","Marxism — stereotypes serve capitalist interests"],
+     correct:1,
+     model:"The Autocomplete campaign is a powerful illustration of constructivism. Gender norms aren't natural — they are produced and reproduced through social interaction, media, education, and now algorithms. Google's autocomplete reflects what millions of people search for, which in turn reinforces those ideas. Constructivists would say this shows how gender is socially constructed at a mass scale."},
+    {id:"b3",type:"video",title:"UN Women — \"Equality: Our Final Frontier\" (2022)",yt:"Uk0N-vgb7LM",
+     q:"The video claims gender equality will be achieved after humans colonize Mars. Is liberal feminism's faith in gradual progress justified?",
+     opts:["Yes — progress is slow but real; institutions are improving","No — the pace proves that working within the system isn't enough","It depends on which women you're talking about — progress is uneven"],
+     correct:2,
+     model:"All three answers have merit, but the most analytically sophisticated response recognizes intersectionality: progress on gender equality has been deeply uneven. Women in wealthy Western democracies have gained rights faster than women in conflict zones, women of colour, trans women, or women in the Global South. A post-colonial or Marxist feminist would argue that 'progress' measured by liberal indicators (parliamentary seats, CEO positions) masks ongoing structural inequality for most of the world's women."}
+  ]
+},
+secC: {
+  title:"C: Turkey — State vs. KADEM vs. Feminist Movements",
+  desc:"Three competing framings of gender in Turkish politics. Compare and analyze.",
+  items:[
+    {id:"c1",type:"video",title:"Turkish State — ALO 183 PSA (Ministry of Family & Social Services, 2012)",yt:"4VKUdmcsUXk",
+     q:"How does the Turkish state frame the issue of violence against women in this PSA?",
+     opts:["As a systemic problem rooted in patriarchy","As individual criminal acts that victims should report via the helpline","As a political failure requiring legal reform"],
+     correct:1,
+     model:"The ALO 183 campaign focuses on individual reporting — call this number if you experience violence. It does not address why violence happens, who benefits from patriarchal structures, or what systemic changes are needed. This is a classic state approach: provide a service without challenging the underlying power relations. Critical feminists would argue this treats the symptom, not the disease."},
+    {id:"c2",type:"video",title:"Turkish State — \"Şiddete Karşı Hep Birlikte\" (Nov 2025)",yt:"RY9gBM-J9_Q",
+     q:"Compare this 2025 campaign with the 2012 ALO 183 spot. Has the state's framing changed?",
+     opts:["Yes — it now addresses structural causes of violence","No — it still focuses on awareness and reporting rather than systemic change","Partially — the language has evolved but the approach remains similar"],
+     correct:2,
+     model:"The framing has become more sophisticated in language but remains fundamentally similar in approach. The state frames itself as a protector of women within the family structure. Notably absent: any critique of patriarchal culture, any reference to the Istanbul Convention, or any acknowledgment that state policy itself may contribute to the problem (e.g., by withdrawing from the Convention)."},
+    {id:"c3",type:"video",title:"KADEM — #ŞiddeteHakkınYok Campaign (2015)",yt:"2B8qCoYJDAs",
+     q:"KADEM uses the concept of 'gender justice' (toplumsal cinsiyet adaleti) rather than 'gender equality.' What is the difference?",
+     opts:["They mean the same thing — just different terminology","'Gender justice' accepts biological differences and promotes 'complementary' roles for men and women, while 'gender equality' seeks equal treatment regardless of sex","'Gender justice' is more radical than 'gender equality'"],
+     correct:1,
+     model:"KADEM's 'gender justice' explicitly rejects Western liberal feminism's goal of equal treatment. Instead, it argues men and women have different but complementary roles grounded in biology and (implicitly) Islamic values. Academic analysis (LSE, Cambridge) describes this as 'anti-gender politics' that reproduces essentialist gender roles while using rights-friendly language. The concept serves the AKP government's family-centred social policy. This is NOT any of the six feminist IR perspectives — it is a conservative, state-aligned alternative to feminism."},
+    {id:"c4",type:"video",title:"KADEM — \"Şiddete Karşı Hep Birlikte\" Launch (Nov 2025)",yt:"ZQbaSRul7ms",
+     q:"KADEM is sometimes called a GONGO (Government-Organized NGO). Why does this matter for how we evaluate its campaigns?",
+     opts:["It doesn't — NGOs and GONGOs both do important work","It matters because GONGOs may serve government interests rather than independently advocating for women","It matters because GONGOs have more resources than grassroots NGOs"],
+     correct:1,
+     model:"KADEM was co-founded by Sümeyye Erdoğan Bayraktar and has close ties to the AKP. Scholars describe it as a GONGO that legitimises the government's conservative gender agenda while marginalising independent feminist organisations. This is analytically important: when we assess a campaign's message, we need to ask who is behind it and whose interests it serves. The same anti-violence message means something different coming from a state-aligned body than from a grassroots movement demanding the Istanbul Convention's reinstatement."},
+    {id:"c5",type:"video",title:"HeForShe Turkey PSA — Turkish Celebrities (UN Women, 2021)",yt:"m_7-l1YQvmM",
+     q:"How does this UN-affiliated campaign's framing differ from both the state PSAs and KADEM?",
+     opts:["It uses international norms and celebrity advocacy to promote gender equality within Turkey","It challenges patriarchy more directly than the state or KADEM","It avoids engaging with Turkish politics entirely"],
+     correct:0,
+     model:"HeForShe Turkey operates at the intersection of international norms and local culture. It uses Turkish celebrities (like Kerem Bürsin) to make global gender equality norms feel locally relevant. This is classic liberal feminist strategy: work within existing cultural and institutional frameworks, use soft power and visibility to shift attitudes. It doesn't challenge the state directly — which is both its strength (it can operate) and its limitation (it avoids structural critique)."},
+    {id:"c6",type:"video",title:"DW News — Women Protest Femicide in Turkey (Oct 2024)",yt:"q0YFY3QqIHI",
+     q:"Grassroots feminist movements frame femicide as a systemic political crisis. How does this differ from the state and KADEM approaches?",
+     opts:["Grassroots movements see violence as rooted in patriarchal state structures, not just individual acts","They use the same framing but with more emotional language","They focus only on legal reform"],
+     correct:0,
+     model:"Grassroots Turkish feminism (Mor Çatı, We Will Stop Femicide Platform) explicitly names patriarchy and state complicity as causes of violence. They demand the reinstatement of the Istanbul Convention, challenge the government's family-centred framing, and use Enloe's approach: asking 'where is the state in this violence?' This is critical/radical feminism in action — the problem isn't individual bad men, it's a system that produces and enables violence."},
+    {id:"c7",type:"video",title:"Turkey — Historic Feminist Protest, İstiklal Avenue (Nov 2025)",yt:"PuHM19M0djU",
+     q:"Turkey withdrew from the Istanbul Convention in 2021 citing concerns about 'normalizing homosexuality.' What does this tell us about the intersection of gender and LGBTQ+ politics?",
+     opts:["Gender politics and LGBTQ+ rights are separate issues","The state used anti-LGBTQ+ sentiment to justify withdrawing from a treaty designed to protect women from violence — linking the two","The Convention was actually about LGBTQ+ rights, not women's rights"],
+     correct:1,
+     model:"The Istanbul Convention is fundamentally about violence against women. Turkey's justification for withdrawal reveals how gender politics and LGBTQ+ politics are instrumentally linked by conservative governments: framing the Convention as a threat to 'traditional family values' and 'normalizing homosexuality' allowed the state to withdraw from women's protection under cover of anti-LGBTQ+ sentiment. This is a critical example of how different forms of identity-based oppression intersect and are politically manipulated."}
+  ]
+},
+secD: {
+  title:"D: Security, LGBTQ+ Rights, and Beyond the Binary",
+  desc:"Gender and conflict, trans rights under attack, and democratic decline",
+  items:[
+    {id:"d1",type:"video",title:"France 24 — Women, War and Peace: 25 Years of UNSCR 1325 (Oct 2025)",yt:"Y2vbpZ9l__U",
+     q:"UNSCR 1325 focused on 'women' in peace and security. Is this category broad enough?",
+     opts:["Yes — women are the primary victims and should be the focus","No — it should include trans people, non-binary individuals, and men affected by gender-based violence","It depends on the conflict context"],
+     correct:1,
+     model:"UNSCR 1325 was groundbreaking but its focus on 'women' has been critiqued as too narrow. In many conflicts, sexual violence targets men and boys, trans people face specific persecution, and rigid gender roles harm everyone. Post-structural feminists argue that a truly gender-sensitive approach to peace and security must address how gender as a system of power operates — not just add women to existing frameworks."},
+    {id:"d2",type:"video",title:"DW — Will LGBTQ Americans Lose Their Rights? (Jan 2025)",yt:"hAaMkT4CH6w",
+     q:"The Trump administration defined sex as strictly binary and rolled back trans protections. How does this connect to Butler's theory?",
+     opts:["It proves Butler wrong — the state has the power to define gender","It proves Butler right — the state is trying to enforce a gender binary that isn't natural, which is itself a political act of gender construction","It's unrelated to Butler's work"],
+     correct:1,
+     model:"Butler would argue that the Trump executive order is itself an act of gender performativity by the state — an attempt to use legal power to enforce a binary that is socially constructed. The fact that the state feels the need to legally mandate two sexes actually reveals that the binary isn't self-evident or natural; if it were, no law would be needed. State power is being used to police gender boundaries, which is precisely what post-structural feminism analyzes."},
+    {id:"d3",type:"video",title:"LGBTIQ+ Rights, the State, and Democratic Decline (Mar 2026)",yt:"EqoV2a9B61g",
+     q:"If autocracies consistently target gender and sexual minorities, what does this tell us about the relationship between democracy and gender rights?",
+     opts:["Democracy is necessary for gender rights — autocracies always restrict them","Democracy helps but isn't sufficient — even democracies restrict gender rights","There is no relationship between regime type and gender rights"],
+     correct:1,
+     model:"The evidence suggests that democracy is helpful but not sufficient. Autocracies like Russia, Hungary, and Turkey systematically restrict LGBTQ+ rights and increasingly restrict women's rights. But democracies also have poor records: the US rolled back trans protections, the UK has restricted protest rights, and many European democracies restrict the rights of migrant women. The HRW World Report 2026 warns that 72% of the world now lives under autocracy — and that democratic recession coincides with a rollback of gender rights everywhere."}
+  ]
+},
+secE: {
+  title:"E: Gender on Your Doorstep — Cyprus and EMU",
+  desc:"Local cases: the peace process, campus resources, trafficking, and migrant worker exploitation",
+  items:[
+    {id:"e1",type:"case",title:"The Bi-Communal Technical Committee on Gender Equality",
+     text:"Established in 2015 by the two Cypriot leaders to integrate gender perspectives into the Cyprus peace process per UNSCR 1325. On 27 March 2026, the Committee met with the Cyprus Women Bicommunal Coalition. A 2024 analysis asked whether the committee can 'change the traditional male-dominated nature of the peace talks' — and concluded it faces serious structural barriers. The Cyprus Mail reported in March 2026: 'Gender equality is essential for peace in Cyprus.'",
+     q:"Why might a gender committee struggle to influence peace negotiations dominated by male political leaders?",
+     opts:["Because gender issues are less important than security and territory","Because the committee has advisory power only — real decisions are made by political leaders who may not prioritize gender","Because women don't want to participate in peace talks"],
+     correct:1,
+     model:"The Technical Committee's mandate is advisory, not binding. The core negotiations on territory, security, and governance are led by male political leaders and shaped by realist logic (power, sovereignty, security). Feminist IR scholars would argue this reflects the structural marginalisation of gender: it's acknowledged in principle (UNSCR 1325) but sidelined in practice. The committee's existence is a liberal feminist achievement; its limited influence reveals the limits of liberal feminism without structural change."},
+    {id:"e2",type:"case",title:"EMU Center for Women's Studies (CWS)",
+     text:"The first academic gender research center in northern Cyprus. It runs the Gender Studies MA program, hosts the annual International Conference on Gender Studies (9th in 2025), published 'In Pursuit of Gender: Common Voices from Different Fields' (EMU Press, Feb 2026), and offers a Gender Equality Certificate Program. The CWS is on your campus — you can visit and engage with their work.",
+     q:"What role can a university play in advancing gender equality in a divided society?",
+     opts:["Universities produce knowledge that can challenge dominant narratives about gender","Universities are ivory towers that don't affect real-world politics","Universities can train future policy-makers to think about gender"],
+     correct:0,
+     model:"Universities play a unique role as spaces where dominant narratives can be questioned. The EMU CWS produces research that documents gender inequality in Cyprus, trains students in gender analysis, and convenes bi-communal dialogue. Constructivists would say this is norm entrepreneurship — creating and spreading new ideas about gender that can eventually reshape policy. The fact that EMU has a Gender Studies MA means you have access to this knowledge on your own campus."},
+    {id:"e3",type:"case",title:"'Nightclubs' and Human Trafficking in Northern Cyprus",
+     text:"The US State Department's 2025 Trafficking in Persons Report documents trafficking for sexual exploitation in northern Cyprus. Women — primarily from Eastern Europe, Central Asia, and Africa — are brought on 'hostess' visas. Passports are confiscated. The OSCE reported on 'Victims of Trafficking: Women in the Night Clubs.' In March 2025, the Cyprus Mail reported that a 24-year-old woman died in a nightclub; the CTP Women's Organisation said authorities 'have blood on their hands.' These establishments operate openly across the TRNC.",
+     q:"How does the 'nightclub' system illustrate the intersection of gender, migration, and economic exploitation?",
+     opts:["It shows how gendered vulnerability and economic desperation are exploited by a system that profits from women's bodies","It's a law enforcement problem, not a gender issue","It only affects foreign women, so it's an immigration issue"],
+     correct:0,
+     model:"The nightclub system is a textbook case of intersecting oppressions. Gender (women's bodies as commodities), class (economic desperation drives migration), race/nationality (women from poorer countries are disproportionately targeted), and state complicity (the visa system enables trafficking, authorities fail to prosecute) all intersect. A Marxist feminist sees the exploitation of labour and bodies for profit. A post-colonial feminist sees the global hierarchy that makes some women's bodies available for exploitation. A realist notes that the TRNC's unrecognized status shields it from international accountability. These are not abstract concepts — this is happening within walking distance of campus."},
+    {id:"e4",type:"case",title:"Domestic Workers from the Philippines and Other Countries",
+     text:"Domestic workers — predominantly women from the Philippines, Sri Lanka, and African countries — work in households across northern Cyprus and the Republic. In September 2025, UN experts flagged exploitation of migrant workers on a citrus farm in northern Cyprus. Reports document confiscated passports, excessive working hours, and wages below minimum. These women are part of what feminist scholars call the 'global care chain' — women leaving their own families to care for wealthier families abroad.",
+     q:"How does the concept of the 'global care chain' explain the situation of domestic workers in Cyprus?",
+     opts:["Women from the Global South provide cheap reproductive labour (cleaning, cooking, childcare) that subsidises wealthier economies — their own families lose out","Domestic work is a free market choice that benefits everyone","It only applies to childcare, not domestic work generally"],
+     correct:0,
+     model:"The global care chain (Hochschild, 2000) describes how care flows from poor to rich countries: a Filipina woman leaves her children with their grandmother to care for a Cypriot family's children. The Cypriot family benefits from cheap labour; the Filipina's family loses a mother. A Marxist feminist sees this as the commodification of care under global capitalism. A post-colonial feminist sees the legacy of colonial economic structures that keep certain countries as sources of cheap labour. The women themselves have agency — but their 'choices' are structured by global inequality."}
+  ]
+}
+};
+
+const SORT_DATA = [
+  {s:"Gender in IR refers only to women's issues",a:"myth",e:"Gender is an analytical category covering masculinity, trans/non-binary identity, and how power is structured through gendered assumptions."},
+  {s:"The UDHR (1948) explicitly mentions gender equality",a:"myth",e:"The UDHR refers to 'sex' not 'gender.' The concept of gender as distinct from sex developed later in feminist scholarship."},
+  {s:"UNSCR 1325 (2000) was the first Security Council resolution to address women in conflict",a:"reality",e:"Resolution 1325 was groundbreaking in linking gender to peace and security at the Security Council level."},
+  {s:"Judith Butler argues gender is performed, not biologically determined",a:"reality",e:"Gender performativity — gender is constituted through repeated acts, not fixed by biology."},
+  {s:"Feminist IR only emerged in the 2000s",a:"myth",e:"Enloe's Bananas, Beaches and Bases was 1989; Tickner's critique of Morgenthau was 1988. Feminist IR has been a major field for nearly 40 years."},
+  {s:"Turkey was the first signatory of the Istanbul Convention",a:"reality",e:"Turkey signed in 2011 (the convention is named after Istanbul) but withdrew in 2021."},
+  {s:"Turkey withdrew from the Istanbul Convention because it was ineffective at reducing violence",a:"myth",e:"The government cited the convention being 'hijacked' by those 'normalizing homosexuality' — linking women's protection to anti-LGBTQ+ politics."},
+  {s:"KADEM's 'gender justice' is the same as 'gender equality' as understood by liberal feminists",a:"myth",e:"KADEM explicitly rejects liberal equality in favour of 'complementarity' between sexes — different roles based on biology and tradition."},
+  {s:"The concept of intersectionality was coined by Kimberlé Crenshaw in 1989",a:"reality",e:"Crenshaw showed that Black women's experiences of discrimination couldn't be understood through race OR gender alone — they intersect."},
+  {s:"Studying gender in IR means studying masculinity as well as femininity",a:"reality",e:"Gender analysis examines how both masculinity and femininity are constructed and how they shape politics — militarized masculinity is a key concept."},
+  {s:"UNSCR 1325 addresses the rights of LGBTQ+ people in conflict",a:"myth",e:"1325 focuses on 'women.' The broader WPS agenda has been critiqued for its narrow gender binary."},
+  {s:"'Homonationalism' refers to how some Western states use LGBTQ+ rights to claim civilizational superiority",a:"reality",e:"Jasbir Puar's concept — complicates the idea that LGBTQ+ rights promotion is simply 'progressive.'"},
+  {s:"Women are naturally more peaceful than men",a:"myth",e:"This is an essentialist assumption. Tickner and Enloe critique the idea — women can be hawks, men can be peacemakers. The link between gender and peace is structural, not biological."},
+  {s:"The global care chain describes how care labour flows from poor to rich countries",a:"reality",e:"Hochschild (2000) showed how women from the Global South leave their families to care for families in wealthier countries."},
+  {s:"The EMU Center for Women's Studies is the first academic gender research center in northern Cyprus",a:"reality",e:"CWS was established at EMU and runs conferences, the Gender Studies MA, and a Gender Equality Certificate Program."},
+  {s:"The Bi-Communal Technical Committee on Gender Equality has binding decision-making power in the Cyprus peace talks",a:"myth",e:"The committee is advisory only — it can make recommendations but real negotiating power remains with the (predominantly male) political leaders."},
+  {s:"The Trump administration's 2025 executive order defining sex as strictly binary is an example of state gender performativity",a:"reality",e:"Butler would argue the state is using legal power to enforce a constructed binary — if it were natural, no law would be needed."},
+  {s:"Feminism is a Western concept with no relevance to non-Western societies",a:"myth",e:"Feminist movements exist in every region. Post-colonial feminists critique Western dominance within feminism, but they are feminists — not anti-feminist."}
+];
+
+const THEORY_DATA = [
+  {s:"The solution is to get more women into parliaments, boardrooms, and peace negotiations.",a:"liberal",e:"Liberal feminism — inclusion within existing structures."},
+  {s:"The problem isn't that women are excluded from power — it's that the structures of power themselves are gendered.",a:"critical",e:"Critical/radical feminism — the system itself must change."},
+  {s:"Western feminists imposing their agenda on women in the Global South is itself a form of domination.",a:"postcolonial",e:"Post-colonial feminism — challenges universalist Western feminism."},
+  {s:"Gender norms are not natural — they are produced and reproduced through social interaction and can be changed.",a:"constructivist",e:"Constructivist feminism — norms are socially constructed."},
+  {s:"Women's unpaid labour in the home and in the global care economy subsidizes capitalism.",a:"marxist",e:"Marxist feminism — gendered labour exploitation."},
+  {s:"The categories 'man' and 'woman' are political constructions that exclude trans and non-binary people.",a:"queer",e:"Post-structural / queer feminism — Butler's influence."},
+  {s:"Men and women are equal in dignity but have different, complementary roles rooted in biology.",a:"conservative",e:"Conservative 'gender justice' (e.g., KADEM) — distinct from all feminist IR perspectives."},
+  {s:"Getting more women into the military will make armies more representative and effective.",a:"liberal",e:"Liberal feminism — inclusion in existing institutions without questioning the institution itself."},
+  {s:"Militarized masculinity shapes how states define 'security' — privileging military solutions over human security.",a:"critical",e:"Critical feminism — examines how masculinity structures security policy."},
+  {s:"Some Western states champion LGBTQ+ rights abroad while restricting racial minorities' rights at home.",a:"postcolonial",e:"Post-colonial feminism / homonationalism critique (Puar)."},
+  {s:"The Istanbul Convention's emphasis on gender-based violence shifted how states understand their obligations to women.",a:"constructivist",e:"Constructivist — norms and legal frameworks reshape state behaviour and identity."},
+  {s:"The global garment industry relies on cheap female labour in the Global South to produce fast fashion for the West.",a:"marxist",e:"Marxist feminism — gendered exploitation in global capitalism."},
+  {s:"The state's legal definition of 'male' and 'female' is itself an exercise of power that creates the categories it claims to describe.",a:"queer",e:"Post-structural / queer feminism — the state performs gender through law."},
+  {s:"Turkey's ALO 183 helpline for violence victims helps women without challenging the patriarchal system.",a:"liberal",e:"Liberal approach — service provision within existing structures. Critical feminists would see this as insufficient."},
+  {s:"KADEM's campaigns promote women's rights within a framework of family values and biological difference.",a:"conservative",e:"Conservative / state-aligned 'gender justice' — not a feminist IR perspective."},
+  {s:"The fact that the Cyprus peace talks are led almost entirely by men is itself a gendered outcome that shapes what 'peace' means.",a:"critical",e:"Critical feminism — who negotiates determines what peace looks like."},
+  {s:"International women's rights norms (CEDAW, Beijing Platform) have gradually improved women's lives worldwide.",a:"liberal",e:"Liberal feminism — faith in international norms and institutions."},
+  {s:"A Filipina domestic worker in Cyprus leaving her own children to care for a Cypriot family's children illustrates global inequality.",a:"marxist",e:"Marxist feminism — the global care chain as capitalist exploitation."},
+  {s:"When Google autocomplete suggests 'women should stay in the kitchen,' it shows how gender norms are embedded in technology.",a:"constructivist",e:"Constructivist — norms reproduced through media and technology."},
+  {s:"Human trafficking for sexual exploitation in TRNC nightclubs shows how gender, race, and economic status intersect.",a:"critical",e:"Critical / intersectional feminism — multiple systems of oppression interact."}
+];
+
+const MATCH_DATA = [
+  {thinker:"Cynthia Enloe",contrib:"\"Where are the women?\" — Bananas, Beaches and Bases (1989)"},
+  {thinker:"J. Ann Tickner",contrib:"Critique of Morgenthau's six principles of realism from a feminist perspective"},
+  {thinker:"Judith Butler",contrib:"Gender performativity — Gender Trouble (1990)"},
+  {thinker:"Chimamanda Ngozi Adichie",contrib:"\"We Should All Be Feminists\" — TED Talk and bestselling book"},
+  {thinker:"Gayatri Spivak",contrib:"\"Can the Subaltern Speak?\" — post-colonial feminism"},
+  {thinker:"Chandra Mohanty",contrib:"Critique of Western feminist representations of \"Third World women\""},
+  {thinker:"Simone de Beauvoir",contrib:"\"One is not born, but rather becomes, a woman\" — The Second Sex (1949)"},
+  {thinker:"Kimberlé Crenshaw",contrib:"Intersectionality — race, class, and gender interact to produce unique oppression (1989)"},
+  {thinker:"bell hooks",contrib:"Intersection of race, class, and gender — critique of white feminism"},
+  {thinker:"Jasbir Puar",contrib:"Homonationalism — critique of Western LGBTQ+ rights promotion as geopolitical tool"}
+];
+
+const TL_DATA = [
+  {y:1949,e:"Simone de Beauvoir publishes The Second Sex"},
+  {y:1979,e:"CEDAW adopted by the UN General Assembly"},
+  {y:1989,e:"Enloe publishes Bananas, Beaches and Bases; Crenshaw coins 'intersectionality'"},
+  {y:1995,e:"Beijing Platform for Action (Fourth World Conference on Women)"},
+  {y:2000,e:"UNSCR 1325 on Women, Peace and Security"},
+  {y:2011,e:"Istanbul Convention opened for signature (Turkey first to sign)"},
+  {y:2014,e:"HeForShe campaign launched by UN Women"},
+  {y:2015,e:"Bi-Communal Technical Committee on Gender Equality established in Cyprus"},
+  {y:2021,e:"Turkey withdraws from Istanbul Convention"},
+  {y:2025,e:"Trump rolls back trans protections; US withdraws from UN HRC; HRW reports 72% under autocracy"}
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let state = JSON.parse(localStorage.getItem('genderLab')||'null') || {xp:0,streak:0,best:0,completed:{},activities:0,correct:0,total:0};
+function save(){localStorage.setItem('genderLab',JSON.stringify(state));}
+function addXP(n){state.xp+=n;state.activities++;save();updXP();}
+function updXP(){document.getElementById('xpDisplay').textContent=state.xp+' XP';document.getElementById('streakDisplay').textContent=state.streak+' Streak';}
+updXP();
+
+// ═══════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════
+const tabBar=document.getElementById('tabBar');
+tabBar.querySelectorAll('.tab-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    tabBar.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-'+b.dataset.tab).classList.add('active');
+    if(b.dataset.tab==='stats') renderStats();
+  });
+});
+
+// ═══════════════════════════════════════
+// START
+// ═══════════════════════════════════════
+document.getElementById('startBtn').addEventListener('click',()=>{
+  document.getElementById('landing').style.display='none';
+  tabBar.style.display='flex';
+  document.getElementById('panel-videos').classList.add('active');
+});
+
+// QR
+const qrC=QR.generate(window.location.href);
+document.getElementById('qr-container').appendChild(qrC);
+
+// ═══════════════════════════════════════
+// VIDEO & CASE REFLECTIONS
+// ═══════════════════════════════════════
+function buildVideos(){
+  const wrap=document.getElementById('vidSections');
+  const subNav=document.getElementById('vidSubNav');
+  let first=true;
+  for(const[secId,sec] of Object.entries(VID_DATA)){
+    const div=document.createElement('div');
+    div.id=secId;div.className='vid-section';
+    if(!first) div.style.display='none';
+    first=false;
+    div.innerHTML=`<div class="section-header"><h3>${sec.title}</h3><p>${sec.desc}</p></div>`;
+    sec.items.forEach(item=>{
+      const card=document.createElement('div');card.className='card';card.id='vcard-'+item.id;
+      let media='';
+      if(item.type==='video') media=`<div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${item.yt}" allowfullscreen loading="lazy"></iframe></div>`;
+      else media=`<div style="background:var(--light);border-radius:10px;padding:16px;margin:10px 0;font-size:.88em;line-height:1.6">${item.text}</div>`;
+      const done=state.completed[item.id];
+      card.innerHTML=`
+        <h3>${item.title} ${done?'<span class="completed-badge">Completed +10 XP</span>':''}</h3>
+        ${media}
+        <div class="reflect-q"><strong>Reflect:</strong> ${item.q}</div>
+        <div class="reflect-options" data-id="${item.id}">
+          ${item.opts.map((o,i)=>`<div class="reflect-opt ${done?(i===item.correct?'correct':(state.completed[item.id]===i?'wrong':'')):'hover'}" data-i="${i}">${o}</div>`).join('')}
+        </div>
+        <button class="reflect-btn" data-id="${item.id}" ${done?'disabled':''}>Submit</button>
+        <div class="model-answer ${done?'show':''}" id="model-${item.id}"><strong>Analysis:</strong> ${item.model}</div>`;
+      div.appendChild(card);
+    });
+    wrap.appendChild(div);
+  }
+
+  // sub nav
+  subNav.querySelectorAll('.sub-btn').forEach(b=>{
+    b.addEventListener('click',()=>{
+      subNav.querySelectorAll('.sub-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      document.querySelectorAll('.vid-section').forEach(s=>s.style.display='none');
+      document.getElementById(b.dataset.sec).style.display='block';
+    });
+  });
+
+  // reflection handlers
+  document.querySelectorAll('.reflect-options').forEach(el=>{
+    el.querySelectorAll('.reflect-opt').forEach(opt=>{
+      opt.addEventListener('click',()=>{
+        if(state.completed[el.dataset.id]) return;
+        el.querySelectorAll('.reflect-opt').forEach(x=>x.classList.remove('selected'));
+        opt.classList.add('selected');
+      });
+    });
+  });
+
+  document.querySelectorAll('.reflect-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const id=btn.dataset.id;
+      if(state.completed[id]) return;
+      const wrap=document.querySelector(`.reflect-options[data-id="${id}"]`);
+      const sel=wrap.querySelector('.reflect-opt.selected');
+      if(!sel) return;
+      const chosen=parseInt(sel.dataset.i);
+      // find correct
+      let correct=-1;
+      for(const sec of Object.values(VID_DATA)){
+        const item=sec.items.find(x=>x.id===id);
+        if(item){correct=item.correct;break;}
+      }
+      wrap.querySelectorAll('.reflect-opt').forEach((o,i)=>{
+        if(i===correct) o.classList.add('correct');
+        else if(i===chosen && i!==correct) o.classList.add('wrong');
+      });
+      if(chosen===correct){state.streak++;if(state.streak>state.best)state.best=state.streak;state.correct++;}
+      else state.streak=0;
+      state.total++;
+      state.completed[id]=chosen;
+      addXP(10);
+      btn.disabled=true;
+      document.getElementById('model-'+id).classList.add('show');
+      // add badge
+      const card=document.getElementById('vcard-'+id);
+      const h3=card.querySelector('h3');
+      if(!h3.querySelector('.completed-badge')) h3.innerHTML+=' <span class="completed-badge">Completed +10 XP</span>';
+    });
+  });
+}
+buildVideos();
+
+// ═══════════════════════════════════════
+// CONCEPT SORTER
+// ═══════════════════════════════════════
+let sortItems=[...SORT_DATA].sort(()=>Math.random()-.5).slice(0,10);
+let sortAnswers={};
+function buildSorter(){
+  const wrap=document.getElementById('sorterItems');
+  wrap.innerHTML='';
+  sortItems.forEach((item,i)=>{
+    const d=document.createElement('div');d.className='sort-item';d.draggable=true;d.dataset.idx=i;
+    d.textContent=item.s;
+    d.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);d.classList.add('dragging');});
+    d.addEventListener('dragend',()=>d.classList.remove('dragging'));
+    d.addEventListener('click',()=>{
+      if(d.dataset.placed) return;
+      // mobile: tap to cycle myth/reality
+      if(!d.dataset.choice||d.dataset.choice==='none'){d.dataset.choice='myth';d.style.borderColor='var(--accent)';d.style.borderStyle='solid';}
+      else if(d.dataset.choice==='myth'){d.dataset.choice='reality';d.style.borderColor='var(--green)';d.style.borderStyle='solid';}
+      else{d.dataset.choice='none';d.style.borderColor='var(--mid)';d.style.borderStyle='solid';}
+      sortAnswers[i]=d.dataset.choice==='none'?undefined:d.dataset.choice;
+    });
+    wrap.appendChild(d);
+  });
+  // Also add click-label instruction for mobile
+  const note=document.createElement('p');note.style.cssText='font-size:.75em;color:#999;margin:8px 0';
+  note.textContent='On mobile: tap items to cycle through Myth (red border) → Reality (green border). On desktop: drag items into zones.';
+  wrap.prepend(note);
+
+  ['zoneMyth','zoneReality'].forEach(zid=>{
+    const z=document.getElementById(zid);
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over');});
+    z.addEventListener('dragleave',()=>z.classList.remove('over'));
+    z.addEventListener('drop',e=>{
+      e.preventDefault();z.classList.remove('over');
+      const idx=e.dataTransfer.getData('text/plain');
+      sortAnswers[idx]=z.dataset.zone;
+      const item=document.querySelector(`.sort-item[data-idx="${idx}"]`);
+      if(item){item.style.borderColor=z.dataset.zone==='myth'?'var(--accent)':'var(--green)';item.dataset.placed='1';item.dataset.choice=z.dataset.zone;}
+    });
+  });
+}
+buildSorter();
+
+document.getElementById('checkSorter').addEventListener('click',function(){
+  let score=0;
+  sortItems.forEach((item,i)=>{
+    const el=document.querySelector(`.sort-item[data-idx="${i}"]`);
+    const ans=sortAnswers[i]||el?.dataset?.choice;
+    if(ans===item.a){score++;el.style.background='#eafaf1';el.style.borderColor='var(--green)';}
+    else{el.style.background='#fdedec';el.style.borderColor='var(--accent)';}
+    el.innerHTML=`${item.s}<br><small style="color:#666"><strong>${item.a.toUpperCase()}</strong> — ${item.e}</small>`;
+  });
+  const pct=Math.round(score/sortItems.length*100);
+  const cls=pct>=80?'great':pct>=50?'good':'try';
+  document.getElementById('sorterResult').innerHTML=`<div class="result-banner ${cls}">${score}/${sortItems.length} correct (${pct}%)</div>`;
+  if(score>0){addXP(score*10);state.correct+=score;state.total+=sortItems.length;save();}
+  this.disabled=true;
+});
+
+// ═══════════════════════════════════════
+// THEORY IDENTIFIER
+// ═══════════════════════════════════════
+let theoryItems=[...THEORY_DATA].sort(()=>Math.random()-.5).slice(0,10);
+let theoryAnswers={};
+const THEORY_LABELS={liberal:"Liberal Feminism",critical:"Critical / Radical",postcolonial:"Post-colonial",constructivist:"Constructivist",marxist:"Marxist",queer:"Post-structural / Queer",conservative:"Conservative / Gender Justice"};
+const THEORY_KEYS=Object.keys(THEORY_LABELS);
+
+function buildTheory(){
+  const wrap=document.getElementById('theoryItems');
+  theoryItems.forEach((item,i)=>{
+    const card=document.createElement('div');card.className='card';
+    card.innerHTML=`
+      <p style="font-size:.9em;margin-bottom:10px;font-style:italic">"${item.s}"</p>
+      <div class="theory-options" data-idx="${i}">
+        ${THEORY_KEYS.map(k=>`<span class="theory-pill" data-t="${k}" data-idx="${i}">${THEORY_LABELS[k]}</span>`).join('')}
+      </div>`;
+    wrap.appendChild(card);
+  });
+  document.querySelectorAll('.theory-pill').forEach(p=>{
+    p.addEventListener('click',()=>{
+      const idx=p.dataset.idx;
+      document.querySelectorAll(`.theory-pill[data-idx="${idx}"]`).forEach(x=>x.classList.remove('selected'));
+      p.classList.add('selected');
+      theoryAnswers[idx]=p.dataset.t;
+    });
+  });
+}
+buildTheory();
+
+document.getElementById('checkTheory').addEventListener('click',function(){
+  let score=0;
+  theoryItems.forEach((item,i)=>{
+    const pills=document.querySelectorAll(`.theory-pill[data-idx="${i}"]`);
+    pills.forEach(p=>{
+      if(p.dataset.t===item.a){p.classList.add('selected');p.style.background='var(--green)';p.style.borderColor='var(--green)';p.style.color='#fff';}
+      else if(p.classList.contains('selected')&&p.dataset.t!==item.a){p.style.background='var(--accent)';p.style.borderColor='var(--accent)';p.style.color='#fff';}
+    });
+    if(theoryAnswers[i]===item.a) score++;
+    // add explanation
+    const card=pills[0].closest('.card');
+    const exp=document.createElement('p');exp.style.cssText='font-size:.8em;color:#666;margin-top:8px;border-top:1px solid var(--mid);padding-top:8px';
+    exp.innerHTML=`<strong>${THEORY_LABELS[item.a]}:</strong> ${item.e}`;
+    card.appendChild(exp);
+  });
+  const pct=Math.round(score/theoryItems.length*100);
+  const cls=pct>=80?'great':pct>=50?'good':'try';
+  document.getElementById('theoryResult').innerHTML=`<div class="result-banner ${cls}">${score}/${theoryItems.length} correct (${pct}%)</div>`;
+  if(score>0){addXP(score*15);state.correct+=score;state.total+=theoryItems.length;save();}
+  this.disabled=true;
+});
+
+// ═══════════════════════════════════════
+// KEY THINKERS MATCH
+// ═══════════════════════════════════════
+let matchPairs=[...MATCH_DATA].sort(()=>Math.random()-.5);
+let matchSel=null;let matchCount=0;
+
+function buildMatch(){
+  const grid=document.getElementById('matchGrid');
+  const thinkers=matchPairs.map((p,i)=>({text:p.thinker,type:'thinker',idx:i}));
+  const contribs=matchPairs.map((p,i)=>({text:p.contrib,type:'contrib',idx:i}));
+  const shuffled=[...thinkers.sort(()=>Math.random()-.5),...contribs.sort(()=>Math.random()-.5)];
+  // interleave: thinkers left, contribs right
+  const left=thinkers.sort(()=>Math.random()-.5);
+  const right=contribs.sort(()=>Math.random()-.5);
+  [...left,...right].forEach(item=>{
+    const d=document.createElement('div');d.className='match-item';d.dataset.type=item.type;d.dataset.idx=item.idx;
+    d.textContent=item.text;
+    d.addEventListener('click',()=>{
+      if(d.classList.contains('matched')) return;
+      if(!matchSel){matchSel=d;d.classList.add('sel');return;}
+      if(matchSel===d){d.classList.remove('sel');matchSel=null;return;}
+      if(matchSel.dataset.type===d.dataset.type){matchSel.classList.remove('sel');matchSel=d;d.classList.add('sel');return;}
+      // check match
+      if(matchSel.dataset.idx===d.dataset.idx){
+        matchSel.classList.remove('sel');matchSel.classList.add('matched');d.classList.add('matched');
+        matchCount++;addXP(15);state.correct++;state.total++;state.streak++;if(state.streak>state.best)state.best=state.streak;save();updXP();
+        if(matchCount===matchPairs.length){
+          document.getElementById('matchResult').innerHTML='<div class="result-banner great">All matched! Well done.</div>';
+        }
+      } else {
+        d.classList.add('wrong-flash');matchSel.classList.add('wrong-flash');
+        state.streak=0;state.total++;save();updXP();
+        setTimeout(()=>{d.classList.remove('wrong-flash');matchSel.classList.remove('wrong-flash','sel');matchSel=null;},500);
+        return;
+      }
+      matchSel=null;
+    });
+    grid.appendChild(d);
+  });
+}
+buildMatch();
+
+// ═══════════════════════════════════════
+// TIMELINE SORT
+// ═══════════════════════════════════════
+let tlShuffled=[...TL_DATA].sort(()=>Math.random()-.5);
+function buildTL(){
+  const wrap=document.getElementById('tlItems');
+  tlShuffled.forEach((item,i)=>{
+    const d=document.createElement('div');d.className='tl-item';d.draggable=true;d.dataset.idx=i;
+    d.innerHTML=`<span class="handle">☰</span> ${item.e}`;
+    d.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);d.classList.add('dragging');});
+    d.addEventListener('dragend',()=>d.classList.remove('dragging'));
+    d.addEventListener('dragover',e=>{e.preventDefault();const after=getDragAfter(wrap,e.clientY);const dragging=wrap.querySelector('.dragging');if(after){wrap.insertBefore(dragging,after);}else{wrap.appendChild(dragging);}});
+    wrap.appendChild(d);
+  });
+}
+function getDragAfter(container,y){const els=[...container.querySelectorAll('.tl-item:not(.dragging)')];return els.reduce((closest,child)=>{const box=child.getBoundingClientRect();const offset=y-box.top-box.height/2;if(offset<0&&offset>closest.offset)return{offset,element:child};return closest;},{offset:Number.NEGATIVE_INFINITY}).element;}
+buildTL();
+
+document.getElementById('checkTL').addEventListener('click',function(){
+  const items=document.querySelectorAll('#tlItems .tl-item');
+  const currentOrder=Array.from(items).map(d=>tlShuffled[d.dataset.idx]);
+  const correctOrder=[...TL_DATA].sort((a,b)=>a.y-b.y);
+  let score=0;
+  items.forEach((d,i)=>{
+    const item=tlShuffled[d.dataset.idx];
+    const correctItem=correctOrder[i];
+    if(item.y===correctItem.y){d.classList.add('correct');score++;}
+    else d.classList.add('wrong');
+    d.innerHTML=`<span class="handle">${i+1}</span> <strong>${item.y}</strong> — ${item.e}`;
+  });
+  const pct=Math.round(score/TL_DATA.length*100);
+  const cls=pct>=80?'great':pct>=50?'good':'try';
+  document.getElementById('tlResult').innerHTML=`<div class="result-banner ${cls}">${score}/${TL_DATA.length} in correct position (${pct}%)</div>`;
+  const xpEarned=score===TL_DATA.length?20:Math.floor(score*2);
+  if(xpEarned>0){addXP(xpEarned);state.correct+=score;state.total+=TL_DATA.length;save();}
+  this.disabled=true;
+});
+
+// ═══════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════
+function renderStats(){
+  const grid=document.getElementById('statGrid');
+  const acc=state.total?Math.round(state.correct/state.total*100):0;
+  grid.innerHTML=`
+    <div class="stat-card"><span class="num">${state.xp}</span><span class="lbl">Total XP</span></div>
+    <div class="stat-card"><span class="num">${acc}%</span><span class="lbl">Accuracy</span></div>
+    <div class="stat-card"><span class="num">${state.best}</span><span class="lbl">Best Streak</span></div>
+    <div class="stat-card"><span class="num">${state.activities}</span><span class="lbl">Activities</span></div>`;
+  const prog=document.getElementById('activityProgress');
+  const totalVids=Object.values(VID_DATA).reduce((s,sec)=>s+sec.items.length,0);
+  const doneVids=Object.keys(state.completed).length;
+  prog.innerHTML=`<h3>Activity Completion</h3>
+    <p style="font-size:.85em;margin:10px 0">Video & Case Reflections: ${doneVids}/${totalVids}</p>
+    <div class="progress-bar"><div class="fill" style="width:${Math.round(doneVids/totalVids*100)}%"></div></div>`;
+}
+
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  if(confirm('Reset all progress? This cannot be undone.')){
+    state={xp:0,streak:0,best:0,completed:{},activities:0,correct:0,total:0};
+    save();updXP();location.reload();
+  }
+});
+
+</script>
+</body>
+</html>
