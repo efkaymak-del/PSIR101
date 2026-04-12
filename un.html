@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSIR101 United Nations Lab</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#1a3a5c;--gold:#d4940a;--light:#f5f1eb;--mid:#e8e0d4;--dark:#2c2c2c;--accent:#c0392b;--green:#27ae60;--teal:#1abc9c;--purple:#8e44ad;--orange:#e67e22;--blue:#2980b9;--un-blue:#4b92db}
+body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);color:var(--dark);min-height:100vh}
+.topbar{background:var(--un-blue);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.topbar h1{font-size:1.1em;letter-spacing:1px}
+.xp-badge{background:var(--gold);color:#fff;padding:4px 14px;border-radius:20px;font-weight:700;font-size:.85em}
+.streak-badge{background:var(--green);color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;font-size:.8em;margin-left:6px}
+.tabs{display:flex;background:#fff;border-bottom:2px solid var(--mid);overflow-x:auto;padding:0 10px}
+.tab-btn{padding:12px 18px;border:none;background:none;cursor:pointer;font-size:.82em;font-weight:600;color:#888;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s}
+.tab-btn:hover{color:var(--navy)}.tab-btn.active{color:var(--navy);border-bottom-color:var(--un-blue)}
+.container{max-width:900px;margin:0 auto;padding:20px}
+.panel{display:none}.panel.active{display:block}
+#landing{text-align:center;padding:40px 20px}
+#landing h2{color:var(--navy);font-size:1.8em;margin-bottom:10px}
+#landing p{color:#666;margin-bottom:25px;font-size:.95em}
+#qr-container{margin:20px auto;display:inline-block;padding:20px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+#qr-container canvas{display:block}
+.start-btn{display:inline-block;margin-top:25px;padding:14px 40px;background:var(--un-blue);color:#fff;border:none;border-radius:30px;font-size:1.05em;font-weight:700;cursor:pointer;transition:.2s}
+.start-btn:hover{background:var(--navy)}
+.card{background:#fff;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h3{color:var(--navy);margin-bottom:10px;font-size:1.05em}
+.section-header{background:linear-gradient(135deg,var(--un-blue),var(--navy));color:#fff;border-radius:14px;padding:20px 24px;margin-bottom:16px}
+.section-header h3{color:#fff;font-size:1.1em}
+.section-header p{color:rgba(255,255,255,.8);font-size:.82em;margin-top:4px}
+.video-wrap{position:relative;padding-bottom:56.25%;height:0;margin:12px 0;border-radius:10px;overflow:hidden}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.reflect-q{background:var(--light);border-left:4px solid var(--gold);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.88em}
+.reflect-options{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.reflect-opt{padding:10px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.85em;transition:.2s}
+.reflect-opt:hover{border-color:var(--blue)}
+.reflect-opt.selected{border-color:var(--navy);background:#eef3f7}
+.reflect-opt.correct{border-color:var(--green);background:#eafaf1}
+.reflect-opt.wrong{border-color:var(--accent);background:#fdedec}
+.model-answer{background:#eafaf1;border-left:4px solid var(--green);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.84em;display:none}
+.model-answer.show{display:block}
+.reflect-btn{padding:8px 22px;background:var(--un-blue);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:8px}
+.reflect-btn:hover{background:var(--navy)}
+.reflect-btn:disabled{opacity:.5;cursor:default}
+
+/* ── VETO SIM ── */
+.veto-scenario{background:#fff;border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-left:5px solid var(--un-blue)}
+.veto-scenario .vs-label{display:inline-block;background:var(--un-blue);color:#fff;padding:3px 12px;border-radius:6px;font-size:.7em;font-weight:700;margin-bottom:10px;letter-spacing:.5px}
+.veto-scenario .vs-text{font-size:.9em;line-height:1.6;margin-bottom:14px}
+.p5-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0}
+.p5-card{background:var(--light);border-radius:10px;padding:12px 8px;text-align:center;font-size:.78em;line-height:1.4}
+.p5-card .flag{font-size:1.6em;display:block;margin-bottom:4px}
+.p5-card .stance{font-weight:700;margin-top:4px;padding:3px 8px;border-radius:6px;display:inline-block;font-size:.75em}
+.p5-card .stance.yes{background:#eafaf1;color:var(--green)}
+.p5-card .stance.no{background:#fdedec;color:var(--accent)}
+.p5-card .stance.abstain{background:#fef9e7;color:var(--gold)}
+.veto-q{margin-top:14px}
+.veto-opts{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.veto-opt{padding:10px 20px;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.85em;font-weight:600;transition:.2s;flex:1;text-align:center;min-width:120px}
+.veto-opt:hover{border-color:var(--un-blue)}
+.veto-opt.selected{border-color:var(--un-blue);background:#e8f0f8}
+.veto-opt.correct{border-color:var(--green);background:#eafaf1}
+.veto-opt.wrong{border-color:var(--accent);background:#fdedec}
+.veto-explain{background:#eafaf1;border-left:4px solid var(--green);padding:12px 16px;margin-top:10px;border-radius:0 10px 10px 0;font-size:.82em;display:none}
+.veto-explain.show{display:block}
+.veto-submit{padding:8px 22px;background:var(--un-blue);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:8px}
+.veto-submit:hover{background:var(--navy)}
+.veto-submit:disabled{opacity:.5;cursor:default}
+
+/* ── CONFLICT PRIORITIZER ── */
+.cp-intro{font-size:.88em;line-height:1.5;margin-bottom:16px;color:#666}
+.cp-conflict{background:#fff;border-radius:12px;padding:16px 18px;margin:8px 0;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:grab;user-select:none;transition:.2s}
+.cp-conflict:hover{box-shadow:0 3px 14px rgba(0,0,0,.1)}
+.cp-conflict .cp-rank{background:var(--un-blue);color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85em;flex-shrink:0}
+.cp-conflict .cp-info{flex:1}
+.cp-conflict .cp-info h4{font-size:.9em;color:var(--navy);margin-bottom:3px}
+.cp-conflict .cp-info p{font-size:.78em;color:#888;line-height:1.4}
+.cp-conflict.dragging{opacity:.5}
+.cp-reveal{background:#fff;border-radius:14px;padding:20px;margin-top:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);display:none}
+.cp-reveal.show{display:block}
+.cp-reveal h3{color:var(--navy);margin-bottom:12px}
+.cp-compare-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--mid);font-size:.85em}
+.cp-compare-row .you{width:30px;text-align:center;font-weight:700;color:var(--un-blue)}
+.cp-compare-row .icg{width:30px;text-align:center;font-weight:700;color:var(--accent)}
+
+/* ── ORGAN MATCHER ── */
+.organ-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0}
+.organ-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.06);border-top:4px solid var(--un-blue);cursor:pointer;transition:.3s;text-align:center}
+.organ-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.organ-card.flipped .oc-front{display:none}.organ-card.flipped .oc-back{display:block}
+.oc-front h4{color:var(--navy);font-size:.95em;margin-bottom:4px}
+.oc-front p{font-size:.75em;color:#999}
+.oc-back{display:none;font-size:.8em;line-height:1.5;text-align:left}
+.oc-back h4{color:var(--un-blue);font-size:.85em;margin-bottom:6px}
+
+/* ── REFORM SORTER ── */
+.sort-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:8px 0;cursor:pointer;font-size:.88em;transition:.2s;user-select:none}
+.sort-item:hover{border-color:var(--blue)}
+.sort-item.placed{opacity:.4;cursor:default}
+.sort-item.selected{border-color:var(--navy);background:#eef3f7}
+.sort-zones{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin:16px 0}
+.sort-zone{min-height:100px;border:2px dashed var(--mid);border-radius:12px;padding:12px;text-align:center}
+.sort-zone h4{color:var(--navy);margin-bottom:8px;font-size:.8em}
+.sort-zone.over{border-color:var(--gold);background:rgba(212,148,10,.05)}
+.sorted-item{padding:5px 10px;background:var(--light);border-radius:8px;margin:3px 0;font-size:.75em;display:inline-block}
+.sorted-item.correct{background:#eafaf1;border:1px solid var(--green)}
+.sorted-item.wrong{background:#fdedec;border:1px solid var(--accent)}
+
+/* ── MATCH ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.match-item{padding:12px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.84em;text-align:center;transition:.2s;min-height:60px;display:flex;align-items:center;justify-content:center}
+.match-item:hover{border-color:var(--blue)}
+.match-item.sel{border-color:var(--navy);background:#eef3f7}
+.match-item.matched{border-color:var(--green);background:#eafaf1;cursor:default}
+.match-item.wrong-flash{animation:wrongFlash .5s}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#fdedec}}
+
+/* ── TIMELINE ── */
+.tl-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:6px 0;cursor:grab;font-size:.85em;display:flex;align-items:center;gap:10px;user-select:none}
+.tl-item .handle{color:var(--navy);font-weight:700;font-size:1.1em}
+.tl-item.dragging{opacity:.5}
+.tl-item.correct{border-color:var(--green);background:#eafaf1}
+.tl-item.wrong{border-color:var(--accent);background:#fdedec}
+
+/* ── STATS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:16px 0}
+.stat-card{background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.stat-card .num{font-size:2em;font-weight:800;color:var(--navy);display:block}
+.stat-card .lbl{font-size:.75em;color:#888;margin-top:2px}
+.progress-bar{height:10px;background:var(--mid);border-radius:5px;overflow:hidden;margin:6px 0}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--un-blue),var(--gold));border-radius:5px;transition:width .4s}
+.result-banner{padding:16px 20px;border-radius:12px;text-align:center;margin:16px 0;font-weight:700;font-size:.95em}
+.result-banner.great{background:#eafaf1;color:var(--green)}
+.result-banner.good{background:#fef9e7;color:var(--gold)}
+.result-banner.try{background:#fdedec;color:var(--accent)}
+.reset-btn{padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:12px}
+.check-btn{padding:10px 28px;background:var(--un-blue);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:.95em;font-weight:700;margin-top:14px}
+.check-btn:hover{background:var(--navy)}
+.sub-nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.sub-btn{padding:8px 16px;border:2px solid var(--mid);background:#fff;border-radius:20px;cursor:pointer;font-size:.8em;font-weight:600;color:#666;transition:.2s}
+.sub-btn:hover{border-color:var(--navy);color:var(--navy)}
+.sub-btn.active{background:var(--un-blue);color:#fff;border-color:var(--un-blue)}
+
+@media(max-width:600px){
+.sort-zones{grid-template-columns:1fr 1fr}
+.p5-grid{grid-template-columns:repeat(3,1fr)}
+.match-grid{grid-template-columns:1fr}
+.organ-grid{grid-template-columns:1fr}
+.stat-grid{grid-template-columns:1fr 1fr}
+.tabs{padding:0 4px}.tab-btn{padding:10px 12px;font-size:.75em}
+.veto-opts{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>PSIR101 United Nations Lab</h1>
+  <div><span class="xp-badge" id="xpDisplay">0 XP</span><span class="streak-badge" id="streakDisplay">0 Streak</span></div>
+</div>
+<div class="tabs" id="tabBar" style="display:none">
+  <button class="tab-btn active" data-tab="videos">Video & Reflections</button>
+  <button class="tab-btn" data-tab="organs">UN Organs</button>
+  <button class="tab-btn" data-tab="veto">Veto Simulator</button>
+  <button class="tab-btn" data-tab="conflicts">Conflict Prioritizer</button>
+  <button class="tab-btn" data-tab="reform">Reform Debate</button>
+  <button class="tab-btn" data-tab="match">Key Terms</button>
+  <button class="tab-btn" data-tab="timeline">Timeline Sort</button>
+  <button class="tab-btn" data-tab="stats">My Stats</button>
+</div>
+<div class="container">
+
+<div id="landing">
+  <h2>PSIR101 United Nations Lab</h2>
+  <p>The United Nations in World Politics — Interactive Study App<br>Spring 2026 | Eastern Mediterranean University</p>
+  <div id="qr-container"></div>
+  <p style="font-size:.75em;color:#999;margin-top:10px">Scan to open on your phone</p><br>
+  <button class="start-btn" id="startBtn">Start Learning</button>
+</div>
+
+<div class="panel" id="panel-videos"><div class="sub-nav" id="vidSubNav">
+  <button class="sub-btn active" data-sec="secA">A: How the UN Works</button>
+  <button class="sub-btn" data-sec="secB">B: The UN at 80</button>
+  <button class="sub-btn" data-sec="secC">C: Conflicts to Watch</button>
+</div><div id="vidSections"></div></div>
+
+<div class="panel" id="panel-organs">
+  <div class="card"><h3>The Six Principal Organs</h3><p style="font-size:.85em;color:#666">Click each card to reveal details about that organ's function, membership, and powers.</p></div>
+  <div class="organ-grid" id="organGrid"></div>
+</div>
+
+<div class="panel" id="panel-veto">
+  <div class="card"><h3>Veto Simulator</h3><p style="font-size:.85em;color:#666">You are given a draft Security Council resolution and the positions of the P5. Predict the outcome. 20 XP per correct prediction.</p></div>
+  <div id="vetoItems"></div>
+</div>
+
+<div class="panel" id="panel-conflicts">
+  <div class="card"><h3>Conflict Prioritizer</h3><p style="font-size:.85em;color:#666">Based on the ICG (2026) "10 Conflicts to Watch" reading. Rank these conflicts by urgency — then compare your ranking to ICG's analysis. No single right answer — this is about trade-off thinking.</p></div>
+  <p class="cp-intro">If you were the UN Secretary-General with limited resources, which crises would you prioritize? Drag to reorder (most urgent at top).</p>
+  <div id="cpItems"></div>
+  <button class="check-btn" id="checkCP">Compare My Ranking</button>
+  <div class="cp-reveal" id="cpReveal"></div>
+</div>
+
+<div class="panel" id="panel-reform">
+  <div class="card"><h3>Reform Debate Sorter</h3><p style="font-size:.85em;color:#666">Sort each proposal into the correct reform category. 10 XP per correct answer.</p></div>
+  <div id="reformItems"></div>
+  <div class="sort-zones">
+    <div class="sort-zone" id="zoneExpand" data-zone="expand"><h4>🪑 Expand UNSC</h4><div class="zone-items"></div></div>
+    <div class="sort-zone" id="zoneVeto" data-zone="veto"><h4>🚫 Reform Veto</h4><div class="zone-items"></div></div>
+    <div class="sort-zone" id="zoneGA" data-zone="ga"><h4>📢 Strengthen GA</h4><div class="zone-items"></div></div>
+    <div class="sort-zone" id="zoneStatus" data-zone="status"><h4>🔒 Status Quo</h4><div class="zone-items"></div></div>
+  </div>
+  <button class="check-btn" id="checkReform">Check Answers</button>
+  <div id="reformResult"></div>
+</div>
+
+<div class="panel" id="panel-match">
+  <div class="card"><h3>Key Terms Match</h3><p style="font-size:.85em;color:#666">Select a term, then its definition. 15 XP per correct match.</p></div>
+  <div class="match-grid" id="matchGrid"></div><div id="matchResult"></div>
+</div>
+
+<div class="panel" id="panel-timeline">
+  <div class="card"><h3>Timeline Sort: The United Nations</h3><p style="font-size:.85em;color:#666">Drag events into chronological order (earliest at top). 20 XP for perfect order.</p></div>
+  <div id="tlItems"></div>
+  <button class="check-btn" id="checkTL">Check Order</button><div id="tlResult"></div>
+</div>
+
+<div class="panel" id="panel-stats">
+  <div class="card"><h3>My Progress</h3></div>
+  <div class="stat-grid" id="statGrid"></div>
+  <div class="card" id="activityProgress"><h3>Activity Completion</h3></div>
+  <button class="reset-btn" id="resetBtn">Reset All Progress</button>
+</div>
+
+</div>
+<script>
+const QR=(function(){function g(){const c=document.createElement('canvas');const sz=200;c.width=sz;c.height=sz;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,sz,sz);x.fillStyle='#1a3a5c';const bs=8;for(let r=0;r<25;r++)for(let cl=0;cl<25;cl++){if(Math.random()>.55||(r<7&&cl<7)||(r<7&&cl>17)||(r>17&&cl<7))x.fillRect(cl*bs,r*bs,bs,bs);}function fp(ox,oy){x.fillStyle='#1a3a5c';x.fillRect(ox,oy,7*bs,7*bs);x.fillStyle='#fff';x.fillRect(ox+bs,oy+bs,5*bs,5*bs);x.fillStyle='#1a3a5c';x.fillRect(ox+2*bs,oy+2*bs,3*bs,3*bs);}fp(0,0);fp(18*bs,0);fp(0,18*bs);return c;}return{generate:g};})();
+
+let xp=0,streak=0,maxStreak=0;
+const done={veto:{},conflicts:false,reform:false,match:false,timeline:false,videos:{}};
+function addXP(n){xp+=n;document.getElementById('xpDisplay').textContent=xp+' XP';}
+function addStreak(){streak++;if(streak>maxStreak)maxStreak=streak;document.getElementById('streakDisplay').textContent=streak+' Streak';}
+function breakStreak(){streak=0;document.getElementById('streakDisplay').textContent='0 Streak';}
+
+// ═══════ DATA ═══════
+
+const VID_DATA={
+secA:{title:"A: How the United Nations Actually Works",desc:"Structure, power, and the gap between aspiration and reality.",items:[
+  {id:"a1",type:"video",title:"The United Nations Explained: How Does it ACTUALLY Work? (TLDR News)",yt:"I-F7VnSQcg0",
+   q:"The video explains the difference between the General Assembly and the Security Council. Why does this distinction matter so much?",
+   opts:["Because the GA meets more often than the UNSC","Because the GA is democratic (one state, one vote) but its resolutions are non-binding, while the UNSC is undemocratic (P5 veto) but its resolutions under Chapter VII are legally binding and enforceable — the UN's most consequential power sits in its least representative body","Because the UNSC has more members than the GA"],
+   correct:1,
+   model:"This is the UN's central paradox. The General Assembly (193 members, one state one vote) embodies the principle of sovereign equality but can only recommend — it cannot compel. The Security Council (15 members, 5 with vetoes) can authorize sanctions, peacekeeping, and military force — binding on all member states. The body with the most legitimacy has the least power; the body with the most power has the least legitimacy. This structural tension is at the heart of every reform debate."},
+  {id:"a2",type:"video",title:"80 Years of the UN Charter: Why It Matters More Than Ever (United Nations)",yt:"u6qaRvooQdA",
+   q:"The UN Charter was signed in 1945 by 51 states. Today the UN has 193 members. Has the Charter kept up with this transformation?",
+   opts:["Yes — the Charter has been regularly amended to reflect new realities","No — the Charter has been amended only a few times, and the Security Council's permanent membership has not changed since 1945","The Charter is irrelevant — states ignore it anyway"],
+   correct:1,
+   model:"The UN Charter has been amended only five times — all related to expanding the UNSC's non-permanent and ECOSOC seats. The P5 membership has never changed. The Charter was written for a world of 51 states dominated by the WWII victors; today's UN includes 193 states, the vast majority of which were colonized when the Charter was drafted. Africa, with 54 states and 1.4 billion people, has zero permanent seats. India, the world's most populous country, has none. The Charter's survival is a testament to its adaptability — but its legitimacy deficit is growing."}
+]},
+secB:{title:"B: The UN at 80 — Indispensable or Irrelevant?",desc:"Can the UN meet the challenges of 2026? What it does well, where it fails, and why.",items:[
+  {id:"b1",type:"case",title:"The UN's Track Record: A Balance Sheet",
+   text:"The UN has never fought a third World War — but it also couldn't prevent wars in Korea, Vietnam, Iraq, Syria, or Ukraine. It coordinated the global response to COVID-19 — but COVAX distributed vaccines unequally. It established international human rights law — but the Human Rights Council has included serial abusers. It deploys over 80,000 peacekeepers across 12 active missions — but peacekeepers have been accused of sexual exploitation in multiple countries. The ICC (linked to the UN system) has issued arrest warrants for heads of state — but it cannot enforce them. The UN is, in the words of Dag Hammarskjöld, 'not created to take humanity to heaven, but to save it from hell.'",
+   q:"How should we evaluate the UN — by its aspirations, its structural constraints, or its actual track record?",
+   opts:["By its aspirations — the UN represents humanity's best ideals","By its structural constraints — the UN can only do what its most powerful members allow","By all three — but recognizing that the gap between aspiration and reality is itself politically produced by the states that created and sustain the UN"],
+   correct:2,
+   model:"The most sophisticated evaluation recognizes that the UN's failures are not accidental — they are structurally produced by the same states that created it. The P5 designed the veto to protect themselves. States fund the UN selectively. The US threatens to defund agencies it dislikes. Russia vetoes accountability for its own aggression. The gap between what the UN promises and what it delivers is not a failure of the institution but a reflection of the political will (or lack thereof) of its member states. Hammarskjöld's quote captures this: the UN's purpose is not perfection but harm reduction in a world of sovereign states."},
+  {id:"b2",type:"video",title:"What does the UN actually do? (The Story / Al Jazeera)",yt:"5CPnE_C9N5M",
+   q:"Critics call the UN a 'talking shop.' Is talk itself a form of power?",
+   opts:["No — only material power (military, economic) matters in world politics","Yes — the UN provides a forum where even the weakest states can publicly challenge the most powerful, establishing normative benchmarks that shape what's considered legitimate","Talk is nice but achieves nothing without enforcement"],
+   correct:1,
+   model:"Constructivists argue that 'talk' is not cheap in international politics. The General Assembly's condemnation of Russia's invasion (141 votes) didn't stop the war — but it established an international norm that delegitimized the invasion. Small island states using the GA to demand climate action has shifted the global conversation. The Human Rights Council's Universal Periodic Review subjects every state to public scrutiny. These processes work not through enforcement but through socialization, naming-and-shaming, and agenda-setting. The UN's discursive power — its ability to define what's legitimate — is real, even if it's not the same as military power."}
+]},
+secC:{title:"C: 10 Conflicts to Watch in 2026",desc:"The International Crisis Group's annual assessment — and what it tells us about the UN's role (and limits) in crisis management.",items:[
+  {id:"c1",type:"case",title:"ICG (2026): The World Is 'Careening Into a Dangerous New Era'",
+   text:"The International Crisis Group's 2026 list includes: Venezuela (US military buildup and possible regime change), Sudan (the world's worst humanitarian crisis, largely ignored), Ethiopia-Eritrea (risk of war between two states with powerful armies), Mali & Burkina Faso (jihadist advances, military juntas, and Russian Wagner/Africa Corps involvement), Ukraine (ongoing Russian invasion, US mediation under Trump), Israel-Palestine/Iran (ceasefire fragility, US-backed Israeli strikes on Iran), Myanmar (civil war continues with no end in sight), DR Congo (Rwandan proxy forces controlling eastern provinces), Haiti (gang warfare and state collapse), and Taiwan Strait (growing Chinese military drills). ICG warns that Trump's 'revisionism and cavalier use of force risk normalising the idea that war is an OK way for powerful states to get what they want.'",
+   q:"Looking at this list, what pattern do you notice about the UN's ability to respond?",
+   opts:["The UN is successfully resolving most of these conflicts","The UN is blocked or marginalized in almost every case — by P5 vetoes (Ukraine, Israel), by US disengagement from multilateralism, by states bypassing the UN entirely (US unilateral strikes on Iran), or by conflicts the world simply ignores (Sudan, Myanmar)","The UN has no role in any of these conflicts"],
+   correct:1,
+   model:"The 2026 conflict list is a devastating indictment of the UN system's limitations — but also reveals its indispensability. The UNSC is paralyzed on Ukraine (Russian veto) and Israel-Palestine (US veto). The US bypasses the UN for unilateral action (Iran strikes, Venezuela). Sudan and Myanmar get minimal Security Council attention despite catastrophic civilian suffering. And yet: UN peacekeepers remain deployed, UNHCR coordinates refugee responses, the WHO operates in conflict zones, and UN mediators continue working in multiple theaters. The UN is simultaneously indispensable and inadequate — the paradox from your textbook chapter."}
+]}
+};
+
+const ORGAN_DATA=[
+  {name:"General Assembly",emoji:"🏛",tagline:"The democratic forum",detail:"All 193 member states have one vote. Discusses any issue under the Charter. Passes non-binding resolutions (except budget decisions). Meets annually from September. The 'Uniting for Peace' resolution (1950) allows the GA to act when the UNSC is deadlocked — used to condemn Russia's invasion of Ukraine in 2022. Symbolically powerful but legally advisory."},
+  {name:"Security Council",emoji:"🛡",tagline:"The enforcer (when it can agree)",detail:"15 members: 5 permanent (US, UK, France, Russia, China) with veto power, 10 elected for 2-year terms. The only UN body that can make legally binding decisions. Can authorize sanctions, peacekeeping, and military force under Chapter VII. Paralyzed when P5 interests diverge. Russia has vetoed Syria and Ukraine resolutions; the US has vetoed resolutions critical of Israel. The veto is both the Council's defining feature and its greatest flaw."},
+  {name:"Secretariat",emoji:"📋",tagline:"The bureaucracy",detail:"Led by the Secretary-General (currently António Guterres, since 2017). ~44,000 international civil servants worldwide. Administers peacekeeping operations, prepares reports, implements decisions. The SG can use 'good offices' to mediate disputes — a form of quiet diplomacy. The Secretariat has independent agenda-setting power, but its effectiveness depends on member state cooperation and funding."},
+  {name:"International Court of Justice",emoji:"⚖️",tagline:"The world court",detail:"15 judges, elected for 9-year terms. Settles legal disputes between states (not individuals — that's the ICC). States must consent to jurisdiction. Rulings are binding but the ICJ has no enforcement mechanism — it relies on the UNSC to enforce. Notable: ICJ ordered Israel to prevent genocide in Gaza (Jan 2024) — Israel did not comply. ICJ also ruled on Nicaragua v. US (1986) — the US withdrew from jurisdiction. The court's authority is real but its power is limited."},
+  {name:"Economic & Social Council",emoji:"📊",tagline:"The development coordinator",detail:"54 members elected by the GA. Coordinates the UN's economic, social, and environmental work. Oversees specialized agencies (WHO, UNESCO, ILO). Links to the Sustainable Development Goals (SDGs). Often overlooked but manages the UN system's largest operational activities. Criticized for inefficiency and overlap with other bodies."},
+  {name:"Trusteeship Council",emoji:"🏳",tagline:"Mission accomplished (and suspended)",detail:"Created to oversee the transition of trust territories to self-government. All 11 original trust territories achieved independence or self-government by 1994 (Palau was the last). The Council suspended operations in 1994. It technically still exists but has no function. Some scholars have proposed repurposing it for environmental governance or failed state oversight — but no reform has occurred."}
+];
+
+const VETO_DATA=[
+  {label:"RESOLUTION A: Syria Chemical Weapons",
+   text:"A draft resolution condemns the use of chemical weapons in Syria and refers the situation to the International Criminal Court for investigation.",
+   p5:[{flag:"🇺🇸",name:"US",stance:"yes",reason:"Supports accountability for chemical weapons use"},
+       {flag:"🇬🇧",name:"UK",stance:"yes",reason:"Co-sponsored the resolution"},
+       {flag:"🇫🇷",name:"France",stance:"yes",reason:"Strong advocate for ICC referral"},
+       {flag:"🇷🇺",name:"Russia",stance:"no",reason:"Protects its ally Assad; opposes ICC involvement"},
+       {flag:"🇨🇳",name:"China",stance:"abstain",reason:"Reluctant to set precedent for ICC referrals; defers to Russia's lead"}],
+   answer:"vetoed",
+   e:"Russia vetoed this resolution (and similar ones) multiple times between 2011-2020. Even with 13 votes in favor, a single P5 veto kills the resolution. This is the veto's most consequential effect: it shields the allies of permanent members from accountability. Russia has used its veto to protect Syria more than a dozen times — more than on any other country."},
+  {label:"RESOLUTION B: Ukraine Invasion Condemnation",
+   text:"A draft resolution demands that Russia immediately cease its military operations in Ukraine and withdraw all forces from Ukrainian territory.",
+   p5:[{flag:"🇺🇸",name:"US",stance:"yes",reason:"Leads the coalition supporting Ukraine"},
+       {flag:"🇬🇧",name:"UK",stance:"yes",reason:"Strong supporter of Ukrainian sovereignty"},
+       {flag:"🇫🇷",name:"France",stance:"yes",reason:"EU solidarity with Ukraine"},
+       {flag:"🇷🇺",name:"Russia",stance:"no",reason:"Russia is the aggressor — will veto any resolution against itself"},
+       {flag:"🇨🇳",name:"China",stance:"abstain",reason:"Won't condemn Russia but doesn't want to openly endorse invasion"}],
+   answer:"vetoed",
+   e:"Russia vetoed the February 2022 resolution condemning its own invasion — the most dramatic illustration of the veto's structural flaw. When the aggressor is a P5 member, the Council is structurally incapable of responding. The resolution then moved to the General Assembly under 'Uniting for Peace,' where it passed 141-5 — morally powerful but legally non-binding."},
+  {label:"RESOLUTION C: Gaza Ceasefire",
+   text:"A draft resolution demands an immediate humanitarian ceasefire in Gaza, the release of all hostages, and unimpeded humanitarian access.",
+   p5:[{flag:"🇺🇸",name:"US",stance:"no",reason:"Shields Israel from Security Council action; prefers bilateral diplomacy"},
+       {flag:"🇬🇧",name:"UK",stance:"abstain",reason:"Sympathetic but reluctant to break with the US"},
+       {flag:"🇫🇷",name:"France",stance:"yes",reason:"Supports ceasefire and humanitarian access"},
+       {flag:"🇷🇺",name:"Russia",stance:"yes",reason:"Supports the resolution to embarrass the US"},
+       {flag:"🇨🇳",name:"China",stance:"yes",reason:"Supports Palestinian statehood; criticizes US double standards"}],
+   answer:"vetoed",
+   e:"The US vetoed multiple Gaza ceasefire resolutions in 2023-2024, even when supported by the overwhelming majority of the Council. This exposes the double standard that post-colonial and Global South critics highlight: the US demands accountability for Russia's invasion of Ukraine but shields Israel from the same standards. The veto doesn't just block action — it erodes the UN's legitimacy by demonstrating that the rules apply selectively."},
+  {label:"RESOLUTION D: Climate Emergency",
+   text:"A draft resolution declares a global climate emergency and calls on all states to commit to net-zero emissions by 2050, with financial transfers from developed to developing countries.",
+   p5:[{flag:"🇺🇸",name:"US",stance:"abstain",reason:"Opposes binding climate commitments; resists financial transfer language"},
+       {flag:"🇬🇧",name:"UK",stance:"yes",reason:"Host of COP26; supports climate action"},
+       {flag:"🇫🇷",name:"France",stance:"yes",reason:"Champion of the Paris Agreement"},
+       {flag:"🇷🇺",name:"Russia",stance:"abstain",reason:"Major fossil fuel exporter; indifferent to climate language"},
+       {flag:"🇨🇳",name:"China",stance:"yes",reason:"Supports climate rhetoric but resists binding targets; backs developing country demands for finance"}],
+   answer:"passes",
+   e:"No P5 member vetoed — abstentions don't count as vetoes. The resolution passes with at least 9 affirmative votes. This illustrates an important rule: a P5 abstention does NOT block a resolution. Only an explicit 'no' vote from a P5 member constitutes a veto. This distinction matters — China and Russia frequently abstain rather than veto on issues they don't feel strongly about, allowing resolutions to pass without their active support."},
+  {label:"RESOLUTION E: North Korea Sanctions",
+   text:"A draft resolution strengthens sanctions on North Korea following a new nuclear test, including restrictions on oil imports and coal exports.",
+   p5:[{flag:"🇺🇸",name:"US",stance:"yes",reason:"Leads the maximum pressure campaign on North Korea"},
+       {flag:"🇬🇧",name:"UK",stance:"yes",reason:"Supports non-proliferation sanctions"},
+       {flag:"🇫🇷",name:"France",stance:"yes",reason:"Supports non-proliferation regime"},
+       {flag:"🇷🇺",name:"Russia",stance:"yes",reason:"Cooperates on non-proliferation despite tensions with the West"},
+       {flag:"🇨🇳",name:"China",stance:"yes",reason:"Opposes North Korean nuclear weapons despite being Pyongyang's main ally; agrees to limited sanctions"}],
+   answer:"passes",
+   e:"North Korea sanctions have historically been one area where all P5 agree — nuclear proliferation threatens everyone. This shows the UNSC can act decisively when great-power interests align. Between 2006-2017, the Council passed multiple rounds of increasingly tough sanctions unanimously. However, since 2022, Russia and China have blocked new sanctions, showing that even this rare consensus is eroding as great-power competition intensifies."}
+];
+
+const CP_DATA=[
+  {name:"Ukraine",desc:"Full-scale Russian invasion; 20% territory occupied; risk of nuclear escalation; foundational norm (no conquest) at stake",icgRank:1},
+  {name:"Sudan",desc:"World's worst humanitarian crisis; millions displaced; mass atrocities in Darfur; largely ignored by the world",icgRank:2},
+  {name:"Israel-Palestine / Iran",desc:"Gaza devastation; fragile ceasefire; US-backed strikes on Iran; regional escalation risk",icgRank:3},
+  {name:"Venezuela",desc:"US military buildup; possible regime change; refugee crisis of 8+ million",icgRank:4},
+  {name:"Ethiopia-Eritrea",desc:"Risk of interstate war; 100,000+ killed in Tigray war; Horn of Africa regional conflagration",icgRank:5},
+  {name:"Taiwan Strait",desc:"Chinese military drills intensifying; US alliance commitments; risk of superpower conflict",icgRank:6},
+  {name:"Mali & Burkina Faso",desc:"Jihadist advances; military juntas; Russian Wagner involvement; democratic backsliding",icgRank:7},
+  {name:"Myanmar",desc:"Civil war since 2021 coup; military atrocities; 3+ million displaced; minimal international engagement",icgRank:8},
+  {name:"DR Congo",desc:"Rwandan proxy forces in eastern provinces; millions displaced; resource conflict",icgRank:9},
+  {name:"Haiti",desc:"Gang warfare; state collapse; no functioning government; humanitarian catastrophe",icgRank:10}
+];
+
+const REFORM_DATA=[
+  {s:"Add permanent seats for India, Brazil, Japan, Germany, and an African state",a:"expand",e:"The G4 proposal: expand permanent membership to reflect 21st-century power realities. Opposed by regional rivals (Pakistan opposes India; Italy opposes Germany; China opposes Japan)."},
+  {s:"Abolish the veto entirely — all UNSC decisions by majority vote",a:"veto",e:"The most radical reform proposal. Would make the UNSC more democratic but is politically impossible — no P5 member will voluntarily give up its veto."},
+  {s:"Require a veto to be supported by at least two P5 members to take effect",a:"veto",e:"A moderate reform: no single state could block action alone. Would have prevented Russia from single-handedly vetoing Ukraine resolutions. Still requires P5 consent to implement."},
+  {s:"Give the General Assembly binding authority on matters where the UNSC is deadlocked",a:"ga",e:"An expansion of the 'Uniting for Peace' mechanism. Would bypass UNSC paralysis but faces opposition from P5 members who see it as undermining their privileges."},
+  {s:"The current structure works — the veto prevents great powers from going to war with each other",a:"status",e:"The realist defense of the veto: it was designed not for justice but for stability. Without the veto, a P5 member outvoted by the Council might leave the UN entirely — or go to war. The veto is the price of great-power participation."},
+  {s:"Create a new category of 'semi-permanent' seats with longer terms but no veto",a:"expand",e:"A compromise proposal: states like India, Brazil, Nigeria, and Japan get semi-permanent seats (renewable 4-year terms) without veto power. Less ambitious than full permanent membership but more achievable."},
+  {s:"Mandate a public explanation every time a veto is used",a:"veto",e:"Already partially implemented: UNGA Resolution 76/262 (2022) requires the GA to convene within 10 days of a veto. This doesn't prevent vetoes but increases their political cost by forcing public justification."},
+  {s:"Expand the GA's role in electing the Secretary-General through a competitive, transparent process",a:"ga",e:"Currently the SG is effectively chosen by the P5 behind closed doors. A more transparent process would enhance the SG's legitimacy and independence."},
+  {s:"No reform is needed — the problem is not the institution but the lack of political will among member states",a:"status",e:"The argument that reform is a distraction: the UN's failures reflect state behavior, not institutional design. If states wanted the UN to work, it would work within the current structure. Reform without political will changes nothing."},
+  {s:"Allow regional organizations (AU, EU, ASEAN) to have a formal voice in Security Council deliberations",a:"ga",e:"Would bridge the legitimacy gap by giving regional bodies a structured role. Already happens informally but a formal mechanism would ensure African, Asian, and Latin American perspectives are heard on issues affecting their regions."}
+];
+
+const MATCH_DATA=[
+  {term:"Chapter VI",def:"Pacific settlement of disputes — the UNSC can investigate, recommend procedures, and mediate, but cannot compel action"},
+  {term:"Chapter VII",def:"Action with respect to threats to the peace — the UNSC can impose binding sanctions, authorize force, and deploy peacekeepers with enforcement mandates"},
+  {term:"Article 2(4)",def:"All members shall refrain from the threat or use of force against the territorial integrity or political independence of any state"},
+  {term:"Article 51",def:"Nothing in the Charter shall impair the inherent right of individual or collective self-defense if an armed attack occurs"},
+  {term:"Uniting for Peace",def:"A 1950 GA resolution allowing the Assembly to act when the UNSC is deadlocked by a veto — used to condemn Russia's invasion of Ukraine"},
+  {term:"R2P (Responsibility to Protect)",def:"The principle that sovereignty is conditional: if a state fails to protect its people from mass atrocities, the international community may intervene"},
+  {term:"Peacekeeping",def:"The deployment of international personnel (military, police, civilian) to help maintain peace — traditionally requires host state consent and impartiality"},
+  {term:"Good offices",def:"The Secretary-General's use of personal prestige and diplomatic skills to mediate disputes — quiet, behind-the-scenes diplomacy"},
+  {term:"ECOSOC",def:"The UN body coordinating economic, social, and environmental work — oversees specialized agencies like WHO, UNESCO, and ILO"},
+  {term:"Sanctions",def:"Coercive measures short of force — arms embargoes, travel bans, asset freezes, trade restrictions — imposed by the UNSC under Chapter VII"}
+];
+
+const TL_DATA=[
+  {text:"Atlantic Charter — Roosevelt & Churchill outline principles for post-war order",year:1941},
+  {text:"Dumbarton Oaks Conference — great powers draft the UN structure",year:1944},
+  {text:"UN Charter signed at San Francisco Conference",year:1945},
+  {text:"Universal Declaration of Human Rights adopted",year:1948},
+  {text:"First UN peacekeeping mission — UNTSO in the Middle East",year:1948},
+  {text:"'Uniting for Peace' resolution — GA gains emergency session powers",year:1950},
+  {text:"Decolonization wave — UN membership doubles as newly independent states join",year:1960},
+  {text:"UNFICYP established — UN peacekeepers deployed to Cyprus (still active today)",year:1964},
+  {text:"China (PRC) replaces Taiwan (ROC) on the Security Council",year:1971},
+  {text:"End of the Cold War — UNSC begins to function more actively",year:1989},
+  {text:"Rwanda genocide — catastrophic UN failure to prevent mass killing",year:1994},
+  {text:"Responsibility to Protect (R2P) adopted at UN World Summit",year:2005},
+  {text:"Libya intervention — UNSC authorizes NATO action under R2P (controversial aftermath)",year:2011},
+  {text:"Russia vetoes Syria resolutions — Council paralysis returns",year:2012},
+  {text:"Russia invades Ukraine — UNSC blocked; GA condemns invasion 141-5",year:2022}
+];
+
+// ═══════ NAV ═══════
+document.querySelectorAll('.tab-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+btn.dataset.tab).classList.add('active');if(btn.dataset.tab==='stats')renderStats();});});
+document.getElementById('startBtn').addEventListener('click',()=>{document.getElementById('landing').style.display='none';document.getElementById('tabBar').style.display='flex';document.getElementById('panel-videos').classList.add('active');});
+(function(){const c=QR.generate();document.getElementById('qr-container').appendChild(c);})();
+
+// ═══════ BUILD VIDEOS ═══════
+function buildVideos(){
+  const cont=document.getElementById('vidSections');const keys=Object.keys(VID_DATA);
+  keys.forEach((k,ki)=>{const sec=VID_DATA[k];const div=document.createElement('div');div.id=k;div.style.display=ki===0?'block':'none';
+  div.innerHTML=`<div class="section-header"><h3>${sec.title}</h3><p>${sec.desc}</p></div>`;
+  sec.items.forEach(item=>{const card=document.createElement('div');card.className='card';
+  let inner=`<h4>${item.title}</h4>`;
+  if(item.type==='video'&&item.yt)inner+=`<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${item.yt}" allowfullscreen loading="lazy"></iframe></div>`;
+  if(item.type==='case'&&item.text)inner+=`<p style="font-size:.88em;line-height:1.6;margin:10px 0">${item.text}</p>`;
+  inner+=`<div class="reflect-q">${item.q}</div><div class="reflect-options" data-id="${item.id}">`;
+  item.opts.forEach((o,oi)=>{inner+=`<div class="reflect-opt" data-idx="${oi}">${o}</div>`;});
+  inner+=`</div><button class="reflect-btn" data-id="${item.id}">Submit</button><div class="model-answer" id="model-${item.id}">${item.model}</div>`;
+  card.innerHTML=inner;div.appendChild(card);});cont.appendChild(div);});
+  document.querySelectorAll('#vidSubNav .sub-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('#vidSubNav .sub-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');keys.forEach(k=>{document.getElementById(k).style.display='none';});document.getElementById(btn.dataset.sec).style.display='block';});});
+  document.querySelectorAll('.reflect-btn').forEach(btn=>{btn.addEventListener('click',()=>{const id=btn.dataset.id;const opts=document.querySelector(`.reflect-options[data-id="${id}"]`);const sel=opts.querySelector('.reflect-opt.selected');if(!sel)return;const idx=parseInt(sel.dataset.idx);const allItems=[...Object.values(VID_DATA)].flatMap(s=>s.items);const item=allItems.find(i=>i.id===id);opts.querySelectorAll('.reflect-opt').forEach(o=>{o.style.pointerEvents='none';if(parseInt(o.dataset.idx)===item.correct)o.classList.add('correct');else if(o.classList.contains('selected'))o.classList.add('wrong');});btn.disabled=true;document.getElementById('model-'+id).classList.add('show');if(idx===item.correct){addXP(10);addStreak();}else{breakStreak();}done.videos[id]=true;});});
+  document.querySelectorAll('.reflect-opt').forEach(opt=>{opt.addEventListener('click',()=>{opt.parentElement.querySelectorAll('.reflect-opt').forEach(o=>o.classList.remove('selected'));opt.classList.add('selected');});});
+}
+
+// ═══════ BUILD ORGANS ═══════
+function buildOrgans(){
+  const grid=document.getElementById('organGrid');
+  ORGAN_DATA.forEach(o=>{const card=document.createElement('div');card.className='organ-card';
+  card.innerHTML=`<div class="oc-front"><div style="font-size:2em">${o.emoji}</div><h4>${o.name}</h4><p>${o.tagline}</p><p style="font-size:.7em;color:#aaa;margin-top:6px">Click to reveal</p></div><div class="oc-back"><h4>${o.emoji} ${o.name}</h4><p>${o.detail}</p></div>`;
+  card.addEventListener('click',()=>card.classList.toggle('flipped'));grid.appendChild(card);});
+}
+
+// ═══════ BUILD VETO SIMULATOR ═══════
+function buildVeto(){
+  const cont=document.getElementById('vetoItems');
+  VETO_DATA.forEach((sc,si)=>{
+    const card=document.createElement('div');card.className='veto-scenario';
+    let html=`<span class="vs-label">${sc.label}</span><div class="vs-text">${sc.text}</div><div class="p5-grid">`;
+    sc.p5.forEach(m=>{html+=`<div class="p5-card"><span class="flag">${m.flag}</span><strong>${m.name}</strong><br><span style="font-size:.75em;color:#666">${m.reason}</span><br><span class="stance ${m.stance}">${m.stance==='yes'?'✅ YES':m.stance==='no'?'❌ NO':'🟡 ABSTAIN'}</span></div>`;});
+    html+=`</div><div class="veto-q"><strong>What happens to this resolution?</strong></div><div class="veto-opts" data-si="${si}">`;
+    html+=`<div class="veto-opt" data-val="passes">✅ PASSES</div><div class="veto-opt" data-val="vetoed">❌ VETOED</div>`;
+    html+=`</div><button class="veto-submit" data-si="${si}">Submit Prediction</button><div class="veto-explain" id="veto-exp-${si}">${sc.e}</div>`;
+    card.innerHTML=html;cont.appendChild(card);
+    card.querySelectorAll('.veto-opt').forEach(opt=>{opt.addEventListener('click',()=>{card.querySelectorAll('.veto-opt').forEach(o=>o.classList.remove('selected'));opt.classList.add('selected');});});
+  });
+  cont.querySelectorAll('.veto-submit').forEach(btn=>{btn.addEventListener('click',()=>{
+    const si=parseInt(btn.dataset.si);const opts=cont.querySelector(`.veto-opts[data-si="${si}"]`);const sel=opts.querySelector('.veto-opt.selected');if(!sel)return;
+    opts.querySelectorAll('.veto-opt').forEach(o=>{o.style.pointerEvents='none';if(o.dataset.val===VETO_DATA[si].answer)o.classList.add('correct');else if(o.classList.contains('selected'))o.classList.add('wrong');});
+    btn.disabled=true;document.getElementById('veto-exp-'+si).classList.add('show');
+    if(sel.dataset.val===VETO_DATA[si].answer){addXP(20);addStreak();}else{breakStreak();}done.veto[si]=true;
+  });});
+}
+
+// ═══════ BUILD CONFLICT PRIORITIZER ═══════
+function buildConflicts(){
+  const cont=document.getElementById('cpItems');
+  const shuffled=[...CP_DATA].sort(()=>Math.random()-.5);
+  shuffled.forEach((c,i)=>{
+    const el=document.createElement('div');el.className='cp-conflict';el.dataset.name=c.name;el.draggable=true;
+    el.innerHTML=`<div class="cp-rank">${i+1}</div><div class="cp-info"><h4>${c.name}</h4><p>${c.desc}</p></div>`;
+    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain','');el.classList.add('dragging');});
+    el.addEventListener('dragend',()=>{el.classList.remove('dragging');updateRanks();});
+    el.addEventListener('dragover',e=>{e.preventDefault();const dragging=cont.querySelector('.dragging');if(dragging&&dragging!==el){const rect=el.getBoundingClientRect();const mid=rect.top+rect.height/2;if(e.clientY<mid)cont.insertBefore(dragging,el);else cont.insertBefore(dragging,el.nextSibling);}});
+    cont.appendChild(el);
+  });
+  // Touch
+  let touchEl=null;
+  cont.addEventListener('touchstart',e=>{const item=e.target.closest('.cp-conflict');if(item){touchEl=item;item.classList.add('dragging');}},{passive:true});
+  cont.addEventListener('touchmove',e=>{if(!touchEl)return;e.preventDefault();const touch=e.touches[0];const target=document.elementFromPoint(touch.clientX,touch.clientY);const over=target?target.closest('.cp-conflict'):null;if(over&&over!==touchEl){const rect=over.getBoundingClientRect();const mid=rect.top+rect.height/2;if(touch.clientY<mid)cont.insertBefore(touchEl,over);else cont.insertBefore(touchEl,over.nextSibling);}},{passive:false});
+  cont.addEventListener('touchend',()=>{if(touchEl){touchEl.classList.remove('dragging');touchEl=null;updateRanks();}});
+  function updateRanks(){[...cont.querySelectorAll('.cp-conflict')].forEach((el,i)=>{el.querySelector('.cp-rank').textContent=i+1;});}
+
+  document.getElementById('checkCP').addEventListener('click',()=>{
+    const items=[...cont.querySelectorAll('.cp-conflict')];
+    const reveal=document.getElementById('cpReveal');
+    let html=`<h3>Your Ranking vs. ICG's Analysis</h3><div style="display:flex;gap:20px;margin:10px 0;font-size:.8em;font-weight:600"><div><span style="color:var(--un-blue)">■</span> Your rank</div><div><span style="color:var(--accent)">■</span> ICG rank</div></div>`;
+    items.forEach((el,i)=>{
+      const name=el.dataset.name;const icg=CP_DATA.find(c=>c.name===name);
+      html+=`<div class="cp-compare-row"><div class="you">${i+1}</div><div class="icg">${icg.icgRank}</div><div style="flex:1"><strong>${name}</strong></div></div>`;
+    });
+    html+=`<div style="margin-top:16px;padding:16px;background:var(--light);border-radius:10px;font-size:.85em;line-height:1.6"><strong>There is no single "right" answer.</strong> The ICG ranking reflects their expert assessment of urgency, scale of human suffering, risk of escalation, and potential for diplomatic intervention. Your ranking may reflect different priorities — and that's the point. In the real UN, states disagree about priorities all the time. The exercise reveals: Who gets attention? Whose suffering is invisible? Why do some crises get Security Council sessions while others are ignored? These are political questions, not technical ones.</div>`;
+    reveal.innerHTML=html;reveal.classList.add('show');
+    addXP(15);done.conflicts=true;
+  });
+}
+
+// ═══════ BUILD REFORM SORTER ═══════
+function buildReform(){
+  const cont=document.getElementById('reformItems');
+  const shuffled=[...REFORM_DATA].sort(()=>Math.random()-.5);
+  shuffled.forEach((item,i)=>{
+    const el=document.createElement('div');el.className='sort-item';el.textContent=item.s;el.draggable=true;el.dataset.idx=i;el.dataset.answer=item.a;
+    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);el.classList.add('dragging');});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('click',()=>{if(el.classList.contains('placed'))return;if(el.classList.contains('selected')){el.classList.remove('selected');return;}cont.querySelectorAll('.sort-item').forEach(s=>s.classList.remove('selected'));el.classList.add('selected');});
+    cont.appendChild(el);
+  });
+  document.querySelectorAll('#panel-reform .sort-zone').forEach(zone=>{
+    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
+    zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+    zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('over');place(e.dataTransfer.getData('text/plain'),zone);});
+    zone.addEventListener('click',()=>{const sel=cont.querySelector('.sort-item.selected');if(sel){place(sel.dataset.idx,zone);sel.classList.remove('selected');}});
+  });
+  function place(idx,zone){const el=cont.querySelector(`.sort-item[data-idx="${idx}"]`);if(!el||el.classList.contains('placed'))return;el.classList.add('placed');const pill=document.createElement('div');pill.className='sorted-item';pill.textContent=el.textContent.substring(0,50)+'…';pill.title=el.textContent;pill.dataset.idx=idx;pill.dataset.answer=el.dataset.answer;pill.dataset.zone=zone.dataset.zone;zone.querySelector('.zone-items').appendChild(pill);}
+  document.getElementById('checkReform').addEventListener('click',()=>{
+    let correct=0,total=0;document.querySelectorAll('#panel-reform .sorted-item').forEach(pill=>{total++;if(pill.dataset.zone===pill.dataset.answer){pill.classList.add('correct');correct++;addXP(10);addStreak();}else{pill.classList.add('wrong');breakStreak();}});
+    const pct=total?Math.round(correct/total*100):0;const res=document.getElementById('reformResult');
+    res.innerHTML=`<div class="result-banner ${pct>=80?'great':pct>=50?'good':'try'}">${correct}/${total} correct (${pct}%)</div>`;
+    REFORM_DATA.forEach(item=>{const exp=document.createElement('div');exp.style.cssText='font-size:.82em;padding:8px 14px;margin:4px 0;background:#fff;border-radius:8px;border-left:3px solid var(--gold)';exp.innerHTML=`<strong>"${item.s.substring(0,60)}…"</strong> → <em>${item.a.toUpperCase()}</em>: ${item.e}`;res.appendChild(exp);});
+    done.reform=true;
+  });
+}
+
+// ═══════ BUILD MATCH ═══════
+function buildMatch(){
+  const grid=document.getElementById('matchGrid');const terms=[...MATCH_DATA].sort(()=>Math.random()-.5);const defs=[...MATCH_DATA].sort(()=>Math.random()-.5);let selected=null,mc=0;
+  terms.forEach(item=>{const el=document.createElement('div');el.className='match-item';el.textContent=item.term;el.dataset.type='term';el.dataset.key=item.term;el.addEventListener('click',()=>hm(el));grid.appendChild(el);});
+  defs.forEach(item=>{const el=document.createElement('div');el.className='match-item';el.textContent=item.def;el.dataset.type='def';el.dataset.key=item.term;el.style.fontSize='.78em';el.addEventListener('click',()=>hm(el));grid.appendChild(el);});
+  function hm(el){if(el.classList.contains('matched'))return;if(!selected){selected=el;el.classList.add('sel');}else{if(selected===el){selected.classList.remove('sel');selected=null;return;}if(selected.dataset.type===el.dataset.type){selected.classList.remove('sel');selected=el;el.classList.add('sel');return;}if(selected.dataset.key===el.dataset.key){selected.classList.remove('sel');selected.classList.add('matched');el.classList.add('matched');addXP(15);addStreak();mc++;if(mc===MATCH_DATA.length){done.match=true;document.getElementById('matchResult').innerHTML='<div class="result-banner great">All matched!</div>';}}else{selected.classList.remove('sel');el.classList.add('wrong-flash');selected.classList.add('wrong-flash');breakStreak();setTimeout(()=>el.classList.remove('wrong-flash'),500);}selected=null;}}
+}
+
+// ═══════ BUILD TIMELINE ═══════
+function buildTimeline(){
+  const cont=document.getElementById('tlItems');const shuffled=[...TL_DATA].sort(()=>Math.random()-.5);
+  shuffled.forEach((item,i)=>{const el=document.createElement('div');el.className='tl-item';el.draggable=true;el.dataset.year=item.year;el.innerHTML=`<span class="handle">☰</span><span>${item.text}</span>`;
+  el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);el.classList.add('dragging');});el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+  el.addEventListener('dragover',e=>{e.preventDefault();const d=cont.querySelector('.dragging');if(d&&d!==el){const r=el.getBoundingClientRect();const m=r.top+r.height/2;if(e.clientY<m)cont.insertBefore(d,el);else cont.insertBefore(d,el.nextSibling);}});cont.appendChild(el);});
+  let te=null;
+  cont.addEventListener('touchstart',e=>{const i=e.target.closest('.tl-item');if(i){te=i;i.classList.add('dragging');}},{passive:true});
+  cont.addEventListener('touchmove',e=>{if(!te)return;e.preventDefault();const t=e.touches[0];const tg=document.elementFromPoint(t.clientX,t.clientY);const o=tg?tg.closest('.tl-item'):null;if(o&&o!==te){const r=o.getBoundingClientRect();const m=r.top+r.height/2;if(t.clientY<m)cont.insertBefore(te,o);else cont.insertBefore(te,o.nextSibling);}},{passive:false});
+  cont.addEventListener('touchend',()=>{if(te){te.classList.remove('dragging');te=null;}});
+  document.getElementById('checkTL').addEventListener('click',()=>{const items=[...cont.querySelectorAll('.tl-item')];const years=items.map(el=>parseInt(el.dataset.year));const sorted=[...years].sort((a,b)=>a-b);let c=0;items.forEach((el,i)=>{if(years[i]===sorted[i]){el.classList.add('correct');c++;}else el.classList.add('wrong');el.querySelector('.handle').textContent=el.dataset.year;el.querySelector('.handle').style.cssText='font-size:.8em;min-width:40px';});const p=Math.round(c/items.length*100);document.getElementById('tlResult').innerHTML=`<div class="result-banner ${p>=80?'great':p>=50?'good':'try'}">${c}/${items.length} correct (${p}%)</div>`;if(p===100)addXP(20);else if(p>=70)addXP(10);addStreak();done.timeline=true;});
+}
+
+// ═══════ STATS ═══════
+function renderStats(){
+  const grid=document.getElementById('statGrid');const vd=Object.keys(done.videos).length;const vt=[...Object.values(VID_DATA)].reduce((a,s)=>a+s.items.length,0);
+  const vetoDone=Object.keys(done.veto).length;
+  const acts=['conflicts','reform','match','timeline'];const ad=acts.filter(a=>done[a]).length;
+  grid.innerHTML=`<div class="stat-card"><span class="num">${xp}</span><span class="lbl">Total XP</span></div><div class="stat-card"><span class="num">${maxStreak}</span><span class="lbl">Best Streak</span></div><div class="stat-card"><span class="num">${vd+vetoDone}/${vt+VETO_DATA.length}</span><span class="lbl">Reflections</span></div><div class="stat-card"><span class="num">${ad}/${acts.length}</span><span class="lbl">Activities</span></div>`;
+  const prog=document.getElementById('activityProgress');const total=vt+VETO_DATA.length+acts.length;const completed=vd+vetoDone+ad;const pct=Math.round(completed/total*100);
+  prog.innerHTML=`<h3>Activity Completion</h3><div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div><p style="font-size:.82em;color:#666;margin-top:6px">${completed}/${total} completed (${pct}%)</p>`;
+}
+document.getElementById('resetBtn').addEventListener('click',()=>{if(confirm('Reset all progress?'))location.reload();});
+
+// ═══════ INIT ═══════
+buildVideos();buildOrgans();buildVeto();buildConflicts();buildReform();buildMatch();buildTimeline();
+</script>
+</body>
+</html>
