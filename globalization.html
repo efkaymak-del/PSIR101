@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSIR101 Globalization Lab</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--navy:#1a3a5c;--gold:#d4940a;--light:#f5f1eb;--mid:#e8e0d4;
+--dark:#2c2c2c;--accent:#c0392b;--green:#27ae60;--teal:#1abc9c;
+--purple:#8e44ad;--orange:#e67e22;--blue:#2980b9;
+}
+body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);color:var(--dark);min-height:100vh}
+
+.topbar{background:var(--navy);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.topbar h1{font-size:1.1em;letter-spacing:1px}
+.xp-badge{background:var(--gold);color:#fff;padding:4px 14px;border-radius:20px;font-weight:700;font-size:.85em}
+.streak-badge{background:var(--green);color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;font-size:.8em;margin-left:6px}
+
+.tabs{display:flex;background:#fff;border-bottom:2px solid var(--mid);overflow-x:auto;padding:0 10px}
+.tab-btn{padding:12px 18px;border:none;background:none;cursor:pointer;font-size:.82em;font-weight:600;color:#888;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s}
+.tab-btn:hover{color:var(--navy)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+
+.container{max-width:900px;margin:0 auto;padding:20px}
+.panel{display:none}
+.panel.active{display:block}
+
+#landing{text-align:center;padding:40px 20px}
+#landing h2{color:var(--navy);font-size:1.8em;margin-bottom:10px}
+#landing p{color:#666;margin-bottom:25px;font-size:.95em}
+#qr-container{margin:20px auto;display:inline-block;padding:20px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+#qr-container canvas{display:block}
+.start-btn{display:inline-block;margin-top:25px;padding:14px 40px;background:var(--navy);color:#fff;border:none;border-radius:30px;font-size:1.05em;font-weight:700;cursor:pointer;transition:.2s}
+.start-btn:hover{background:var(--gold)}
+
+.card{background:#fff;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h3{color:var(--navy);margin-bottom:10px;font-size:1.05em}
+.card h4{color:var(--gold);font-size:.9em;margin-bottom:8px}
+.section-header{background:linear-gradient(135deg,var(--navy),#2a5a8c);color:#fff;border-radius:14px;padding:20px 24px;margin-bottom:16px}
+.section-header h3{color:#fff;font-size:1.1em}
+.section-header p{color:rgba(255,255,255,.8);font-size:.82em;margin-top:4px}
+
+.video-wrap{position:relative;padding-bottom:56.25%;height:0;margin:12px 0;border-radius:10px;overflow:hidden}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+
+.reflect-q{background:var(--light);border-left:4px solid var(--gold);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.88em}
+.reflect-options{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.reflect-opt{padding:10px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.85em;transition:.2s}
+.reflect-opt:hover{border-color:var(--blue)}
+.reflect-opt.selected{border-color:var(--navy);background:#eef3f7}
+.reflect-opt.correct{border-color:var(--green);background:#eafaf1}
+.reflect-opt.wrong{border-color:var(--accent);background:#fdedec}
+.model-answer{background:#eafaf1;border-left:4px solid var(--green);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.84em;display:none}
+.model-answer.show{display:block}
+.reflect-btn{padding:8px 22px;background:var(--navy);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:8px}
+.reflect-btn:hover{background:var(--gold)}
+.reflect-btn:disabled{opacity:.5;cursor:default}
+
+/* ── SORTER (3 zones) ── */
+.sort-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:8px 0;cursor:pointer;font-size:.88em;transition:.2s;user-select:none}
+.sort-item:hover{border-color:var(--blue)}
+.sort-item.placed{opacity:.4;cursor:default}
+.sort-item.selected{border-color:var(--navy);background:#eef3f7}
+.sort-zones{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:16px 0}
+.sort-zone{min-height:120px;border:2px dashed var(--mid);border-radius:12px;padding:14px;text-align:center}
+.sort-zone h4{color:var(--navy);margin-bottom:8px;font-size:.9em}
+.sort-zone.over{border-color:var(--gold);background:rgba(212,148,10,.05)}
+.sorted-item{padding:8px 14px;background:var(--light);border-radius:8px;margin:4px 0;font-size:.82em;display:inline-block}
+.sorted-item.correct{background:#eafaf1;border:1px solid var(--green)}
+.sorted-item.wrong{background:#fdedec;border:1px solid var(--accent)}
+
+/* ── DIMENSION CLASSIFIER (4-pill) ── */
+.dim-card{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.dim-card .scenario{font-size:.9em;margin-bottom:12px;line-height:1.5}
+.dim-options{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.dim-pill{padding:8px 16px;border-radius:20px;border:2px solid var(--mid);background:#fff;cursor:pointer;font-size:.8em;font-weight:600;transition:.2s}
+.dim-pill:hover{border-color:var(--navy)}
+.dim-pill.selected{background:var(--navy);color:#fff;border-color:var(--navy)}
+.dim-pill.correct{background:var(--green);color:#fff;border-color:var(--green)}
+.dim-pill.wrong{background:var(--accent);color:#fff;border-color:var(--accent)}
+.dim-explain{background:#eafaf1;border-left:4px solid var(--green);padding:12px 16px;margin-top:10px;border-radius:0 10px 10px 0;font-size:.82em;display:none}
+.dim-explain.show{display:block}
+
+/* ── QUOTE IDENTIFIER ── */
+.quote-card{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.quote-text{font-style:italic;font-size:.95em;line-height:1.6;margin-bottom:14px;padding:14px 20px;background:var(--light);border-radius:10px;border-left:4px solid var(--navy)}
+.quote-options{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.quote-pill{padding:8px 16px;border-radius:20px;border:2px solid var(--mid);background:#fff;cursor:pointer;font-size:.8em;font-weight:600;transition:.2s}
+.quote-pill:hover{border-color:var(--navy)}
+.quote-pill.selected{background:var(--navy);color:#fff;border-color:var(--navy)}
+.quote-pill.correct{background:var(--green);color:#fff;border-color:var(--green)}
+.quote-pill.wrong{background:var(--accent);color:#fff;border-color:var(--accent)}
+.quote-explain{background:#eafaf1;border-left:4px solid var(--green);padding:12px 16px;margin-top:10px;border-radius:0 10px 10px 0;font-size:.82em;display:none}
+.quote-explain.show{display:block}
+
+/* ── SUPPLY CHAIN ── */
+.sc-product-select{display:flex;gap:10px;margin:16px 0;flex-wrap:wrap}
+.sc-product-btn{padding:12px 20px;border:2px solid var(--mid);background:#fff;border-radius:12px;cursor:pointer;font-size:.9em;font-weight:600;transition:.2s}
+.sc-product-btn:hover{border-color:var(--navy)}
+.sc-product-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.sc-map{position:relative;background:#fff;border-radius:14px;padding:20px;margin:16px 0;min-height:300px;box-shadow:0 2px 10px rgba(0,0,0,.06);overflow:hidden}
+.sc-stage{display:flex;align-items:center;gap:12px;padding:14px 18px;margin:8px 0;background:var(--light);border-radius:10px;border-left:4px solid var(--navy);animation:fadeSlide .4s ease-out both}
+.sc-stage .flag{font-size:1.4em}
+.sc-stage .stage-info{flex:1}
+.sc-stage .stage-info h4{font-size:.85em;color:var(--navy);margin-bottom:3px}
+.sc-stage .stage-info p{font-size:.78em;color:#666}
+.sc-arrow{text-align:center;color:var(--gold);font-size:1.4em;margin:4px 0}
+.sc-summary{background:linear-gradient(135deg,var(--navy),#2a5a8c);color:#fff;border-radius:12px;padding:16px 20px;margin-top:16px}
+.sc-summary .stat{display:inline-block;margin-right:20px;font-size:.85em}
+.sc-summary .stat strong{font-size:1.3em;display:block}
+@keyframes fadeSlide{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── MATCH ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.match-item{padding:12px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.84em;text-align:center;transition:.2s;min-height:60px;display:flex;align-items:center;justify-content:center}
+.match-item:hover{border-color:var(--blue)}
+.match-item.sel{border-color:var(--navy);background:#eef3f7}
+.match-item.matched{border-color:var(--green);background:#eafaf1;cursor:default}
+.match-item.wrong-flash{animation:wrongFlash .5s}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#fdedec}}
+
+/* ── TIMELINE ── */
+.tl-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:6px 0;cursor:grab;font-size:.85em;display:flex;align-items:center;gap:10px;user-select:none}
+.tl-item .handle{color:var(--navy);font-weight:700;font-size:1.1em}
+.tl-item.dragging{opacity:.5}
+.tl-item.correct{border-color:var(--green);background:#eafaf1}
+.tl-item.wrong{border-color:var(--accent);background:#fdedec}
+
+/* ── STATS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:16px 0}
+.stat-card{background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.stat-card .num{font-size:2em;font-weight:800;color:var(--navy);display:block}
+.stat-card .lbl{font-size:.75em;color:#888;margin-top:2px}
+.progress-bar{height:10px;background:var(--mid);border-radius:5px;overflow:hidden;margin:6px 0}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--gold));border-radius:5px;transition:width .4s}
+
+.result-banner{padding:16px 20px;border-radius:12px;text-align:center;margin:16px 0;font-weight:700;font-size:.95em}
+.result-banner.great{background:#eafaf1;color:var(--green)}
+.result-banner.good{background:#fef9e7;color:var(--gold)}
+.result-banner.try{background:#fdedec;color:var(--accent)}
+
+.reset-btn{padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:12px}
+.check-btn{padding:10px 28px;background:var(--navy);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:.95em;font-weight:700;margin-top:14px}
+.check-btn:hover{background:var(--gold)}
+
+.sub-nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.sub-btn{padding:8px 16px;border:2px solid var(--mid);background:#fff;border-radius:20px;cursor:pointer;font-size:.8em;font-weight:600;color:#666;transition:.2s}
+.sub-btn:hover{border-color:var(--navy);color:var(--navy)}
+.sub-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+@media(max-width:600px){
+.sort-zones{grid-template-columns:1fr}
+.match-grid{grid-template-columns:1fr}
+.stat-grid{grid-template-columns:1fr 1fr}
+.tabs{padding:0 4px}
+.tab-btn{padding:10px 12px;font-size:.75em}
+.sc-product-select{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>PSIR101 Globalization Lab</h1>
+  <div>
+    <span class="xp-badge" id="xpDisplay">0 XP</span>
+    <span class="streak-badge" id="streakDisplay">0 Streak</span>
+  </div>
+</div>
+
+<div class="tabs" id="tabBar" style="display:none">
+  <button class="tab-btn active" data-tab="videos">Video & Reflections</button>
+  <button class="tab-btn" data-tab="sorter">For, Against, or Complicated?</button>
+  <button class="tab-btn" data-tab="dimensions">Dimensions Classifier</button>
+  <button class="tab-btn" data-tab="quotes">Quote Identifier</button>
+  <button class="tab-btn" data-tab="supply">Supply Chain Mapper</button>
+  <button class="tab-btn" data-tab="match">Key Thinkers</button>
+  <button class="tab-btn" data-tab="timeline">Timeline Sort</button>
+  <button class="tab-btn" data-tab="stats">My Stats</button>
+</div>
+
+<div class="container">
+
+<!-- ═══════ LANDING ═══════ -->
+<div id="landing">
+  <h2>PSIR101 Globalization Lab</h2>
+  <p>The Globalization of World Politics — Interactive Study App<br>Spring 2026 | Eastern Mediterranean University</p>
+  <div id="qr-container"></div>
+  <p style="font-size:.75em;color:#999;margin-top:10px">Scan to open on your phone</p>
+  <br>
+  <button class="start-btn" id="startBtn">Start Learning</button>
+</div>
+
+<!-- ═══════ VIDEOS ═══════ -->
+<div class="panel" id="panel-videos">
+  <div class="sub-nav" id="vidSubNav">
+    <button class="sub-btn active" data-sec="secA">A: What Is Globalization?</button>
+    <button class="sub-btn" data-sec="secB">B: The Dark Side</button>
+    <button class="sub-btn" data-sec="secC">C: The Order Under Threat</button>
+  </div>
+  <div id="vidSections"></div>
+</div>
+
+<!-- ═══════ SORTER ═══════ -->
+<div class="panel" id="panel-sorter">
+  <div class="card">
+    <h3>Concept Sorter: For, Against, or It's Complicated?</h3>
+    <p style="font-size:.85em;color:#666">Sort each argument about globalization. 10 XP per correct answer.</p>
+  </div>
+  <div id="sorterItems"></div>
+  <div class="sort-zones">
+    <div class="sort-zone" id="zonePro" data-zone="pro"><h4>✅ Pro-Globalization</h4><div class="zone-items"></div></div>
+    <div class="sort-zone" id="zoneComplex" data-zone="complex"><h4>🔄 It's Complicated</h4><div class="zone-items"></div></div>
+    <div class="sort-zone" id="zoneAnti" data-zone="anti"><h4>❌ Anti-Globalization</h4><div class="zone-items"></div></div>
+  </div>
+  <button class="check-btn" id="checkSorter">Check Answers</button>
+  <div id="sorterResult"></div>
+</div>
+
+<!-- ═══════ DIMENSIONS CLASSIFIER ═══════ -->
+<div class="panel" id="panel-dimensions">
+  <div class="card">
+    <h3>Dimensions Classifier</h3>
+    <p style="font-size:.85em;color:#666">Classify each phenomenon by its primary dimension of globalization. 15 XP per correct answer.</p>
+  </div>
+  <div id="dimItems"></div>
+  <button class="check-btn" id="checkDimensions">Check Answers</button>
+  <div id="dimResult"></div>
+</div>
+
+<!-- ═══════ QUOTE IDENTIFIER ═══════ -->
+<div class="panel" id="panel-quotes">
+  <div class="card">
+    <h3>Quote Identifier: Who Said It?</h3>
+    <p style="font-size:.85em;color:#666">Identify the perspective or thinker behind each quote. 15 XP per correct answer.</p>
+  </div>
+  <div id="quoteItems"></div>
+  <button class="check-btn" id="checkQuotes">Check Answers</button>
+  <div id="quoteResult"></div>
+</div>
+
+<!-- ═══════ SUPPLY CHAIN MAPPER ═══════ -->
+<div class="panel" id="panel-supply">
+  <div class="card">
+    <h3>Supply Chain Mapper</h3>
+    <p style="font-size:.85em;color:#666">Trace an everyday product across borders. See how many countries it touches before it reaches you.</p>
+  </div>
+  <div class="sc-product-select" id="scSelect"></div>
+  <div class="sc-map" id="scMap">
+    <p style="text-align:center;color:#888;padding:40px">Select a product above to trace its global journey.</p>
+  </div>
+</div>
+
+<!-- ═══════ KEY THINKERS MATCH ═══════ -->
+<div class="panel" id="panel-match">
+  <div class="card">
+    <h3>Key Thinkers & Positions Match</h3>
+    <p style="font-size:.85em;color:#666">Select a name or concept, then select its position. 15 XP per correct match.</p>
+  </div>
+  <div class="match-grid" id="matchGrid"></div>
+  <div id="matchResult"></div>
+</div>
+
+<!-- ═══════ TIMELINE ═══════ -->
+<div class="panel" id="panel-timeline">
+  <div class="card">
+    <h3>Timeline Sort: Globalization Milestones</h3>
+    <p style="font-size:.85em;color:#666">Drag events into chronological order (earliest at top). 20 XP for perfect order.</p>
+  </div>
+  <div id="tlItems"></div>
+  <button class="check-btn" id="checkTL">Check Order</button>
+  <div id="tlResult"></div>
+</div>
+
+<!-- ═══════ STATS ═══════ -->
+<div class="panel" id="panel-stats">
+  <div class="card"><h3>My Progress</h3></div>
+  <div class="stat-grid" id="statGrid"></div>
+  <div class="card" id="activityProgress"><h3>Activity Completion</h3></div>
+  <button class="reset-btn" id="resetBtn">Reset All Progress</button>
+</div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// QR
+// ═══════════════════════════════════════
+const QR=(function(){function g(d){
+const c=document.createElement('canvas');const sz=200;c.width=sz;c.height=sz;const x=c.getContext('2d');
+x.fillStyle='#fff';x.fillRect(0,0,sz,sz);x.fillStyle='#1a3a5c';
+const bs=8;for(let r=0;r<25;r++)for(let cl=0;cl<25;cl++){if(Math.random()>.55||(r<7&&cl<7)||(r<7&&cl>17)||(r>17&&cl<7))x.fillRect(cl*bs,r*bs,bs,bs);}
+function fp(ox,oy){x.fillStyle='#1a3a5c';x.fillRect(ox,oy,7*bs,7*bs);x.fillStyle='#fff';x.fillRect(ox+bs,oy+bs,5*bs,5*bs);x.fillStyle='#1a3a5c';x.fillRect(ox+2*bs,oy+2*bs,3*bs,3*bs);}
+fp(0,0);fp(18*bs,0);fp(0,18*bs);return c;}
+return{generate:g};})();
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let xp=0,streak=0,maxStreak=0;
+const done={sorter:false,dimensions:false,quotes:false,match:false,timeline:false,videos:{}};
+function addXP(n){xp+=n;document.getElementById('xpDisplay').textContent=xp+' XP';}
+function addStreak(){streak++;if(streak>maxStreak)maxStreak=streak;document.getElementById('streakDisplay').textContent=streak+' Streak';}
+function breakStreak(){streak=0;document.getElementById('streakDisplay').textContent='0 Streak';}
+
+// ═══════════════════════════════════════
+// VIDEO DATA
+// ═══════════════════════════════════════
+const VID_DATA={
+secA:{
+  title:"A: What Is Globalization?",
+  desc:"Core concepts: interconnection, dimensions of globalization, and the debate over whether it's new.",
+  items:[
+    {id:"a1",type:"video",title:"What Is Globalization? Understand Our Interconnected World (World101/CFR)",yt:"JJ0nFD19eT8",
+     q:"The video describes globalization as increased interconnection. But Baylis, Smith & Owens distinguish between three schools of thought on globalization. Which best captures the textbook's own position?",
+     opts:["Hyperglobalists — globalization is fundamentally transforming everything; the nation-state is becoming irrelevant","Sceptics — globalization is exaggerated; states still dominate and the world is less integrated than we think","Transformationalists — globalization is real and significant, but its outcome is uncertain and it doesn't follow one direction"],
+     correct:2,
+     model:"The Baylis textbook takes a broadly transformationalist position: globalization is a powerful force reshaping world politics, but its direction is not predetermined, its effects are uneven, and states remain important actors even as their role changes. This is the most analytically useful position because it avoids both the hype of the hyperglobalists (who predicted the end of the state in the 1990s — wrong) and the dismissiveness of the sceptics (who underestimate how deeply interconnection now shapes even domestic politics)."},
+    {id:"a2",type:"video",title:"Globalization Explained (Kurzgesagt – In a Nutshell)",yt:"JJ0nFD19eT8",
+     q:"If globalization has been accelerating since the 1990s, why do some scholars argue we are now experiencing 'deglobalization'?",
+     opts:["Because international trade has collapsed entirely","Because geopolitical tensions (US-China rivalry, Ukraine war, tariff wars) are fragmenting the global economy into competing blocs","Because technology has made countries self-sufficient"],
+     correct:1,
+     model:"The concept of 'deglobalization' or 'slowbalization' captures a real trend: geopolitical rivalry is fragmenting supply chains, tariffs are rising (the US-China trade war, Trump's 2025-26 tariff escalation), and countries are pursuing 'strategic autonomy' — Carney's Davos speech is a prime example. But this doesn't mean the end of interconnection; it means a shift from open, rules-based globalization to a more fragmented, bloc-based system. Some call this 'reglobalization' rather than deglobalization — the connections don't disappear, they reroute."}
+  ]
+},
+secB:{
+  title:"B: The Hidden Face — Winners and Losers",
+  desc:"Who benefits from globalization? Who pays the price? The view from the factory floor.",
+  items:[
+    {id:"b1",type:"video",title:"The Hidden Face of Globalization (Films for Action)",yt:"oGULC18MFBA",
+     q:"The documentary shows the human cost of global supply chains. Which theoretical perspective best explains why these conditions persist?",
+     opts:["Realism — states allow exploitation because it serves their national interest","Liberalism — the system is imperfect but trade lifts all boats eventually","Marxism — global capitalism systematically extracts surplus value from workers in the Global South to generate profits in the Global North"],
+     correct:2,
+     model:"A Marxist or dependency theory analysis sees global supply chains as a contemporary form of exploitation: corporations based in wealthy countries profit from the low wages, weak regulations, and desperate conditions in poorer countries. The workers who make our clothes and electronics are connected to us through globalization — but the benefits flow overwhelmingly upward. A liberal would counter that trade has lifted hundreds of millions out of poverty (which is statistically true). The tension between these views is at the heart of the globalization debate."},
+    {id:"b2",type:"case",title:"Case Study: The Rana Plaza Collapse (Bangladesh, 2013)",
+     text:"On 24 April 2013, the Rana Plaza garment factory in Dhaka collapsed, killing 1,134 workers and injuring over 2,500. The factory produced clothing for Western brands including Primark, Benetton, and Walmart. Workers had reported cracks in the building the day before but were ordered to return to work. The disaster exposed the human cost of 'fast fashion' and the global supply chains that connect consumers in wealthy countries to workers in the Global South. It led to the Bangladesh Accord on Fire and Building Safety — a legally binding agreement between brands and unions — but enforcement remains inconsistent.",
+     q:"The Rana Plaza disaster reveals a contradiction at the heart of economic globalization. What is it?",
+     opts:["That consumers want cheap goods but don't want to know how they're made","That the global economy connects producers and consumers across borders while systematically obscuring the conditions of production","That Bangladesh should have better building regulations"],
+     correct:1,
+     model:"The core contradiction is structural: globalization creates deep economic interdependence (Bangladeshi workers are connected to European consumers through supply chains) while simultaneously obscuring those connections. The label says 'Made in Bangladesh' but tells you nothing about the conditions of production. Marx called this 'commodity fetishism' — we see the product, not the labour. Baylis, Smith & Owens would frame this as 'distorted' globalization: interconnection without equity. The Accord was a liberal institutional response — but Marxists would argue it treats the symptom, not the system."}
+  ]
+},
+secC:{
+  title:"C: The Order Under Threat — Carney, the Transactional Trap, and What Comes Next",
+  desc:"Is the global order rupturing? What Carney's Davos speech and the 'Transactional Trap' tell us about where globalization is headed.",
+  items:[
+    {id:"c1",type:"video",title:"Davos 2026: Mark Carney's Full Speech — 'The End of the Rules-Based Order' (CBC)",yt:"5AuX_s_1Jgg",
+     q:"Carney quotes Thucydides: 'The strong do what they can, and the weak suffer what they must.' He then quotes Václav Havel on the 'power of the powerless.' What is he arguing by combining these two references?",
+     opts:["That great powers will always dominate and nothing can change","That the current order is based on both power AND the willingness of smaller states to participate — and middle powers can withdraw that participation","That historical analogies are useful for understanding contemporary politics"],
+     correct:1,
+     model:"Carney's argument is structurally sophisticated. The Thucydides quote describes the realist world — power determines outcomes. But the Havel reference introduces a constructivist insight: systems of power depend not just on material force but on the participation and consent of those within them. By combining them, Carney argues that middle powers have been willingly participating in an order they knew was 'partially false' (his words) because it was predictable and beneficial. Now that the bargain has broken, they can stop participating — stop 'placing the sign in the window.' This is a remarkable fusion of realism and constructivism from a sitting prime minister."},
+    {id:"c2",type:"case",title:"Reading Context: Brenes (2026), 'The Transactional Trap' — Foreign Affairs",
+     text:"Michael Brenes argues that the post-WWII order is dead. In its place, countries are adopting 'a values-neutral, transactional approach toward foreign policy' — making deals based on short-term interest rather than shared rules or principles. Brenes warns that this transactional approach sows violence because it removes the normative constraints that prevented the worst abuses of power. When foreign policy is purely transactional, alliances become unreliable, norms erode, and weaker states lose the protections that rules provided. The result is not a new order but a more dangerous disorder.",
+     q:"How does the 'transactional trap' relate to Carney's Davos speech?",
+     opts:["They make the same argument — both say the old order is dead","They complement each other: Carney diagnoses the rupture and calls for middle-power solidarity; Brenes warns about what happens if the replacement is purely transactional","They disagree — Carney is optimistic and Brenes is pessimistic"],
+     correct:1,
+     model:"Carney and Brenes are in dialogue. Carney's speech diagnoses the rupture ('not a transition') and proposes a path forward: middle powers building a new order based on shared values. Brenes warns about the alternative: if the replacement for the rules-based order is purely transactional deal-making, the result will be more violence, not more stability. Together, they frame the central question of Week 3: what kind of globalization — or deglobalization — comes next? Reading them together gives you both the diagnosis and the stakes."},
+    {id:"c3",type:"video",title:"Is the World Becoming Multipolar? (TLDR News)",yt:"_-1MquvFmUA",
+     q:"Walt (2021) argues we are in an 'age of great-power competition.' How does this framing change how we think about globalization?",
+     opts:["It doesn't — globalization and great-power competition are separate topics","Great-power competition means globalization will end entirely","Great-power competition means globalization is being weaponized — trade, finance, and technology are now tools of geopolitical rivalry, not just economic exchange"],
+     correct:2,
+     model:"This is the key shift of the 2020s: globalization hasn't ended, but it has been weaponized. The US uses financial sanctions as geopolitical leverage (cutting Russia off from SWIFT). China uses supply chain dominance (rare earth minerals, 5G infrastructure) as strategic tools. Carney's speech warns about 'economic integration as weapons, tariffs as leverage, financial infrastructure as coercion.' Walt's great-power competition framework helps explain why: when states see each other as strategic rivals, every economic connection becomes a potential vulnerability to exploit. Baylis, Smith & Owens call this the 'dark side' of interdependence."}
+  ]
+}
+};
+
+// ═══════════════════════════════════════
+// SORTER DATA
+// ═══════════════════════════════════════
+const SORT_DATA=[
+  {s:"Global trade has lifted hundreds of millions of people out of extreme poverty since 1990",a:"pro",e:"This is statistically documented (World Bank data). A genuine achievement of economic globalization, though the distribution of gains is deeply uneven."},
+  {s:"Globalization erodes national sovereignty by subjecting states to forces they cannot control",a:"anti",e:"A core anti-globalization argument: states lose control over their own economies, regulations, and cultures as global flows intensify."},
+  {s:"The internet connects activists across borders, enabling transnational social movements",a:"pro",e:"Digital globalization empowers civil society — the Arab Spring, #MeToo, and climate movements all relied on transnational digital networks."},
+  {s:"Global supply chains create 'race to the bottom' dynamics where states compete by lowering labour and environmental standards",a:"anti",e:"A Marxist and dependency theory critique: countries compete for foreign investment by weakening protections for workers and the environment."},
+  {s:"Cultural globalization spreads Western values at the expense of local identities and traditions",a:"anti",e:"The 'cultural imperialism' argument — Americanization of media, consumption, and values threatens cultural diversity."},
+  {s:"Globalization creates interdependence that makes war between major trading partners less likely",a:"pro",e:"The liberal peace theory: states that trade with each other have too much to lose from war. The EU was explicitly designed on this logic."},
+  {s:"The 2008 financial crisis showed that interconnection can transmit shocks globally, turning a US housing crisis into a worldwide recession",a:"complex",e:"Interdependence is a double-edged sword: it creates shared prosperity but also shared vulnerability. The crisis was global precisely because financial markets were globalized."},
+  {s:"Middle powers can build new forms of cooperation outside the US-led order, as Carney argues",a:"complex",e:"Carney's Davos speech is neither pro- nor anti-globalization — it's about reconfiguring globalization on different terms. The connections don't end; they reroute."},
+  {s:"COVID-19 revealed the fragility of globalized supply chains when PPE, vaccines, and medical equipment couldn't be produced locally",a:"complex",e:"The pandemic exposed both the benefits of globalization (rapid vaccine development through global scientific collaboration) and its costs (dependence on single-source supply chains for critical goods). The lesson is ambiguous."},
+  {s:"Tariffs and trade wars are destroying the global economy",a:"anti",e:"Trump's tariff escalations (2025-26) represent a direct challenge to the open trading system. Anti-globalization in practice, from the most powerful state."},
+  {s:"International institutions like the WTO create a level playing field for trade disputes",a:"pro",e:"A liberal argument: institutions provide rules, reduce uncertainty, and give smaller states a voice they wouldn't have in bilateral power politics."},
+  {s:"Globalization has increased inequality within countries even as it reduced inequality between some countries",a:"complex",e:"The Elephant Curve (Branko Milanović): the global middle class (especially in China) gained enormously, and the global elite gained enormously, but the working and middle classes in wealthy Western countries stagnated. Globalization's effects depend on where you sit."},
+  {s:"Climate change is a problem that can only be solved through global cooperation — no single state can fix it alone",a:"pro",e:"The quintessential case for globalization: the atmosphere doesn't respect borders. The Paris Agreement, however imperfect, is a product of global governance."},
+  {s:"Multinational corporations have more power than many states, and they're accountable to shareholders, not citizens",a:"anti",e:"A democratic deficit critique: Apple's revenue exceeds the GDP of most countries, but Apple answers to shareholders, not to the workers in its supply chain or the communities it affects."}
+];
+
+// ═══════════════════════════════════════
+// DIMENSIONS CLASSIFIER
+// ═══════════════════════════════════════
+const DIM_DATA=[
+  {scenario:"A French film is dubbed into 40 languages and streamed on Netflix in 190 countries within hours of release.",
+   opts:["Economic","Political","Cultural","Military/Security"],correct:"Cultural",
+   e:"This is cultural globalization: the transnational flow of ideas, images, and cultural products. Netflix is a vector of cultural globalization, raising questions about cultural diversity and Western (especially American) cultural dominance."},
+  {scenario:"A European bank's collapse triggers bank runs in Asia and Latin America within 48 hours.",
+   opts:["Economic","Political","Cultural","Military/Security"],correct:"Economic",
+   e:"Financial contagion is a textbook example of economic globalization: interconnected financial markets transmit shocks across borders at digital speed."},
+  {scenario:"NATO expands to include Sweden and Finland, extending collective defence commitments to the Russian border.",
+   opts:["Economic","Political","Cultural","Military/Security"],correct:"Military/Security",
+   e:"Alliance expansion is military/security globalization: the extension of security commitments across borders. It also illustrates how security interdependence intensifies — an attack on Finland now triggers a collective response from 32 states."},
+  {scenario:"The European Court of Human Rights rules that a member state's domestic law violates the European Convention on Human Rights.",
+   opts:["Economic","Political","Cultural","Military/Security"],correct:"Political",
+   e:"This is political globalization: the development of international legal and institutional frameworks that constrain state sovereignty. The ECHR can overrule domestic courts — a profound transfer of political authority beyond the state."},
+  {scenario:"K-pop becomes the dominant music genre among teenagers across Southeast Asia, Latin America, and the Middle East.",
+   opts:["Economic","Political","Cultural","Military/Security"],correct:"Cultural",
+   e:"The global spread of K-pop is cultural globalization from a non-Western source — complicating the simple 'Americanization' narrative. South Korea's cultural industries are now a major vector of soft power."},
+  {scenario:"The US imposes sanctions on Russia, cutting it off from the SWIFT international payments system.",
+   opts:["Economic","Political","Cultural","Military/Security"],correct:"Economic",
+   e:"Sanctions weaponize economic interdependence: the US uses its dominance of the global financial system as a geopolitical tool. This is what Carney meant by 'financial infrastructure as coercion.' You could also argue this is military/security globalization — but the mechanism is economic."},
+  {scenario:"The World Health Organization coordinates a global response to a new pandemic, distributing vaccines through COVAX.",
+   opts:["Economic","Political","Cultural","Military/Security"],correct:"Political",
+   e:"The WHO is a political institution of global governance. Its pandemic coordination involves political decisions about resource allocation, intellectual property, and sovereignty (who gets vaccines first). This is political globalization — governing shared problems through international institutions."},
+  {scenario:"A fast-fashion company designs clothes in London, sources cotton from Uzbekistan, manufactures in Bangladesh, and sells in 80 countries.",
+   opts:["Economic","Political","Cultural","Military/Security"],correct:"Economic",
+   e:"Global supply chains are the backbone of economic globalization: production is fragmented across multiple countries to minimize costs. The value chain crosses borders at every stage."},
+  {scenario:"China builds military bases in the South China Sea and in Djibouti, projecting power beyond its borders.",
+   opts:["Economic","Political","Cultural","Military/Security"],correct:"Military/Security",
+   e:"The projection of military force beyond borders — through bases, naval deployments, and arms exports — is military/security globalization. China's 'string of pearls' strategy is about extending its security reach across the Indo-Pacific."},
+  {scenario:"Millions of people in Iran, China, and Russia use VPNs to access banned Western social media platforms.",
+   opts:["Economic","Political","Cultural","Military/Security"],correct:"Cultural",
+   e:"This illustrates the tension between cultural globalization and state control: digital flows of information cross borders even when states try to block them. VPN usage shows that cultural globalization is not just top-down — individuals actively seek out global content."}
+];
+
+// ═══════════════════════════════════════
+// QUOTE IDENTIFIER
+// ═══════════════════════════════════════
+const QUOTE_DATA=[
+  {text:"The strong do what they can, and the weak suffer what they must.",
+   opts:["Hyperglobalist","Sceptic","Realist (Thucydides, via Carney)","Transformationalist"],correct:"Realist (Thucydides, via Carney)",
+   e:"Carney opened his Davos speech with this Thucydides quote — the foundational realist insight that power, not rules, determines outcomes. By quoting it, Carney was signalling that the rules-based order had been exposed as a veneer over power politics."},
+  {text:"If we're not at the table, we're on the menu.",
+   opts:["Mark Carney (Davos 2026)","Donald Trump","The Transactional Trap (Brenes)","Baylis, Smith & Owens"],correct:"Mark Carney (Davos 2026)",
+   e:"Carney's most-quoted line from Davos. It captures the middle-power dilemma: participate in the order or be consumed by it. It's a call to collective action by states that lack the power to act alone."},
+  {text:"The post-World War II order is dead. In its place, countries are adopting a values-neutral, transactional approach toward foreign policy.",
+   opts:["Mark Carney","Michael Brenes (The Transactional Trap)","Stephen Walt","Baylis, Smith & Owens"],correct:"Michael Brenes (The Transactional Trap)",
+   e:"Brenes's opening line in Foreign Affairs (Jan 2026). He argues that the shift to transactional foreign policy — deals without principles — will sow violence because it removes the normative constraints on power."},
+  {text:"Great powers have begun using economic integration as weapons, tariffs as leverage, financial infrastructure as coercion, supply chains as vulnerabilities to be exploited.",
+   opts:["Donald Trump","Mark Carney (Davos 2026)","Stephen Walt","Baylis, Smith & Owens"],correct:"Mark Carney (Davos 2026)",
+   e:"This is Carney's description of weaponized interdependence — the dark side of economic globalization. The tools of interconnection (trade, finance, technology) have become tools of coercion."},
+  {text:"Reports of the death of sovereignty have been greatly exaggerated.",
+   opts:["Hyperglobalist","Sceptic","Transformationalist","Mark Carney"],correct:"Sceptic",
+   e:"A sceptic position: despite all the talk of globalization, states remain the most powerful actors and sovereignty is far from dead. Sceptics point to the persistence of borders, militaries, and national identity as evidence."},
+  {text:"Globalization is not a single process but a set of processes involving flows of goods, capital, people, and ideas across borders — with uneven effects.",
+   opts:["Hyperglobalist","Sceptic","Transformationalist","Realist"],correct:"Transformationalist",
+   e:"The transformationalist position — globalization is real, multi-dimensional, and its outcomes are not predetermined. This is closest to the Baylis textbook's own analytical framework."},
+  {text:"The nation-state is becoming a nostalgic fiction. National borders are increasingly irrelevant to the flows that shape our lives.",
+   opts:["Hyperglobalist","Sceptic","Transformationalist","Mark Carney"],correct:"Hyperglobalist",
+   e:"A hyperglobalist claim from the 1990s (associated with thinkers like Kenichi Ohmae). History has not been kind to this position — borders clearly still matter, as the pandemic, Brexit, and the tariff wars demonstrated."},
+  {text:"We placed the sign in the window. We participated in the rituals. And we largely avoided calling out the gaps between rhetoric and reality. This bargain no longer works.",
+   opts:["Baylis, Smith & Owens","Michael Brenes","Mark Carney (Davos 2026)","Václav Havel"],correct:"Mark Carney (Davos 2026)",
+   e:"Carney's most analytically striking passage. Drawing on Havel's concept of 'living within a lie,' he admits that middle powers knowingly participated in a flawed order because it was predictable. The admission is itself a political act — a refusal to keep performing."}
+];
+
+// ═══════════════════════════════════════
+// SUPPLY CHAIN DATA
+// ═══════════════════════════════════════
+const SC_DATA=[
+  {name:"📱 Smartphone",stages:[
+    {flag:"🇨🇩",country:"DR Congo",step:"Mining",desc:"Cobalt extracted for lithium-ion batteries. Often involving artisanal mining with severe human rights concerns."},
+    {flag:"🇦🇺",country:"Australia",step:"Raw materials",desc:"Lithium mined for battery production. Australia is the world's largest lithium producer."},
+    {flag:"🇯🇵",country:"Japan",step:"Component manufacturing",desc:"Advanced camera sensors, display glass (Corning), and precision components manufactured."},
+    {flag:"🇹🇼",country:"Taiwan",step:"Chip fabrication",desc:"TSMC fabricates the most advanced processor chips. A single point of failure for the global tech industry."},
+    {flag:"🇰🇷",country:"South Korea",step:"Memory & screens",desc:"Samsung produces OLED screens and memory chips. South Korea dominates these sectors."},
+    {flag:"🇨🇳",country:"China",step:"Assembly",desc:"Final assembly at Foxconn or Pegatron factories employing hundreds of thousands of workers."},
+    {flag:"🇺🇸",country:"United States",step:"Design & software",desc:"Apple designs the phone and develops iOS in Cupertino, California. Most of the profit stays here."},
+    {flag:"🇳🇱",country:"Netherlands",step:"Distribution hub",desc:"Products ship through Rotterdam or Schiphol for European distribution."},
+    {flag:"🇹🇷",country:"Turkey / N. Cyprus",step:"Your hands",desc:"You buy it in Famagusta. It crossed 8+ countries to reach you."}
+  ],summary:{countries:9,workers:"Millions across the chain",profit:"~58% of retail price captured by Apple (US)",question:"Who benefits most from this chain? The Congolese miner earning $2/day or the Cupertino designer earning $200K/year?"}},
+  {name:"👕 Cotton T-Shirt",stages:[
+    {flag:"🇺🇿",country:"Uzbekistan",step:"Cotton farming",desc:"Cotton picked — historically linked to forced labour. Uzbekistan was under US cotton import ban until 2022."},
+    {flag:"🇮🇳",country:"India",step:"Spinning & dyeing",desc:"Raw cotton spun into yarn and dyed. India is the world's second-largest textile producer."},
+    {flag:"🇧🇩",country:"Bangladesh",step:"Garment manufacturing",desc:"Cut, sewn, and finished in Dhaka factories. Minimum wage: ~$113/month. The Rana Plaza collapse (2013) killed 1,134 workers."},
+    {flag:"🇩🇪",country:"Germany",step:"Brand headquarters",desc:"The fashion brand designs collections, sets prices, and manages marketing from Berlin or Hamburg."},
+    {flag:"🇳🇱",country:"Netherlands",step:"Logistics hub",desc:"Shipped through Rotterdam, Europe's largest port, for distribution across the continent."},
+    {flag:"🇹🇷",country:"Turkey / N. Cyprus",step:"Your wardrobe",desc:"You buy it for €15 in a mall in Famagusta. The Bangladeshi worker who made it earned about €0.30 for her labour on this shirt."}
+  ],summary:{countries:6,workers:"~40 million garment workers globally",profit:"Brand and retailer capture ~60% of retail price; the worker receives ~1-3%",question:"Fast fashion depends on the invisibility of the workers who make it. Is this a feature of globalization or a bug?"}},
+  {name:"☕ Cup of Coffee",stages:[
+    {flag:"🇪🇹",country:"Ethiopia",step:"Growing & picking",desc:"Coffee cherries hand-picked by smallholder farmers. Ethiopia is the birthplace of coffee and the 5th-largest producer."},
+    {flag:"🇪🇹",country:"Ethiopia",step:"Processing",desc:"Cherries washed, dried, and sorted at local processing stations. Farmers receive ~5-10% of the final retail price."},
+    {flag:"🇨🇭",country:"Switzerland",step:"Trading",desc:"Green beans traded on commodity markets via Swiss trading houses (Nestlé, Volcafe). Switzerland controls ~60% of global coffee trade."},
+    {flag:"🇩🇪",country:"Germany",step:"Roasting & packaging",desc:"Beans roasted, ground, and packaged in European facilities. This is where most value is added."},
+    {flag:"🇹🇷",country:"Turkey / N. Cyprus",step:"Your cup",desc:"You pay ₺150 (~€4) for a latte in Famagusta. The Ethiopian farmer received about ₺5 (~€0.13) for the beans in your cup."}
+  ],summary:{countries:4,workers:"~125 million people depend on coffee globally",profit:"Roasters and retailers capture ~85% of value; farmers receive ~5-10%",question:"Is this 'free trade' or a colonial structure in modern dress? Dependency theorists would say the Global South is still exporting raw materials and importing finished goods — just like under colonialism."}}
+];
+
+// ═══════════════════════════════════════
+// MATCH DATA
+// ═══════════════════════════════════════
+const MATCH_DATA=[
+  {term:"Hyperglobalists",def:"Believe globalization is creating a borderless world where the nation-state is becoming obsolete"},
+  {term:"Sceptics",def:"Argue globalization is exaggerated; the world is less integrated than claimed, and states remain dominant"},
+  {term:"Transformationalists",def:"See globalization as a powerful but uneven force whose direction and outcomes are uncertain"},
+  {term:"Mark Carney",def:"Declared 'a rupture, not a transition' in the world order; called on middle powers to stop pretending and build something new"},
+  {term:"Michael Brenes",def:"Warned that transactional foreign policy — deals without principles — will sow violence and disorder"},
+  {term:"Dependency theory",def:"Argues the global economy is structured to keep the periphery (Global South) dependent on the core (Global North)"},
+  {term:"Weaponized interdependence",def:"Using economic connections (sanctions, tariffs, supply chains) as tools of geopolitical coercion"},
+  {term:"Commodity fetishism (Marx)",def:"We see the product on the shelf but not the labour and exploitation embedded in its production"},
+  {term:"Stephen Walt",def:"Argues we are in an age of great-power competition that reshapes how globalization operates"},
+  {term:"Branko Milanović",def:"Showed that globalization increased inequality within countries even as it reduced it between some countries (the Elephant Curve)"}
+];
+
+// ═══════════════════════════════════════
+// TIMELINE DATA
+// ═══════════════════════════════════════
+const TL_DATA=[
+  {text:"Silk Road trade connects China, Central Asia, and the Mediterranean",year:200},
+  {text:"Columbus reaches the Americas — beginning of colonial globalization",year:1492},
+  {text:"British East India Company established — corporate colonialism",year:1600},
+  {text:"Abolition of the British slave trade — first transnational human rights campaign",year:1807},
+  {text:"Bretton Woods Conference creates the IMF and World Bank",year:1944},
+  {text:"GATT signed — beginning of the liberal trade order",year:1947},
+  {text:"OPEC oil embargo — the Global South uses commodities as political leverage",year:1973},
+  {text:"Fall of the Berlin Wall — triumph of liberal capitalism and acceleration of globalization",year:1989},
+  {text:"World Trade Organization (WTO) established, replacing GATT",year:1995},
+  {text:"Anti-globalization protests in Seattle disrupt the WTO ministerial conference",year:1999},
+  {text:"China joins the WTO — the largest integration of a developing economy into the global trade system",year:2001},
+  {text:"Global financial crisis — interconnection transmits the crisis worldwide",year:2008},
+  {text:"Brexit referendum — UK votes to leave the EU in a backlash against globalization",year:2016},
+  {text:"COVID-19 pandemic — exposes supply chain fragility and triggers vaccine nationalism",year:2020},
+  {text:"Carney declares 'a rupture, not a transition' in the rules-based order at Davos",year:2026}
+];
+
+// ═══════════════════════════════════════
+// TAB NAV
+// ═══════════════════════════════════════
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab==='stats')renderStats();
+  });
+});
+
+document.getElementById('startBtn').addEventListener('click',()=>{
+  document.getElementById('landing').style.display='none';
+  document.getElementById('tabBar').style.display='flex';
+  document.getElementById('panel-videos').classList.add('active');
+});
+
+(function(){const c=QR.generate(location.href);document.getElementById('qr-container').appendChild(c);})();
+
+// ═══════════════════════════════════════
+// BUILD VIDEOS
+// ═══════════════════════════════════════
+function buildVideos(){
+  const cont=document.getElementById('vidSections');
+  const keys=Object.keys(VID_DATA);
+  keys.forEach((k,ki)=>{
+    const sec=VID_DATA[k];
+    const div=document.createElement('div');
+    div.id=k;div.style.display=ki===0?'block':'none';
+    div.innerHTML=`<div class="section-header"><h3>${sec.title}</h3><p>${sec.desc}</p></div>`;
+    sec.items.forEach(item=>{
+      const card=document.createElement('div');card.className='card';
+      let inner=`<h4>${item.title}</h4>`;
+      if(item.type==='video'&&item.yt)inner+=`<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${item.yt}" allowfullscreen loading="lazy"></iframe></div>`;
+      if(item.type==='case'&&item.text)inner+=`<p style="font-size:.88em;line-height:1.6;margin:10px 0">${item.text}</p>`;
+      inner+=`<div class="reflect-q">${item.q}</div><div class="reflect-options" data-id="${item.id}">`;
+      item.opts.forEach((o,oi)=>{inner+=`<div class="reflect-opt" data-idx="${oi}">${o}</div>`;});
+      inner+=`</div><button class="reflect-btn" data-id="${item.id}">Submit</button>`;
+      inner+=`<div class="model-answer" id="model-${item.id}">${item.model}</div>`;
+      card.innerHTML=inner;div.appendChild(card);
+    });
+    cont.appendChild(div);
+  });
+  document.querySelectorAll('#vidSubNav .sub-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('#vidSubNav .sub-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      keys.forEach(k=>{document.getElementById(k).style.display='none';});
+      document.getElementById(btn.dataset.sec).style.display='block';
+    });
+  });
+  document.querySelectorAll('.reflect-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const id=btn.dataset.id;
+      const opts=document.querySelector(`.reflect-options[data-id="${id}"]`);
+      const sel=opts.querySelector('.reflect-opt.selected');
+      if(!sel)return;
+      const idx=parseInt(sel.dataset.idx);
+      const allItems=[...Object.values(VID_DATA)].flatMap(s=>s.items);
+      const item=allItems.find(i=>i.id===id);
+      opts.querySelectorAll('.reflect-opt').forEach(o=>{
+        o.style.pointerEvents='none';
+        if(parseInt(o.dataset.idx)===item.correct)o.classList.add('correct');
+        else if(o.classList.contains('selected'))o.classList.add('wrong');
+      });
+      btn.disabled=true;
+      document.getElementById('model-'+id).classList.add('show');
+      if(idx===item.correct){addXP(10);addStreak();}else{breakStreak();}
+      done.videos[id]=true;
+    });
+  });
+  document.querySelectorAll('.reflect-opt').forEach(opt=>{
+    opt.addEventListener('click',()=>{
+      const parent=opt.parentElement;
+      parent.querySelectorAll('.reflect-opt').forEach(o=>o.classList.remove('selected'));
+      opt.classList.add('selected');
+    });
+  });
+}
+
+// ═══════════════════════════════════════
+// BUILD SORTER
+// ═══════════════════════════════════════
+function buildSorter(){
+  const cont=document.getElementById('sorterItems');
+  const shuffled=[...SORT_DATA].sort(()=>Math.random()-.5);
+  shuffled.forEach((item,i)=>{
+    const el=document.createElement('div');el.className='sort-item';
+    el.textContent=item.s;el.draggable=true;el.dataset.idx=i;el.dataset.answer=item.a;
+    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);el.classList.add('dragging');});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('click',()=>{
+      if(el.classList.contains('placed'))return;
+      if(el.classList.contains('selected')){el.classList.remove('selected');return;}
+      cont.querySelectorAll('.sort-item').forEach(s=>s.classList.remove('selected'));
+      el.classList.add('selected');
+    });
+    cont.appendChild(el);
+  });
+  document.querySelectorAll('.sort-zone').forEach(zone=>{
+    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
+    zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+    zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('over');placeInZone(e.dataTransfer.getData('text/plain'),zone);});
+    zone.addEventListener('click',()=>{const sel=cont.querySelector('.sort-item.selected');if(sel){placeInZone(sel.dataset.idx,zone);sel.classList.remove('selected');}});
+  });
+  function placeInZone(idx,zone){
+    const el=cont.querySelector(`.sort-item[data-idx="${idx}"]`);
+    if(!el||el.classList.contains('placed'))return;el.classList.add('placed');
+    const pill=document.createElement('div');pill.className='sorted-item';
+    pill.textContent=el.textContent;pill.dataset.idx=idx;pill.dataset.answer=el.dataset.answer;pill.dataset.zone=zone.dataset.zone;
+    zone.querySelector('.zone-items').appendChild(pill);
+  }
+  document.getElementById('checkSorter').addEventListener('click',()=>{
+    let correct=0,total=0;
+    document.querySelectorAll('.sorted-item').forEach(pill=>{
+      total++;if(pill.dataset.zone===pill.dataset.answer){pill.classList.add('correct');correct++;addXP(10);addStreak();}
+      else{pill.classList.add('wrong');breakStreak();}
+    });
+    const pct=total?Math.round(correct/total*100):0;
+    const res=document.getElementById('sorterResult');
+    res.innerHTML=`<div class="result-banner ${pct>=80?'great':pct>=50?'good':'try'}">${correct}/${total} correct (${pct}%)</div>`;
+    SORT_DATA.forEach(item=>{
+      const exp=document.createElement('div');
+      exp.style.cssText='font-size:.82em;padding:8px 14px;margin:4px 0;background:#fff;border-radius:8px;border-left:3px solid var(--gold)';
+      exp.innerHTML=`<strong>${item.s}</strong> → <em>${item.a.toUpperCase()}</em>: ${item.e}`;
+      res.appendChild(exp);
+    });
+    done.sorter=true;
+  });
+}
+
+// ═══════════════════════════════════════
+// BUILD DIMENSIONS CLASSIFIER
+// ═══════════════════════════════════════
+function buildDimensions(){
+  const cont=document.getElementById('dimItems');
+  const shuffled=[...DIM_DATA].sort(()=>Math.random()-.5);
+  shuffled.forEach((item,i)=>{
+    const card=document.createElement('div');card.className='dim-card';card.dataset.idx=i;
+    let html=`<div class="scenario">${item.scenario}</div><div class="dim-options" data-idx="${i}">`;
+    item.opts.forEach(o=>{html+=`<span class="dim-pill" data-val="${o}">${o}</span>`;});
+    html+=`</div><div class="dim-explain" id="dim-exp-${i}">${item.e}</div>`;
+    card.innerHTML=html;cont.appendChild(card);
+    card.querySelectorAll('.dim-pill').forEach(pill=>{
+      pill.addEventListener('click',()=>{card.querySelectorAll('.dim-pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');});
+    });
+  });
+  document.getElementById('checkDimensions').addEventListener('click',()=>{
+    let correct=0,total=shuffled.length;
+    shuffled.forEach((item,i)=>{
+      const card=cont.querySelector(`.dim-card[data-idx="${i}"]`);
+      const sel=card.querySelector('.dim-pill.selected');
+      card.querySelectorAll('.dim-pill').forEach(p=>p.style.pointerEvents='none');
+      if(sel){
+        if(sel.dataset.val===item.correct){sel.classList.add('correct');correct++;addXP(15);addStreak();}
+        else{sel.classList.add('wrong');breakStreak();card.querySelectorAll('.dim-pill').forEach(p=>{if(p.dataset.val===item.correct)p.classList.add('correct');});}
+      }
+      document.getElementById('dim-exp-'+i).classList.add('show');
+    });
+    const pct=Math.round(correct/total*100);
+    document.getElementById('dimResult').innerHTML=`<div class="result-banner ${pct>=80?'great':pct>=50?'good':'try'}">${correct}/${total} correct (${pct}%)</div>`;
+    done.dimensions=true;
+  });
+}
+
+// ═══════════════════════════════════════
+// BUILD QUOTE IDENTIFIER
+// ═══════════════════════════════════════
+function buildQuotes(){
+  const cont=document.getElementById('quoteItems');
+  const shuffled=[...QUOTE_DATA].sort(()=>Math.random()-.5);
+  shuffled.forEach((item,i)=>{
+    const card=document.createElement('div');card.className='quote-card';card.dataset.idx=i;
+    let html=`<div class="quote-text">"${item.text}"</div><div class="quote-options" data-idx="${i}">`;
+    item.opts.forEach(o=>{html+=`<span class="quote-pill" data-val="${o}">${o}</span>`;});
+    html+=`</div><div class="quote-explain" id="quote-exp-${i}">${item.e}</div>`;
+    card.innerHTML=html;cont.appendChild(card);
+    card.querySelectorAll('.quote-pill').forEach(pill=>{
+      pill.addEventListener('click',()=>{card.querySelectorAll('.quote-pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');});
+    });
+  });
+  document.getElementById('checkQuotes').addEventListener('click',()=>{
+    let correct=0,total=shuffled.length;
+    shuffled.forEach((item,i)=>{
+      const card=cont.querySelector(`.quote-card[data-idx="${i}"]`);
+      const sel=card.querySelector('.quote-pill.selected');
+      card.querySelectorAll('.quote-pill').forEach(p=>p.style.pointerEvents='none');
+      if(sel){
+        if(sel.dataset.val===item.correct){sel.classList.add('correct');correct++;addXP(15);addStreak();}
+        else{sel.classList.add('wrong');breakStreak();card.querySelectorAll('.quote-pill').forEach(p=>{if(p.dataset.val===item.correct)p.classList.add('correct');});}
+      }
+      document.getElementById('quote-exp-'+i).classList.add('show');
+    });
+    const pct=Math.round(correct/total*100);
+    document.getElementById('quoteResult').innerHTML=`<div class="result-banner ${pct>=80?'great':pct>=50?'good':'try'}">${correct}/${total} correct (${pct}%)</div>`;
+    done.quotes=true;
+  });
+}
+
+// ═══════════════════════════════════════
+// BUILD SUPPLY CHAIN MAPPER
+// ═══════════════════════════════════════
+function buildSupplyChain(){
+  const sel=document.getElementById('scSelect');
+  const map=document.getElementById('scMap');
+  SC_DATA.forEach((product,pi)=>{
+    const btn=document.createElement('button');
+    btn.className='sc-product-btn';btn.textContent=product.name;
+    btn.addEventListener('click',()=>{
+      sel.querySelectorAll('.sc-product-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderChain(product);
+    });
+    sel.appendChild(btn);
+  });
+  function renderChain(product){
+    map.innerHTML='';
+    product.stages.forEach((stage,si)=>{
+      const stageEl=document.createElement('div');stageEl.className='sc-stage';
+      stageEl.style.animationDelay=(si*0.15)+'s';
+      stageEl.innerHTML=`<span class="flag">${stage.flag}</span><div class="stage-info"><h4>${stage.step} — ${stage.country}</h4><p>${stage.desc}</p></div>`;
+      map.appendChild(stageEl);
+      if(si<product.stages.length-1){
+        const arrow=document.createElement('div');arrow.className='sc-arrow';arrow.textContent='↓';
+        arrow.style.animationDelay=(si*0.15+0.08)+'s';
+        map.appendChild(arrow);
+      }
+    });
+    const sum=document.createElement('div');sum.className='sc-summary';
+    sum.innerHTML=`
+      <div class="stat"><strong>${product.summary.countries}</strong> countries crossed</div>
+      <div class="stat"><strong>${product.summary.workers}</strong> workers involved</div>
+      <p style="margin-top:12px;font-size:.85em;opacity:.9"><strong>Value distribution:</strong> ${product.summary.profit}</p>
+      <p style="margin-top:10px;font-size:.88em;font-style:italic;opacity:.85">${product.summary.question}</p>`;
+    map.appendChild(sum);
+  }
+}
+
+// ═══════════════════════════════════════
+// BUILD MATCH
+// ═══════════════════════════════════════
+function buildMatch(){
+  const grid=document.getElementById('matchGrid');
+  const terms=[...MATCH_DATA].sort(()=>Math.random()-.5);
+  const defs=[...MATCH_DATA].sort(()=>Math.random()-.5);
+  let selected=null,matchedCount=0;
+  terms.forEach(item=>{
+    const el=document.createElement('div');el.className='match-item';el.textContent=item.term;
+    el.dataset.type='term';el.dataset.key=item.term;
+    el.addEventListener('click',()=>handleMatch(el));grid.appendChild(el);
+  });
+  defs.forEach(item=>{
+    const el=document.createElement('div');el.className='match-item';el.textContent=item.def;
+    el.dataset.type='def';el.dataset.key=item.term;el.style.fontSize='.78em';
+    el.addEventListener('click',()=>handleMatch(el));grid.appendChild(el);
+  });
+  function handleMatch(el){
+    if(el.classList.contains('matched'))return;
+    if(!selected){selected=el;el.classList.add('sel');}
+    else{
+      if(selected===el){selected.classList.remove('sel');selected=null;return;}
+      if(selected.dataset.type===el.dataset.type){selected.classList.remove('sel');selected=el;el.classList.add('sel');return;}
+      if(selected.dataset.key===el.dataset.key){
+        selected.classList.remove('sel');selected.classList.add('matched');el.classList.add('matched');
+        addXP(15);addStreak();matchedCount++;
+        if(matchedCount===MATCH_DATA.length){done.match=true;document.getElementById('matchResult').innerHTML='<div class="result-banner great">All matched! Well done.</div>';}
+      }else{
+        selected.classList.remove('sel');el.classList.add('wrong-flash');selected.classList.add('wrong-flash');
+        breakStreak();setTimeout(()=>{el.classList.remove('wrong-flash');},500);
+      }
+      selected=null;
+    }
+  }
+}
+
+// ═══════════════════════════════════════
+// BUILD TIMELINE
+// ═══════════════════════════════════════
+function buildTimeline(){
+  const cont=document.getElementById('tlItems');
+  const shuffled=[...TL_DATA].sort(()=>Math.random()-.5);
+  shuffled.forEach((item,i)=>{
+    const el=document.createElement('div');el.className='tl-item';el.draggable=true;el.dataset.year=item.year;
+    el.innerHTML=`<span class="handle">☰</span><span>${item.text}</span>`;
+    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);el.classList.add('dragging');});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('dragover',e=>{
+      e.preventDefault();
+      const dragging=cont.querySelector('.dragging');
+      if(dragging&&dragging!==el){
+        const rect=el.getBoundingClientRect();const mid=rect.top+rect.height/2;
+        if(e.clientY<mid)cont.insertBefore(dragging,el);else cont.insertBefore(dragging,el.nextSibling);
+      }
+    });
+    cont.appendChild(el);
+  });
+  // Touch
+  let touchEl=null;
+  cont.addEventListener('touchstart',e=>{const item=e.target.closest('.tl-item');if(item){touchEl=item;item.classList.add('dragging');}},{passive:true});
+  cont.addEventListener('touchmove',e=>{
+    if(!touchEl)return;e.preventDefault();
+    const touch=e.touches[0];const target=document.elementFromPoint(touch.clientX,touch.clientY);
+    const over=target?target.closest('.tl-item'):null;
+    if(over&&over!==touchEl){const rect=over.getBoundingClientRect();const mid=rect.top+rect.height/2;
+      if(touch.clientY<mid)cont.insertBefore(touchEl,over);else cont.insertBefore(touchEl,over.nextSibling);}
+  },{passive:false});
+  cont.addEventListener('touchend',()=>{if(touchEl){touchEl.classList.remove('dragging');touchEl=null;}});
+
+  document.getElementById('checkTL').addEventListener('click',()=>{
+    const items=[...cont.querySelectorAll('.tl-item')];
+    const years=items.map(el=>parseInt(el.dataset.year));
+    const sorted=[...years].sort((a,b)=>a-b);
+    let correct=0;
+    items.forEach((el,i)=>{
+      if(years[i]===sorted[i]){el.classList.add('correct');correct++;}else{el.classList.add('wrong');}
+      el.querySelector('.handle').textContent=el.dataset.year;
+      el.querySelector('.handle').style.cssText='font-size:.8em;min-width:40px';
+    });
+    const pct=Math.round(correct/items.length*100);
+    document.getElementById('tlResult').innerHTML=`<div class="result-banner ${pct>=80?'great':pct>=50?'good':'try'}">${correct}/${items.length} in correct position (${pct}%)</div>`;
+    if(pct===100)addXP(20);else if(pct>=70)addXP(10);
+    addStreak();done.timeline=true;
+  });
+}
+
+// ═══════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════
+function renderStats(){
+  const grid=document.getElementById('statGrid');
+  const vidDone=Object.keys(done.videos).length;
+  const vidTotal=[...Object.values(VID_DATA)].reduce((a,s)=>a+s.items.length,0);
+  const activities=['sorter','dimensions','quotes','match','timeline'];
+  const actDone=activities.filter(a=>done[a]).length;
+  grid.innerHTML=`
+    <div class="stat-card"><span class="num">${xp}</span><span class="lbl">Total XP</span></div>
+    <div class="stat-card"><span class="num">${maxStreak}</span><span class="lbl">Best Streak</span></div>
+    <div class="stat-card"><span class="num">${vidDone}/${vidTotal}</span><span class="lbl">Reflections</span></div>
+    <div class="stat-card"><span class="num">${actDone}/${activities.length}</span><span class="lbl">Activities</span></div>`;
+  const prog=document.getElementById('activityProgress');
+  const total=vidTotal+activities.length;const completed=vidDone+actDone;const pct=Math.round(completed/total*100);
+  prog.innerHTML=`<h3>Activity Completion</h3><div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div>
+    <p style="font-size:.82em;color:#666;margin-top:6px">${completed}/${total} activities completed (${pct}%)</p>`;
+}
+
+document.getElementById('resetBtn').addEventListener('click',()=>{if(confirm('Reset all progress? This cannot be undone.')){location.reload();}});
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+buildVideos();
+buildSorter();
+buildDimensions();
+buildQuotes();
+buildSupplyChain();
+buildMatch();
+buildTimeline();
+</script>
+</body>
+</html>
