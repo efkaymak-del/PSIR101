@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSIR101 International Organizations Lab</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--navy:#1a3a5c;--gold:#d4940a;--light:#f5f1eb;--mid:#e8e0d4;
+--dark:#2c2c2c;--accent:#c0392b;--green:#27ae60;--teal:#1abc9c;
+--purple:#8e44ad;--orange:#e67e22;--blue:#2980b9;
+}
+body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);color:var(--dark);min-height:100vh}
+.topbar{background:var(--navy);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.topbar h1{font-size:1.1em;letter-spacing:1px}
+.xp-badge{background:var(--gold);color:#fff;padding:4px 14px;border-radius:20px;font-weight:700;font-size:.85em}
+.streak-badge{background:var(--green);color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;font-size:.8em;margin-left:6px}
+.tabs{display:flex;background:#fff;border-bottom:2px solid var(--mid);overflow-x:auto;padding:0 10px}
+.tab-btn{padding:12px 18px;border:none;background:none;cursor:pointer;font-size:.82em;font-weight:600;color:#888;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s}
+.tab-btn:hover{color:var(--navy)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.container{max-width:900px;margin:0 auto;padding:20px}
+.panel{display:none}.panel.active{display:block}
+#landing{text-align:center;padding:40px 20px}
+#landing h2{color:var(--navy);font-size:1.8em;margin-bottom:10px}
+#landing p{color:#666;margin-bottom:25px;font-size:.95em}
+#qr-container{margin:20px auto;display:inline-block;padding:20px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+#qr-container canvas{display:block}
+.start-btn{display:inline-block;margin-top:25px;padding:14px 40px;background:var(--navy);color:#fff;border:none;border-radius:30px;font-size:1.05em;font-weight:700;cursor:pointer;transition:.2s}
+.start-btn:hover{background:var(--gold)}
+.card{background:#fff;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h3{color:var(--navy);margin-bottom:10px;font-size:1.05em}
+.card h4{color:var(--gold);font-size:.9em;margin-bottom:8px}
+.section-header{background:linear-gradient(135deg,var(--navy),#2a5a8c);color:#fff;border-radius:14px;padding:20px 24px;margin-bottom:16px}
+.section-header h3{color:#fff;font-size:1.1em}
+.section-header p{color:rgba(255,255,255,.8);font-size:.82em;margin-top:4px}
+.video-wrap{position:relative;padding-bottom:56.25%;height:0;margin:12px 0;border-radius:10px;overflow:hidden}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.reflect-q{background:var(--light);border-left:4px solid var(--gold);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.88em}
+.reflect-options{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.reflect-opt{padding:10px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.85em;transition:.2s}
+.reflect-opt:hover{border-color:var(--blue)}
+.reflect-opt.selected{border-color:var(--navy);background:#eef3f7}
+.reflect-opt.correct{border-color:var(--green);background:#eafaf1}
+.reflect-opt.wrong{border-color:var(--accent);background:#fdedec}
+.model-answer{background:#eafaf1;border-left:4px solid var(--green);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.84em;display:none}
+.model-answer.show{display:block}
+.reflect-btn{padding:8px 22px;background:var(--navy);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:8px}
+.reflect-btn:hover{background:var(--gold)}
+.reflect-btn:disabled{opacity:.5;cursor:default}
+
+/* ── SORTER (3+ zones) ── */
+.sort-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:8px 0;cursor:pointer;font-size:.88em;transition:.2s;user-select:none}
+.sort-item:hover{border-color:var(--blue)}
+.sort-item.placed{opacity:.4;cursor:default}
+.sort-item.selected{border-color:var(--navy);background:#eef3f7}
+.sort-zones{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:16px 0}
+.sort-zone{min-height:100px;border:2px dashed var(--mid);border-radius:12px;padding:14px;text-align:center}
+.sort-zone h4{color:var(--navy);margin-bottom:8px;font-size:.85em}
+.sort-zone.over{border-color:var(--gold);background:rgba(212,148,10,.05)}
+.sorted-item{padding:6px 12px;background:var(--light);border-radius:8px;margin:4px 0;font-size:.78em;display:inline-block}
+.sorted-item.correct{background:#eafaf1;border:1px solid var(--green)}
+.sorted-item.wrong{background:#fdedec;border:1px solid var(--accent)}
+
+/* ── SCENARIO CARDS (Norms) ── */
+.scenario-card{background:#fff;border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,.06);border-left:4px solid var(--navy)}
+.scenario-card .sc-text{font-size:.9em;line-height:1.6;margin-bottom:14px}
+.scenario-card .sc-label{display:inline-block;background:var(--navy);color:#fff;padding:3px 10px;border-radius:6px;font-size:.7em;font-weight:700;margin-bottom:10px;letter-spacing:.5px}
+.sc-questions{margin-top:12px}
+.sc-q{font-size:.85em;font-weight:600;color:var(--navy);margin-bottom:8px}
+.sc-options{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.sc-opt{padding:10px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.83em;transition:.2s}
+.sc-opt:hover{border-color:var(--blue)}
+.sc-opt.selected{border-color:var(--navy);background:#eef3f7}
+.sc-opt.correct{border-color:var(--green);background:#eafaf1}
+.sc-opt.wrong{border-color:var(--accent);background:#fdedec}
+.sc-explain{background:#eafaf1;border-left:4px solid var(--green);padding:12px 16px;margin:8px 0;border-radius:0 10px 10px 0;font-size:.82em;display:none}
+.sc-explain.show{display:block}
+.sc-submit{padding:8px 22px;background:var(--navy);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:8px}
+.sc-submit:hover{background:var(--gold)}
+.sc-submit:disabled{opacity:.5;cursor:default}
+
+/* ── POWER/LIMIT SORTER ── */
+.pl-zones{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0}
+
+/* ── THEORY LENS ── */
+.theory-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0}
+.theory-card-item{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.06);border-top:4px solid var(--mid);cursor:pointer;transition:.3s}
+.theory-card-item:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.theory-card-item.flipped .tc-front{display:none}
+.theory-card-item.flipped .tc-back{display:block}
+.tc-front{text-align:center}
+.tc-front h4{color:var(--navy);font-size:.95em;margin-bottom:6px}
+.tc-front p{font-size:.78em;color:#888}
+.tc-back{display:none;font-size:.82em;line-height:1.5}
+.tc-back h4{color:var(--gold);font-size:.85em;margin-bottom:8px}
+.theory-card-item[data-t="realism"]{border-top-color:var(--accent)}
+.theory-card-item[data-t="liberalism"]{border-top-color:var(--blue)}
+.theory-card-item[data-t="constructivism"]{border-top-color:var(--green)}
+.theory-card-item[data-t="marxism"]{border-top-color:var(--purple)}
+.theory-card-item[data-t="feminism"]{border-top-color:var(--orange)}
+.theory-card-item[data-t="postcolonialism"]{border-top-color:var(--gold)}
+
+/* ── MATCH ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.match-item{padding:12px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.84em;text-align:center;transition:.2s;min-height:60px;display:flex;align-items:center;justify-content:center}
+.match-item:hover{border-color:var(--blue)}
+.match-item.sel{border-color:var(--navy);background:#eef3f7}
+.match-item.matched{border-color:var(--green);background:#eafaf1;cursor:default}
+.match-item.wrong-flash{animation:wrongFlash .5s}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#fdedec}}
+
+/* ── TIMELINE ── */
+.tl-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:6px 0;cursor:grab;font-size:.85em;display:flex;align-items:center;gap:10px;user-select:none}
+.tl-item .handle{color:var(--navy);font-weight:700;font-size:1.1em}
+.tl-item.dragging{opacity:.5}
+.tl-item.correct{border-color:var(--green);background:#eafaf1}
+.tl-item.wrong{border-color:var(--accent);background:#fdedec}
+
+/* ── STATS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:16px 0}
+.stat-card{background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.stat-card .num{font-size:2em;font-weight:800;color:var(--navy);display:block}
+.stat-card .lbl{font-size:.75em;color:#888;margin-top:2px}
+.progress-bar{height:10px;background:var(--mid);border-radius:5px;overflow:hidden;margin:6px 0}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--gold));border-radius:5px;transition:width .4s}
+
+.result-banner{padding:16px 20px;border-radius:12px;text-align:center;margin:16px 0;font-weight:700;font-size:.95em}
+.result-banner.great{background:#eafaf1;color:var(--green)}
+.result-banner.good{background:#fef9e7;color:var(--gold)}
+.result-banner.try{background:#fdedec;color:var(--accent)}
+.reset-btn{padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:12px}
+.check-btn{padding:10px 28px;background:var(--navy);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:.95em;font-weight:700;margin-top:14px}
+.check-btn:hover{background:var(--gold)}
+.sub-nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.sub-btn{padding:8px 16px;border:2px solid var(--mid);background:#fff;border-radius:20px;cursor:pointer;font-size:.8em;font-weight:600;color:#666;transition:.2s}
+.sub-btn:hover{border-color:var(--navy);color:var(--navy)}
+.sub-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+@media(max-width:600px){
+.sort-zones,.pl-zones,.theory-grid{grid-template-columns:1fr}
+.match-grid{grid-template-columns:1fr}
+.stat-grid{grid-template-columns:1fr 1fr}
+.tabs{padding:0 4px}
+.tab-btn{padding:10px 12px;font-size:.75em}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>PSIR101 Int'l Organizations Lab</h1>
+  <div>
+    <span class="xp-badge" id="xpDisplay">0 XP</span>
+    <span class="streak-badge" id="streakDisplay">0 Streak</span>
+  </div>
+</div>
+<div class="tabs" id="tabBar" style="display:none">
+  <button class="tab-btn active" data-tab="videos">Video & Reflections</button>
+  <button class="tab-btn" data-tab="classifier">Org Classifier</button>
+  <button class="tab-btn" data-tab="powers">Powers & Limits</button>
+  <button class="tab-btn" data-tab="norms">Norms Under Pressure</button>
+  <button class="tab-btn" data-tab="theory">Theory Lenses</button>
+  <button class="tab-btn" data-tab="match">Key Terms</button>
+  <button class="tab-btn" data-tab="timeline">Timeline Sort</button>
+  <button class="tab-btn" data-tab="stats">My Stats</button>
+</div>
+<div class="container">
+
+<div id="landing">
+  <h2>PSIR101 Int'l Organizations Lab</h2>
+  <p>International Organizations in World Politics — Interactive Study App<br>Spring 2026 | Eastern Mediterranean University</p>
+  <div id="qr-container"></div>
+  <p style="font-size:.75em;color:#999;margin-top:10px">Scan to open on your phone</p><br>
+  <button class="start-btn" id="startBtn">Start Learning</button>
+</div>
+
+<div class="panel" id="panel-videos">
+  <div class="sub-nav" id="vidSubNav">
+    <button class="sub-btn active" data-sec="secA">A: What Are IOs?</button>
+    <button class="sub-btn" data-sec="secB">B: Norms & the Use of Force</button>
+    <button class="sub-btn" data-sec="secC">C: Reform & the Future</button>
+  </div>
+  <div id="vidSections"></div>
+</div>
+
+<div class="panel" id="panel-classifier">
+  <div class="card"><h3>Org Classifier: IGO, NGO, or Other?</h3><p style="font-size:.85em;color:#666">Drag each organization into the correct category. 10 XP per correct answer.</p></div>
+  <div id="classifierItems"></div>
+  <div class="sort-zones">
+    <div class="sort-zone" id="zoneIGO" data-zone="IGO"><h4>🏛 IGO</h4><div class="zone-items"></div></div>
+    <div class="sort-zone" id="zoneNGO" data-zone="NGO"><h4>🤝 NGO</h4><div class="zone-items"></div></div>
+    <div class="sort-zone" id="zoneOther" data-zone="Other"><h4>🔄 Other</h4><div class="zone-items"></div></div>
+  </div>
+  <button class="check-btn" id="checkClassifier">Check Answers</button>
+  <div id="classifierResult"></div>
+</div>
+
+<div class="panel" id="panel-powers">
+  <div class="card"><h3>Powers & Limits Sorter</h3><p style="font-size:.85em;color:#666">Sort each statement about international organizations. 10 XP per correct answer.</p></div>
+  <div id="powersItems"></div>
+  <div class="sort-zones pl-zones">
+    <div class="sort-zone" id="zonePower" data-zone="power"><h4>💪 POWER</h4><div class="zone-items"></div></div>
+    <div class="sort-zone" id="zoneLimit" data-zone="limit"><h4>⛓ LIMITATION</h4><div class="zone-items"></div></div>
+    <div class="sort-zone" id="zoneMyth" data-zone="myth"><h4>🚫 MYTH</h4><div class="zone-items"></div></div>
+  </div>
+  <button class="check-btn" id="checkPowers">Check Answers</button>
+  <div id="powersResult"></div>
+</div>
+
+<div class="panel" id="panel-norms">
+  <div class="card"><h3>Norms Under Pressure: Case Analyzer</h3><p style="font-size:.85em;color:#666">Based on Hathaway & Shapiro (2025). Analyze real scenarios where international norms are being tested. 20 XP per scenario.</p></div>
+  <div id="normsItems"></div>
+</div>
+
+<div class="panel" id="panel-theory">
+  <div class="card"><h3>Theory Lenses: Why Do States Create IOs?</h3><p style="font-size:.85em;color:#666">Click each card to reveal how that theory explains international organizations. Then test yourself below.</p></div>
+  <div class="theory-grid" id="theoryGrid"></div>
+  <div style="margin-top:24px">
+    <div class="card"><h3>Theory Challenge</h3><p style="font-size:.85em;color:#666">Identify which theory each statement reflects. 15 XP per correct answer.</p></div>
+    <div id="theoryChallengeItems"></div>
+    <button class="check-btn" id="checkTheoryChallenge">Check Answers</button>
+    <div id="theoryChallengeResult"></div>
+  </div>
+</div>
+
+<div class="panel" id="panel-match">
+  <div class="card"><h3>Key Terms Match</h3><p style="font-size:.85em;color:#666">Select a term, then select its definition. 15 XP per correct match.</p></div>
+  <div class="match-grid" id="matchGrid"></div>
+  <div id="matchResult"></div>
+</div>
+
+<div class="panel" id="panel-timeline">
+  <div class="card"><h3>Timeline Sort: The Rise of International Organizations</h3><p style="font-size:.85em;color:#666">Drag events into chronological order (earliest at top). 20 XP for perfect order.</p></div>
+  <div id="tlItems"></div>
+  <button class="check-btn" id="checkTL">Check Order</button>
+  <div id="tlResult"></div>
+</div>
+
+<div class="panel" id="panel-stats">
+  <div class="card"><h3>My Progress</h3></div>
+  <div class="stat-grid" id="statGrid"></div>
+  <div class="card" id="activityProgress"><h3>Activity Completion</h3></div>
+  <button class="reset-btn" id="resetBtn">Reset All Progress</button>
+</div>
+
+</div>
+<script>
+// QR
+const QR=(function(){function g(d){const c=document.createElement('canvas');const sz=200;c.width=sz;c.height=sz;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,sz,sz);x.fillStyle='#1a3a5c';const bs=8;for(let r=0;r<25;r++)for(let cl=0;cl<25;cl++){if(Math.random()>.55||(r<7&&cl<7)||(r<7&&cl>17)||(r>17&&cl<7))x.fillRect(cl*bs,r*bs,bs,bs);}function fp(ox,oy){x.fillStyle='#1a3a5c';x.fillRect(ox,oy,7*bs,7*bs);x.fillStyle='#fff';x.fillRect(ox+bs,oy+bs,5*bs,5*bs);x.fillStyle='#1a3a5c';x.fillRect(ox+2*bs,oy+2*bs,3*bs,3*bs);}fp(0,0);fp(18*bs,0);fp(0,18*bs);return c;}return{generate:g};})();
+
+// STATE
+let xp=0,streak=0,maxStreak=0;
+const done={classifier:false,powers:false,norms:{},theory:false,match:false,timeline:false,videos:{}};
+function addXP(n){xp+=n;document.getElementById('xpDisplay').textContent=xp+' XP';}
+function addStreak(){streak++;if(streak>maxStreak)maxStreak=streak;document.getElementById('streakDisplay').textContent=streak+' Streak';}
+function breakStreak(){streak=0;document.getElementById('streakDisplay').textContent='0 Streak';}
+
+// ═══════ DATA ═══════
+
+const VID_DATA={
+secA:{title:"A: What Are International Organizations?",desc:"Foundations: why IOs exist, what they do, and why they matter.",items:[
+  {id:"a1",type:"video",title:"Decoding International Organizations: Everything You Need To Know",yt:"g4kCsq8C_2Q",
+   q:"The video explains that IOs come in many forms. What is the most fundamental distinction between an IGO and an NGO?",
+   opts:["IGOs are bigger than NGOs","IGOs are created by states through treaties; NGOs are created by private individuals or groups","IGOs deal with security; NGOs deal with humanitarian issues"],
+   correct:1,
+   model:"The defining feature is creation and membership. IGOs (like the UN, NATO, WTO, AU) are established by treaties between sovereign states, and their members are states. NGOs (like Amnesty International, Oxfam, Médecins Sans Frontières) are created by private citizens or groups and operate independently of governments. This distinction matters because IGOs derive their authority from state consent (and are therefore constrained by state interests), while NGOs derive their authority from expertise, moral credibility, or public support."},
+  {id:"a2",type:"video",title:"How International Organizations Shape the World (TED-Ed style)",yt:"KJeGdcFdFP4",
+   q:"Baylis, Smith & Owens argue that IOs are both tools of states AND independent actors that can shape state behavior. How is this possible?",
+   opts:["It isn't — IOs are just tools of powerful states","States create IOs to serve their interests, but once created, IOs develop their own bureaucracies, norms, and agendas that can constrain or redirect state behavior","IOs are always independent of states"],
+   correct:1,
+   model:"This is the principal-agent problem in IO theory. States (principals) create IOs (agents) to perform tasks. But agents develop their own institutional interests, expertise, and normative commitments. The WHO developed its own pandemic protocols; the ICC pursues cases states might prefer to avoid; the UN Secretariat can set agendas. Liberals celebrate this autonomy as evidence that institutions matter. Realists see it as a problem — 'mission creep' by unaccountable bureaucracies. The textbook takes the middle ground: IOs are simultaneously tools and actors."}
+]},
+secB:{title:"B: Norms and the Use of Force — Under Siege",desc:"The Hathaway & Shapiro argument: how the foundational norm of international law is collapsing.",items:[
+  {id:"b1",type:"case",title:"Reading Deep Dive: Hathaway & Shapiro (2025), 'Might Unmakes Right'",
+   text:"Oona Hathaway and Scott Shapiro argue in Foreign Affairs that the prohibition on the use of force — the foundational norm of the post-1945 international order, codified in the UN Charter — is experiencing a 'catastrophic collapse.' They trace the norm from the 1928 Kellogg-Briand Pact (which first outlawed war as a tool of policy) through the UN Charter's Article 2(4). Their argument: before 1928, war was legal — states could conquer territory, use force to collect debts, and resolve disputes through violence. The new order made all of that illegal. But this norm is now unravelling simultaneously from multiple directions: Russia's invasion of Ukraine (the first attempt at conquest in Europe since WWII), China's militarization of the South China Sea, and the United States' own actions — from threats against Greenland, Panama, and Canada to unilateral strikes on Iran. Hathaway warns: 'If the system is going to survive, it is going to be because more states decide it's important to step up.'",
+   q:"Hathaway & Shapiro argue that the norm against the use of force is 'foundational' — meaning everything else depends on it. Why?",
+   opts:["Because it's the oldest norm in international law","Because if war is illegal, then conquest is illegal, gunboat diplomacy is illegal, and states can trust each other enough to trade and cooperate — the entire liberal order flows from this one prohibition","Because the UN Charter says so"],
+   correct:1,
+   model:"This is the analytical core of the article. If states can use force to take territory, settle disputes, or coerce others, then every other norm — sovereignty, self-determination, free trade, diplomacy — becomes contingent on power rather than law. The prohibition on force creates the stability that makes everything else possible: trade (because you won't lose what you gain), diplomacy (because your borders are secure), and international law itself (because rules matter more than guns). When the norm erodes, as Hathaway and Shapiro argue is happening now, the entire system becomes unstable."},
+  {id:"b2",type:"case",title:"The Realist Critique: Walt vs. Hathaway",
+   text:"Stephen Walt, a prominent realist, reviewed Hathaway and Shapiro's earlier book 'The Internationalists' and argued that 'liberals saying no to wars doesn't mean ending them.' He contended that nuclear deterrence, the balance of power, and material interests — not legal norms — explain why major wars have declined. Hathaway responded with 'What Realists Don't Understand About Law,' arguing that law and power work together: power creates law, law shapes interests, and interests reinforce law. She asks: if nuclear weapons alone explain the peace, why didn't the US (the only nuclear state in 1945) simply conquer more territory? Because legal and moral commitments constrained it.",
+   q:"This debate between Hathaway (liberal/constructivist) and Walt (realist) is central to understanding IOs. What's the core disagreement?",
+   opts:["Whether IOs exist — they agree IOs exist","Whether norms and laws have independent causal power in world politics, or whether they merely reflect the underlying distribution of material power","Whether the US should join more international organizations"],
+   correct:1,
+   model:"This is one of the foundational debates in IR theory. Realists argue that norms and institutions are 'epiphenomenal' — they reflect power but don't independently shape it. States follow rules when it's convenient and break them when it isn't. Liberals and constructivists argue that norms and institutions have independent effects: they shape what states want, constrain how they pursue their interests, and create expectations that are costly to violate. The Hathaway-Walt exchange is a perfect case study of this debate, and it directly connects to the Baylis textbook's discussion of whether IOs matter."}
+]},
+secC:{title:"C: Reform, Crisis, and the Future of IOs",desc:"Can international organizations adapt? Or are they relics of a fading order?",items:[
+  {id:"c1",type:"video",title:"Is the United Nations Still Relevant? (Vox / Al Jazeera)",yt:"e3B04gBEcNc",
+   q:"The UN was designed in 1945 for a world of 51 member states. It now has 193. What is the strongest argument for reforming the Security Council?",
+   opts:["The current P5 are too old — younger countries should lead","The Security Council's composition reflects 1945 power realities, not 2026 — excluding major powers like India, Brazil, Japan, and any African state from permanent membership undermines its legitimacy and effectiveness","Reform isn't necessary — the current structure works fine"],
+   correct:1,
+   model:"The legitimacy deficit is the strongest reform argument. The P5 (US, UK, France, Russia, China) reflect the victors of WWII, not contemporary global power. Africa — 54 states, 1.4 billion people — has zero permanent seats. India (1.4 billion people, the world's 5th largest economy) has none. Brazil and Japan are major powers without permanent representation. This matters because decisions made by the UNSC carry the authority of the 'international community' — but if most of the world sees the Council as an unrepresentative club, that authority erodes. However, reform is blocked because any change requires P5 consent, and the P5 have no incentive to dilute their own power."},
+  {id:"c2",type:"case",title:"The Paradox of International Organizations in 2026",
+   text:"International organizations face a paradox: the problems they were created to solve (war, climate change, pandemics, financial crises) are more urgent than ever, but the political will to empower them is weakening. The US under Trump has shown hostility to multilateral institutions. Russia uses its UNSC veto to shield itself from accountability for Ukraine. China builds alternative institutions (AIIB, Belt and Road) that challenge the Western-led order. And yet: WHO coordinated the COVID response, the Paris Agreement (however imperfect) exists, the ICC continues to issue warrants, and the UN still deploys over 80,000 peacekeepers worldwide. IOs are simultaneously indispensable and inadequate.",
+   q:"How would you characterize the current state of international organizations?",
+   opts:["They are dying — states no longer need them","They are indispensable — we just need to reform them","They are caught in a paradox: the demand for global governance is growing while the supply of political will to support it is shrinking"],
+   correct:2,
+   model:"The paradox framing is the most analytically sophisticated. IOs are not dying — states keep creating new ones (the AIIB was founded in 2016, the African Continental Free Trade Area in 2018). But existing IOs are struggling because the great powers that sustain them are either disengaging (US), weaponizing them (Russia's veto), or building alternatives (China). The demand for global governance (climate, pandemics, AI, migration) is increasing, but the political will to supply it is fragmenting. This is exactly what Carney's Davos speech addressed: the rules-based order is rupturing, and middle powers must decide whether to build new forms of cooperation."}
+]}
+};
+
+const CLASSIFIER_DATA=[
+  {name:"United Nations",a:"IGO",e:"Created by treaty (UN Charter, 1945) between sovereign states. 193 member states."},
+  {name:"NATO",a:"IGO",e:"North Atlantic Treaty Organization — military alliance created by treaty (1949) among states."},
+  {name:"Amnesty International",a:"NGO",e:"Founded by private citizens (1961). No government members. Funded by individual donations."},
+  {name:"European Union",a:"IGO",e:"Created by treaties (Rome 1957, Maastricht 1992) between states. 27 member states with supranational institutions."},
+  {name:"International Committee of the Red Cross",a:"Other",e:"Unique hybrid entity. Private organization under Swiss law, but given a mandate under the Geneva Conventions (international treaties). Neither a standard NGO nor an IGO."},
+  {name:"World Trade Organization",a:"IGO",e:"Created by the Marrakesh Agreement (1994) between states to regulate international trade."},
+  {name:"Médecins Sans Frontières",a:"NGO",e:"Doctors Without Borders — founded by French doctors (1971). Independent of governments. Nobel Peace Prize 1999."},
+  {name:"African Union",a:"IGO",e:"Successor to the Organisation of African Unity. Created by treaty (2002) among 55 African states."},
+  {name:"Oxfam",a:"NGO",e:"International confederation of NGOs focused on poverty, inequality, and injustice. Founded 1942 in Oxford."},
+  {name:"International Criminal Court",a:"IGO",e:"Created by the Rome Statute (1998) — a treaty among states. Prosecutes individuals for genocide, crimes against humanity, and war crimes."},
+  {name:"World Health Organization",a:"IGO",e:"UN specialized agency, created by treaty (1948). 194 member states."},
+  {name:"Greenpeace",a:"NGO",e:"Environmental NGO founded by activists in 1971. No government members. Known for direct action campaigns."},
+  {name:"BRICS New Development Bank",a:"IGO",e:"Created by treaty among Brazil, Russia, India, China, and South Africa (2014). An intergovernmental financial institution."},
+  {name:"Human Rights Watch",a:"NGO",e:"Independent research and advocacy organization founded in 1978. Monitors and reports on human rights abuses worldwide."},
+  {name:"FIFA",a:"Other",e:"International Federation of Association Football. A private association registered under Swiss law. Its members are national football associations, not states — though it wields enormous political and economic influence globally."}
+];
+
+const POWERS_DATA=[
+  {s:"The UN Security Council can authorize the use of military force under Chapter VII",a:"power",e:"This is the UNSC's most coercive tool — it can legally authorize military intervention, sanctions, and peacekeeping missions."},
+  {s:"The WHO declared COVID-19 a pandemic, triggering global health protocols",a:"power",e:"The WHO's authority to declare health emergencies shapes state behavior and mobilizes resources worldwide — a form of expert authority."},
+  {s:"The UN General Assembly can force states to comply with its resolutions",a:"myth",e:"UNGA resolutions are non-binding. They carry moral and political weight but no legal enforcement power. Only UNSC resolutions under Chapter VII are binding."},
+  {s:"Any of the P5 can veto a Security Council resolution, regardless of how many other members support it",a:"power",e:"The veto is the UNSC's defining — and most controversial — feature. A single P5 member can block action even if the other 14 members vote in favor."},
+  {s:"The ICC can arrest a sitting head of state without that state's cooperation",a:"limit",e:"The ICC has no police force. It depends entirely on states to arrest suspects. When the ICC issued a warrant for Sudan's al-Bashir, he traveled freely to countries that refused to arrest him."},
+  {s:"The WTO's dispute resolution mechanism can enforce trade rulings against non-compliant states",a:"limit",e:"The WTO Appellate Body has been non-functional since 2019 because the US has blocked new appointments. Even when it functioned, enforcement depended on state willingness to comply."},
+  {s:"International organizations are controlled by the Global South because developing countries outnumber Western states in the General Assembly",a:"myth",e:"Numbers don't equal power. Real decision-making power in the UN system lies in the Security Council (dominated by P5), the Bretton Woods institutions (where votes are weighted by financial contribution), and informal coalitions of wealthy states."},
+  {s:"NGOs can set international agendas by generating media attention and public pressure",a:"power",e:"Amnesty International's reporting, MSF's testimony, and Greenpeace's campaigns have repeatedly forced issues onto the international agenda — a form of normative power."},
+  {s:"NATO's Article 5 collective defence guarantee deterred a Soviet invasion of Western Europe during the Cold War",a:"power",e:"The credibility of Article 5 — an attack on one is an attack on all — was a cornerstone of Cold War deterrence. It has been invoked once, after 9/11."},
+  {s:"The UN can prevent wars by mediating between conflicting states",a:"limit",e:"The UN mediates many conflicts but cannot prevent wars when major powers choose to fight. Russia invaded Ukraine despite the UN system; Israel continued operations in Gaza despite UNGA resolutions."},
+  {s:"The UN has its own standing army that it can deploy anywhere in the world",a:"myth",e:"The UN has no standing army. Peacekeeping troops are contributed voluntarily by member states — the UN can only deploy what states are willing to provide."},
+  {s:"International organizations make powerful states follow the same rules as weak states",a:"myth",e:"In practice, powerful states routinely exempt themselves. The US has not ratified the Rome Statute, ignores ICJ rulings it dislikes, and uses its financial leverage in IOs. Russia uses its UNSC veto to block accountability for its own actions."}
+];
+
+const NORMS_DATA=[
+  {label:"SCENARIO 1: UKRAINE",
+   text:"In February 2022, Russia launched a full-scale invasion of Ukraine — the first attempt at territorial conquest in Europe since WWII. Russia claimed it was acting in 'self-defense' and to 'denazify' Ukraine. The UN General Assembly voted 141-5 to condemn the invasion. But the Security Council was paralyzed because Russia holds a permanent seat with veto power. By 2026, the war continues, and Russia occupies approximately 20% of Ukrainian territory.",
+   questions:[
+     {q:"Which foundational international norm is Russia violating?",
+      opts:["The norm against the use of force (UN Charter Article 2(4)) and the prohibition on territorial conquest","The norm of non-interference in domestic affairs","The norm of free trade"],
+      correct:0,
+      e:"This is the paradigm case for Hathaway & Shapiro's argument. Article 2(4) of the UN Charter prohibits 'the threat or use of force against the territorial integrity or political independence of any state.' Russia's invasion violates this directly. The attempted annexation of Crimea (2014) and four Ukrainian oblasts (2022) violates the prohibition on conquest — the norm that Hathaway and Shapiro identify as foundational to the entire post-1945 order."},
+     {q:"Why was the Security Council unable to act?",
+      opts:["Because not enough members cared about Ukraine","Because Russia, as a P5 member, vetoed any resolution that would have authorized action against it — exposing the structural flaw of the veto system","Because the UN Charter doesn't apply to European conflicts"],
+      correct:1,
+      e:"The veto is both the Security Council's defining feature and its greatest limitation. It was designed to prevent the great powers from going to war with each other (by ensuring none could be outvoted). But it also means that when a P5 member is the aggressor, the Council is structurally incapable of responding. This is exactly the scenario the veto was supposed to prevent — and exactly the scenario it enables."}
+   ]},
+  {label:"SCENARIO 2: US THREATS",
+   text:"In 2025-2026, the United States under President Trump made territorial claims or threats against Panama (the Canal), Greenland (a Danish autonomous territory), and Canada ('51st state'). Trump administration officials discussed military options for Greenland. The US also conducted unilateral strikes on Iran without UN authorization or Congressional approval. Mark Carney's Davos speech warned that 'great powers have begun using economic integration as weapons, tariffs as leverage, financial infrastructure as coercion.'",
+   questions:[
+     {q:"Hathaway & Shapiro single out US behavior as especially corrosive. Why is it more damaging when the US undermines the norm than when, say, a smaller state does?",
+      opts:["Because the US has the biggest military","Because the US was the principal architect and enforcer of the post-1945 order — when the rule-maker becomes the rule-breaker, the entire system loses credibility","Because the US is the only country that matters in world politics"],
+      correct:1,
+      e:"The norm against force depends not just on law but on the willingness of powerful states to enforce it. The US led the creation of the UN Charter, provided the security guarantee that made the liberal order possible, and spent 80 years positioning itself as the order's defender. When the same state threatens to annex Greenland, coerces Panama, and bombs Iran without authorization, it signals that the rules are optional — and every other state adjusts its calculations accordingly. As Hathaway puts it: 'By making what has been the unthinkable thinkable, it might be the final blow.'"},
+     {q:"How does Carney's concept of 'weaponized interdependence' relate to IOs?",
+      opts:["It doesn't — Carney was talking about trade, not organizations","IOs were built on the assumption that economic interdependence promotes peace; when powerful states weaponize that interdependence (sanctions as coercion, tariffs as leverage), IOs built on trust are undermined","Carney wants to destroy all international organizations"],
+      correct:1,
+      e:"IOs like the WTO, IMF, and SWIFT were built on the liberal assumption that economic interdependence benefits everyone. When the US weaponizes SWIFT (cutting Russia off), uses tariffs to coerce allies (Canada, EU), and threatens supply chain disruption, it transforms the infrastructure of cooperation into tools of domination. States that feel coerced by the system will seek alternatives — which is exactly what's happening (BRICS New Development Bank, China's CIPS system, bilateral trade agreements bypassing the WTO)."}
+   ]},
+  {label:"SCENARIO 3: THE ICC DILEMMA",
+   text:"The International Criminal Court issued an arrest warrant for Russian President Vladimir Putin in March 2023 for the deportation of Ukrainian children. It also issued warrants related to the Israel-Palestine conflict. The US does not recognize the ICC's jurisdiction (it never ratified the Rome Statute). Russia withdrew its signature. China is not a member. Yet the ICC continues to operate, issuing warrants it cannot enforce, building a legal record even when the powerful evade accountability.",
+   questions:[
+     {q:"Is the ICC effective if it can't enforce its warrants against powerful leaders?",
+      opts:["No — it's toothless and irrelevant","It depends on your theory: liberals see it building norms over time; realists see it as irrelevant when it challenges the powerful; constructivists see it as slowly reshaping what's considered legitimate behavior","Yes — every warrant is fully enforced"],
+      correct:1,
+      e:"The ICC perfectly illustrates the IO paradox. It cannot arrest Putin or compel the US to cooperate. In realist terms, it's weak because it lacks enforcement power. But in constructivist terms, the warrant against Putin changed something: he can no longer travel freely to Rome Statute member states, his international legitimacy is diminished, and a legal record of accountability exists even if justice is delayed. Liberals see the ICC as an investment in the long-term institutionalization of justice — imperfect now, but building the architecture for the future. The theoretical lens you choose determines whether you see the ICC as a failure or a work in progress."}
+   ]}
+];
+
+const THEORY_CARDS=[
+  {t:"realism",name:"Realism",tagline:"IOs are tools of the powerful",
+   content:"Realists see IOs as instruments that powerful states create and use to advance their own interests. The UN Security Council's veto structure ensures great-power dominance. NATO serves US hegemonic interests. The IMF imposes conditions that benefit creditor states. When IOs no longer serve powerful states' interests, those states ignore or abandon them. IOs have no independent power — they reflect the distribution of power, they don't reshape it."},
+  {t:"liberalism",name:"Liberalism",tagline:"IOs enable cooperation & reduce costs",
+   content:"Liberals argue that IOs solve collective action problems that states can't solve alone. They reduce transaction costs (the WTO provides a framework for trade disputes), provide information (the WHO monitors disease outbreaks), and create 'iterated games' where states cooperate because they expect to interact repeatedly. IOs develop independent authority through expertise, legitimacy, and bureaucratic capacity. They constrain state behavior by raising the costs of defection — breaking WTO rules triggers retaliation from trading partners."},
+  {t:"constructivism",name:"Constructivism",tagline:"IOs shape norms and identities",
+   content:"Constructivists argue that IOs don't just reflect interests — they help create them. The UN's promotion of human rights norms has changed what states consider legitimate behavior. The ICC's existence redefines sovereignty as 'conditional' — states that commit atrocities forfeit the right to non-interference. IOs socialize states into shared norms through reporting, monitoring, peer review, and naming-and-shaming. The power of IOs lies not in enforcement but in their ability to shape expectations about appropriate behavior."},
+  {t:"marxism",name:"Marxism",tagline:"IOs reproduce global inequality",
+   content:"Marxists see IOs as institutions that legitimize and reproduce the global capitalist order. The IMF and World Bank impose structural adjustment programs that open developing economies to exploitation by multinational corporations. The WTO's 'free trade' rules benefit industrialized economies that already dominate global markets. Even the UN system reflects the interests of capital: the Bretton Woods institutions weight votes by financial contribution, ensuring wealthy states control the agenda. IOs are not neutral — they are instruments of class power on a global scale."},
+  {t:"feminism",name:"Feminism",tagline:"IOs are gendered institutions",
+   content:"Feminists ask: where are the women in international organizations? Who speaks, who decides, who is affected? The Security Council that decides on war and peace has historically been overwhelmingly male. The 'international community' that sets norms often excludes women's voices and experiences. UNSCR 1325 was a breakthrough — but it remains unevenly implemented. Feminist scholars also examine how IO bureaucracies reproduce gendered hierarchies: men dominate senior positions, 'hard' security issues get more resources than 'soft' issues like gender-based violence."},
+  {t:"postcolonialism",name:"Post-colonialism",tagline:"IOs reflect the colonial past",
+   content:"Post-colonial scholars argue that IOs were created by colonial and imperial powers to manage the world system in their own image. The UN Security Council's P5 are the victors of a European war. The Bretton Woods institutions were designed at a conference where most of the world was still colonized. The 'rules-based order' that IOs enforce was written without the consent of most of the world's people. Even the language of IOs — 'developed' vs. 'developing,' 'first world' vs. 'third world' — reproduces a colonial hierarchy. Genuine reform requires not just adding seats but decolonizing the logic of global governance."}
+];
+
+const THEORY_CHALLENGE_DATA=[
+  {s:"The Security Council's veto structure ensures that IOs can never act against the interests of the great powers.",a:"realism",e:"Classic realist argument: IOs reflect power, and the veto ensures the powerful are never constrained."},
+  {s:"The WTO's dispute resolution mechanism reduces uncertainty and makes trade more efficient for all members.",a:"liberalism",e:"Liberal institutionalist logic: IOs provide public goods (rules, dispute resolution) that benefit everyone by reducing transaction costs."},
+  {s:"The UN's Universal Periodic Review process socializes states into accepting human rights norms they might otherwise reject.",a:"constructivism",e:"Constructivist emphasis on socialization: IOs change state behavior not through enforcement but through peer pressure, reporting, and norm diffusion."},
+  {s:"IMF structural adjustment programs force developing countries to open their markets, benefiting multinational corporations from wealthy states.",a:"marxism",e:"Marxist critique: IOs serve the interests of global capital by prying open markets in the Global South."},
+  {s:"UNSCR 1325 was a landmark achievement, but the Women, Peace and Security agenda remains marginal in actual Security Council deliberations.",a:"feminism",e:"Feminist analysis: formal commitments to gender (1325) exist, but the gendered power structures within IOs remain largely unchanged."},
+  {s:"The permanent members of the Security Council are the five victors of a European-centric war fought 80 years ago. Africa, Latin America, and most of Asia have no permanent representation.",a:"postcolonialism",e:"Post-colonial critique: the institutional architecture of global governance still reflects the colonial-era power hierarchy."},
+  {s:"States comply with WTO rulings not because the WTO enforces them, but because repeated interaction creates expectations and reputational costs for non-compliance.",a:"liberalism",e:"Liberal argument about 'the shadow of the future': institutions work because states expect to interact again and don't want to damage their reputation."},
+  {s:"Russia's veto of Syria resolutions shows that when national interests conflict with international norms, interests always win.",a:"realism",e:"Realist argument: norms are subordinate to interests, and IOs cannot override a great power's determination to protect its allies."},
+  {s:"The ICC's warrant for Putin, even though it can't be enforced, changes the international conversation about accountability and slowly shifts the boundaries of legitimate state behavior.",a:"constructivism",e:"Constructivist logic: the warrant's power lies not in enforcement but in its effect on norms, discourse, and expectations."},
+  {s:"The Bretton Woods institutions were designed when most of Africa and Asia were still under colonial rule. Their governance structures have never been fundamentally reformed to reflect decolonization.",a:"postcolonialism",e:"Post-colonial critique of institutional path dependency: the power structures built under colonialism persist in 'reformed' institutions."}
+];
+
+const MATCH_DATA=[
+  {term:"Collective security",def:"The principle that an attack on one member is an attack on all — aggression is met with a collective response (UN Chapter VII, NATO Article 5)"},
+  {term:"Veto power",def:"The ability of any P5 member (US, UK, France, Russia, China) to block a Security Council resolution, regardless of other members' votes"},
+  {term:"Principal-agent problem",def:"States (principals) create IOs (agents) to perform tasks, but agents may develop their own interests and agendas that diverge from their creators' intentions"},
+  {term:"Norm cascade",def:"The tipping point after which a new norm (e.g., the prohibition on landmines) spreads rapidly as states adopt it to gain legitimacy and avoid stigma"},
+  {term:"Sovereignty",def:"The principle that a state has supreme authority within its territory and is free from external interference — often invoked to resist IO authority"},
+  {term:"Outcasting",def:"Hathaway & Shapiro's term for how the modern order punishes norm violators: not through war, but by excluding them from the benefits of cooperation (sanctions, trade exclusion, diplomatic isolation)"},
+  {term:"Supranational authority",def:"An IO that has authority above member states and can make binding decisions — the EU is the primary example, with its directly applicable laws and court rulings"},
+  {term:"Legitimacy deficit",def:"When an IO's decision-making structure does not reflect the people or states it claims to represent — the UNSC's outdated P5 is the classic case"},
+  {term:"Regime theory",def:"The study of how principles, norms, rules, and decision-making procedures shape state behavior in specific issue areas (trade, environment, security)"},
+  {term:"Forum shopping",def:"When states choose which IO or legal framework to use based on which is most likely to produce the outcome they want — e.g., taking a dispute to the ICJ vs. the WTO vs. a bilateral treaty"}
+];
+
+const TL_DATA=[
+  {text:"Congress of Vienna — first systematic attempt at great-power concert diplomacy",year:1815},
+  {text:"International Committee of the Red Cross (ICRC) founded",year:1863},
+  {text:"First Hague Peace Conference — early experiment in multilateral disarmament and arbitration",year:1899},
+  {text:"League of Nations established — first general-purpose IGO for collective security",year:1920},
+  {text:"Kellogg-Briand Pact — first treaty to outlaw war as a tool of national policy",year:1928},
+  {text:"United Nations Charter signed in San Francisco",year:1945},
+  {text:"Bretton Woods institutions (IMF, World Bank) begin operations",year:1946},
+  {text:"NATO founded — collective defense alliance of Western states",year:1949},
+  {text:"European Economic Community (EEC) created — precursor to the EU",year:1957},
+  {text:"Organisation of African Unity (OAU) founded — first pan-African IGO",year:1963},
+  {text:"Amnesty International wins the Nobel Peace Prize — NGOs gain global visibility",year:1977},
+  {text:"World Trade Organization replaces GATT — new era of rules-based trade",year:1995},
+  {text:"Rome Statute adopted — creates the International Criminal Court",year:1998},
+  {text:"Responsibility to Protect (R2P) adopted at the UN World Summit",year:2005},
+  {text:"Asian Infrastructure Investment Bank (AIIB) launched by China — alternative to Western-led institutions",year:2016}
+];
+
+// ═══════ TAB NAV ═══════
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab==='stats')renderStats();
+  });
+});
+document.getElementById('startBtn').addEventListener('click',()=>{
+  document.getElementById('landing').style.display='none';
+  document.getElementById('tabBar').style.display='flex';
+  document.getElementById('panel-videos').classList.add('active');
+});
+(function(){const c=QR.generate(location.href);document.getElementById('qr-container').appendChild(c);})();
+
+// ═══════ BUILD VIDEOS ═══════
+function buildVideos(){
+  const cont=document.getElementById('vidSections');const keys=Object.keys(VID_DATA);
+  keys.forEach((k,ki)=>{
+    const sec=VID_DATA[k];const div=document.createElement('div');div.id=k;div.style.display=ki===0?'block':'none';
+    div.innerHTML=`<div class="section-header"><h3>${sec.title}</h3><p>${sec.desc}</p></div>`;
+    sec.items.forEach(item=>{
+      const card=document.createElement('div');card.className='card';
+      let inner=`<h4>${item.title}</h4>`;
+      if(item.type==='video'&&item.yt)inner+=`<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${item.yt}" allowfullscreen loading="lazy"></iframe></div>`;
+      if(item.type==='case'&&item.text)inner+=`<p style="font-size:.88em;line-height:1.6;margin:10px 0">${item.text}</p>`;
+      inner+=`<div class="reflect-q">${item.q}</div><div class="reflect-options" data-id="${item.id}">`;
+      item.opts.forEach((o,oi)=>{inner+=`<div class="reflect-opt" data-idx="${oi}">${o}</div>`;});
+      inner+=`</div><button class="reflect-btn" data-id="${item.id}">Submit</button><div class="model-answer" id="model-${item.id}">${item.model}</div>`;
+      card.innerHTML=inner;div.appendChild(card);
+    });cont.appendChild(div);
+  });
+  document.querySelectorAll('#vidSubNav .sub-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('#vidSubNav .sub-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+      keys.forEach(k=>{document.getElementById(k).style.display='none';});document.getElementById(btn.dataset.sec).style.display='block';
+    });
+  });
+  document.querySelectorAll('.reflect-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const id=btn.dataset.id;const opts=document.querySelector(`.reflect-options[data-id="${id}"]`);const sel=opts.querySelector('.reflect-opt.selected');if(!sel)return;
+      const idx=parseInt(sel.dataset.idx);const allItems=[...Object.values(VID_DATA)].flatMap(s=>s.items);const item=allItems.find(i=>i.id===id);
+      opts.querySelectorAll('.reflect-opt').forEach(o=>{o.style.pointerEvents='none';if(parseInt(o.dataset.idx)===item.correct)o.classList.add('correct');else if(o.classList.contains('selected'))o.classList.add('wrong');});
+      btn.disabled=true;document.getElementById('model-'+id).classList.add('show');
+      if(idx===item.correct){addXP(10);addStreak();}else{breakStreak();}done.videos[id]=true;
+    });
+  });
+  document.querySelectorAll('.reflect-opt').forEach(opt=>{opt.addEventListener('click',()=>{opt.parentElement.querySelectorAll('.reflect-opt').forEach(o=>o.classList.remove('selected'));opt.classList.add('selected');});});
+}
+
+// ═══════ GENERIC SORTER BUILDER ═══════
+function buildSorter(data,containerId,checkId,resultId,doneKey){
+  const cont=document.getElementById(containerId);
+  const shuffled=[...data].sort(()=>Math.random()-.5);
+  shuffled.forEach((item,i)=>{
+    const el=document.createElement('div');el.className='sort-item';el.textContent=item.name||item.s;el.draggable=true;el.dataset.idx=i;el.dataset.answer=item.a;
+    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);el.classList.add('dragging');});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('click',()=>{if(el.classList.contains('placed'))return;if(el.classList.contains('selected')){el.classList.remove('selected');return;}cont.querySelectorAll('.sort-item').forEach(s=>s.classList.remove('selected'));el.classList.add('selected');});
+    cont.appendChild(el);
+  });
+  const panel=cont.closest('.panel');
+  panel.querySelectorAll('.sort-zone').forEach(zone=>{
+    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
+    zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+    zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('over');placeInZone(e.dataTransfer.getData('text/plain'),zone,cont);});
+    zone.addEventListener('click',()=>{const sel=cont.querySelector('.sort-item.selected');if(sel){placeInZone(sel.dataset.idx,zone,cont);sel.classList.remove('selected');}});
+  });
+  function placeInZone(idx,zone,c){
+    const el=c.querySelector(`.sort-item[data-idx="${idx}"]`);if(!el||el.classList.contains('placed'))return;el.classList.add('placed');
+    const pill=document.createElement('div');pill.className='sorted-item';pill.textContent=el.textContent;pill.dataset.idx=idx;pill.dataset.answer=el.dataset.answer;pill.dataset.zone=zone.dataset.zone;
+    zone.querySelector('.zone-items').appendChild(pill);
+  }
+  document.getElementById(checkId).addEventListener('click',()=>{
+    let correct=0,total=0;
+    document.querySelectorAll(`#${resultId}`).forEach(r=>r.innerHTML='');
+    panel.querySelectorAll('.sorted-item').forEach(pill=>{total++;if(pill.dataset.zone===pill.dataset.answer){pill.classList.add('correct');correct++;addXP(10);addStreak();}else{pill.classList.add('wrong');breakStreak();}});
+    const pct=total?Math.round(correct/total*100):0;const res=document.getElementById(resultId);
+    res.innerHTML=`<div class="result-banner ${pct>=80?'great':pct>=50?'good':'try'}">${correct}/${total} correct (${pct}%)</div>`;
+    data.forEach(item=>{const exp=document.createElement('div');exp.style.cssText='font-size:.82em;padding:8px 14px;margin:4px 0;background:#fff;border-radius:8px;border-left:3px solid var(--gold)';exp.innerHTML=`<strong>${item.name||item.s}</strong> → <em>${item.a}</em>: ${item.e}`;res.appendChild(exp);});
+    done[doneKey]=true;
+  });
+}
+
+// ═══════ BUILD NORMS UNDER PRESSURE ═══════
+function buildNorms(){
+  const cont=document.getElementById('normsItems');
+  NORMS_DATA.forEach((scenario,si)=>{
+    const card=document.createElement('div');card.className='scenario-card';
+    let html=`<span class="sc-label">${scenario.label}</span><div class="sc-text">${scenario.text}</div><div class="sc-questions">`;
+    scenario.questions.forEach((q,qi)=>{
+      const qid=`norm-${si}-${qi}`;
+      html+=`<div class="sc-q">${q.q}</div><div class="sc-options" data-qid="${qid}">`;
+      q.opts.forEach((o,oi)=>{html+=`<div class="sc-opt" data-idx="${oi}">${o}</div>`;});
+      html+=`</div><button class="sc-submit" data-qid="${qid}" data-si="${si}" data-qi="${qi}">Submit</button><div class="sc-explain" id="exp-${qid}">${q.e}</div>`;
+    });
+    html+=`</div>`;card.innerHTML=html;cont.appendChild(card);
+  });
+  cont.querySelectorAll('.sc-opt').forEach(opt=>{
+    opt.addEventListener('click',()=>{opt.parentElement.querySelectorAll('.sc-opt').forEach(o=>o.classList.remove('selected'));opt.classList.add('selected');});
+  });
+  cont.querySelectorAll('.sc-submit').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const qid=btn.dataset.qid;const si=parseInt(btn.dataset.si);const qi=parseInt(btn.dataset.qi);
+      const opts=cont.querySelector(`.sc-options[data-qid="${qid}"]`);const sel=opts.querySelector('.sc-opt.selected');if(!sel)return;
+      const idx=parseInt(sel.dataset.idx);const correct=NORMS_DATA[si].questions[qi].correct;
+      opts.querySelectorAll('.sc-opt').forEach(o=>{o.style.pointerEvents='none';if(parseInt(o.dataset.idx)===correct)o.classList.add('correct');else if(o.classList.contains('selected'))o.classList.add('wrong');});
+      btn.disabled=true;document.getElementById('exp-'+qid).classList.add('show');
+      if(idx===correct){addXP(20);addStreak();}else{breakStreak();}
+      done.norms[qid]=true;
+    });
+  });
+}
+
+// ═══════ BUILD THEORY LENSES ═══════
+function buildTheory(){
+  const grid=document.getElementById('theoryGrid');
+  THEORY_CARDS.forEach(tc=>{
+    const card=document.createElement('div');card.className='theory-card-item';card.dataset.t=tc.t;
+    card.innerHTML=`<div class="tc-front"><h4>${tc.name}</h4><p>${tc.tagline}</p><p style="font-size:.7em;color:#aaa;margin-top:8px">Click to reveal</p></div><div class="tc-back"><h4>${tc.name}</h4><p>${tc.content}</p></div>`;
+    card.addEventListener('click',()=>card.classList.toggle('flipped'));
+    grid.appendChild(card);
+  });
+  // Challenge
+  const cont=document.getElementById('theoryChallengeItems');
+  const shuffled=[...THEORY_CHALLENGE_DATA].sort(()=>Math.random()-.5);
+  const theories=["realism","liberalism","constructivism","marxism","feminism","postcolonialism"];
+  shuffled.forEach((item,i)=>{
+    const card=document.createElement('div');card.className='card';card.dataset.idx=i;
+    let html=`<p style="font-size:.9em;line-height:1.5;margin-bottom:12px">"${item.s}"</p><div class="dim-options" data-idx="${i}">`;
+    theories.forEach(t=>{html+=`<span class="dim-pill" data-val="${t}" style="text-transform:capitalize">${t}</span>`;});
+    html+=`</div><div class="dim-explain" id="tc-exp-${i}">${item.e}</div>`;
+    card.innerHTML=html;cont.appendChild(card);
+    card.querySelectorAll('.dim-pill').forEach(pill=>{pill.addEventListener('click',()=>{card.querySelectorAll('.dim-pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');});});
+  });
+  document.getElementById('checkTheoryChallenge').addEventListener('click',()=>{
+    let correct=0,total=shuffled.length;
+    shuffled.forEach((item,i)=>{
+      const card=cont.querySelector(`.card[data-idx="${i}"]`);const sel=card.querySelector('.dim-pill.selected');
+      card.querySelectorAll('.dim-pill').forEach(p=>p.style.pointerEvents='none');
+      if(sel){if(sel.dataset.val===item.a){sel.classList.add('correct');correct++;addXP(15);addStreak();}
+      else{sel.classList.add('wrong');breakStreak();card.querySelectorAll('.dim-pill').forEach(p=>{if(p.dataset.val===item.a)p.classList.add('correct');});}}
+      document.getElementById('tc-exp-'+i).classList.add('show');
+    });
+    const pct=Math.round(correct/total*100);
+    document.getElementById('theoryChallengeResult').innerHTML=`<div class="result-banner ${pct>=80?'great':pct>=50?'good':'try'}">${correct}/${total} correct (${pct}%)</div>`;
+    done.theory=true;
+  });
+}
+
+// ═══════ BUILD MATCH ═══════
+function buildMatch(){
+  const grid=document.getElementById('matchGrid');
+  const terms=[...MATCH_DATA].sort(()=>Math.random()-.5);const defs=[...MATCH_DATA].sort(()=>Math.random()-.5);
+  let selected=null,matchedCount=0;
+  terms.forEach(item=>{const el=document.createElement('div');el.className='match-item';el.textContent=item.term;el.dataset.type='term';el.dataset.key=item.term;el.addEventListener('click',()=>handleMatch(el));grid.appendChild(el);});
+  defs.forEach(item=>{const el=document.createElement('div');el.className='match-item';el.textContent=item.def;el.dataset.type='def';el.dataset.key=item.term;el.style.fontSize='.78em';el.addEventListener('click',()=>handleMatch(el));grid.appendChild(el);});
+  function handleMatch(el){
+    if(el.classList.contains('matched'))return;
+    if(!selected){selected=el;el.classList.add('sel');}
+    else{if(selected===el){selected.classList.remove('sel');selected=null;return;}
+    if(selected.dataset.type===el.dataset.type){selected.classList.remove('sel');selected=el;el.classList.add('sel');return;}
+    if(selected.dataset.key===el.dataset.key){selected.classList.remove('sel');selected.classList.add('matched');el.classList.add('matched');addXP(15);addStreak();matchedCount++;if(matchedCount===MATCH_DATA.length){done.match=true;document.getElementById('matchResult').innerHTML='<div class="result-banner great">All matched!</div>';}}
+    else{selected.classList.remove('sel');el.classList.add('wrong-flash');selected.classList.add('wrong-flash');breakStreak();setTimeout(()=>el.classList.remove('wrong-flash'),500);}
+    selected=null;}
+  }
+}
+
+// ═══════ BUILD TIMELINE ═══════
+function buildTimeline(){
+  const cont=document.getElementById('tlItems');const shuffled=[...TL_DATA].sort(()=>Math.random()-.5);
+  shuffled.forEach((item,i)=>{
+    const el=document.createElement('div');el.className='tl-item';el.draggable=true;el.dataset.year=item.year;
+    el.innerHTML=`<span class="handle">☰</span><span>${item.text}</span>`;
+    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);el.classList.add('dragging');});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('dragover',e=>{e.preventDefault();const dragging=cont.querySelector('.dragging');if(dragging&&dragging!==el){const rect=el.getBoundingClientRect();const mid=rect.top+rect.height/2;if(e.clientY<mid)cont.insertBefore(dragging,el);else cont.insertBefore(dragging,el.nextSibling);}});
+    cont.appendChild(el);
+  });
+  let touchEl=null;
+  cont.addEventListener('touchstart',e=>{const item=e.target.closest('.tl-item');if(item){touchEl=item;item.classList.add('dragging');}},{passive:true});
+  cont.addEventListener('touchmove',e=>{if(!touchEl)return;e.preventDefault();const touch=e.touches[0];const target=document.elementFromPoint(touch.clientX,touch.clientY);const over=target?target.closest('.tl-item'):null;if(over&&over!==touchEl){const rect=over.getBoundingClientRect();const mid=rect.top+rect.height/2;if(touch.clientY<mid)cont.insertBefore(touchEl,over);else cont.insertBefore(touchEl,over.nextSibling);}},{passive:false});
+  cont.addEventListener('touchend',()=>{if(touchEl){touchEl.classList.remove('dragging');touchEl=null;}});
+  document.getElementById('checkTL').addEventListener('click',()=>{
+    const items=[...cont.querySelectorAll('.tl-item')];const years=items.map(el=>parseInt(el.dataset.year));const sorted=[...years].sort((a,b)=>a-b);let correct=0;
+    items.forEach((el,i)=>{if(years[i]===sorted[i]){el.classList.add('correct');correct++;}else el.classList.add('wrong');el.querySelector('.handle').textContent=el.dataset.year;el.querySelector('.handle').style.cssText='font-size:.8em;min-width:40px';});
+    const pct=Math.round(correct/items.length*100);
+    document.getElementById('tlResult').innerHTML=`<div class="result-banner ${pct>=80?'great':pct>=50?'good':'try'}">${correct}/${items.length} in correct position (${pct}%)</div>`;
+    if(pct===100)addXP(20);else if(pct>=70)addXP(10);addStreak();done.timeline=true;
+  });
+}
+
+// ═══════ STATS ═══════
+function renderStats(){
+  const grid=document.getElementById('statGrid');
+  const vidDone=Object.keys(done.videos).length;const vidTotal=[...Object.values(VID_DATA)].reduce((a,s)=>a+s.items.length,0);
+  const normsDone=Object.keys(done.norms).length;const normsTotal=NORMS_DATA.reduce((a,s)=>a+s.questions.length,0);
+  const activities=['classifier','powers','theory','match','timeline'];const actDone=activities.filter(a=>done[a]).length;
+  grid.innerHTML=`<div class="stat-card"><span class="num">${xp}</span><span class="lbl">Total XP</span></div>
+    <div class="stat-card"><span class="num">${maxStreak}</span><span class="lbl">Best Streak</span></div>
+    <div class="stat-card"><span class="num">${vidDone+normsDone}/${vidTotal+normsTotal}</span><span class="lbl">Reflections</span></div>
+    <div class="stat-card"><span class="num">${actDone}/${activities.length}</span><span class="lbl">Activities</span></div>`;
+  const prog=document.getElementById('activityProgress');const total=vidTotal+normsTotal+activities.length;const completed=vidDone+normsDone+actDone;const pct=Math.round(completed/total*100);
+  prog.innerHTML=`<h3>Activity Completion</h3><div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div><p style="font-size:.82em;color:#666;margin-top:6px">${completed}/${total} activities completed (${pct}%)</p>`;
+}
+document.getElementById('resetBtn').addEventListener('click',()=>{if(confirm('Reset all progress?'))location.reload();});
+
+// ═══════ INIT ═══════
+buildVideos();
+buildSorter(CLASSIFIER_DATA,'classifierItems','checkClassifier','classifierResult','classifier');
+buildSorter(POWERS_DATA,'powersItems','checkPowers','powersResult','powers');
+buildNorms();
+buildTheory();
+buildMatch();
+buildTimeline();
+</script>
+</body>
+</html>
