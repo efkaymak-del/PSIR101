@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>PSIR101 Midterm Review</title>
+<style>
+:root{--pri:#1a237e;--sec:#e8eaf6;--acc:#ff6f00;--ok:#2e7d32;--no:#c62828;--bg:#f5f5f5;--card:#fff;--radius:12px;--shadow:0 2px 8px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#222;line-height:1.55;overflow-x:hidden}
+.bar{position:sticky;top:0;z-index:100;background:var(--pri);color:#fff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
+.bar h1{font-size:1.05rem;font-weight:700}
+.bar-right{display:flex;align-items:center;gap:10px}
+.timer-display{background:rgba(255,255,255,.15);padding:4px 12px;border-radius:20px;font-size:.85rem;font-weight:700;display:none}
+.timer-display.active{display:inline-block}
+.timer-display.warn{background:var(--no);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.tabs{display:flex;overflow-x:auto;background:#fff;border-bottom:2px solid #e0e0e0;position:sticky;top:48px;z-index:99}
+.tabs button{flex:none;padding:10px 13px;border:none;background:transparent;font-size:.78rem;font-weight:600;color:#666;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s}
+.tabs button.active{color:var(--pri);border-bottom-color:var(--pri)}
+.panel{display:none;padding:16px;max-width:800px;margin:0 auto}
+.panel.active{display:block}
+.card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card h3{color:var(--pri);margin-bottom:8px;font-size:1rem}
+.card p{font-size:.9rem;margin-bottom:6px}
+.btn{display:inline-block;padding:10px 20px;border:none;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;margin:6px 4px;transition:.2s}
+.btn-pri{background:var(--pri);color:#fff}.btn-pri:hover{opacity:.9}
+.btn-acc{background:var(--acc);color:#fff}.btn-acc:hover{opacity:.9}
+.btn-out{background:#fff;color:var(--pri);border:2px solid var(--pri)}.btn-out:hover{background:var(--sec)}
+.btn-ok{background:var(--ok);color:#fff}
+.btn-no{background:var(--no);color:#fff}
+.btn-sm{padding:7px 14px;font-size:.82rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.opt-btn{display:block;width:100%;text-align:left;padding:10px 12px;margin:4px 0;border:2px solid #ccc;border-radius:8px;background:#fff;font-size:.88rem;cursor:pointer;transition:.2s}
+.opt-btn:hover{border-color:var(--pri)}
+.opt-btn.correct{border-color:var(--ok);background:#e8f5e9;font-weight:700}
+.opt-btn.wrong{border-color:var(--no);background:#ffebee}
+.opt-btn.selected{border-color:var(--pri);background:var(--sec)}
+.explain{display:none;background:#fff8e1;border-left:4px solid var(--acc);padding:10px;margin-top:8px;border-radius:0 8px 8px 0;font-size:.85rem}
+.explain.show{display:block}
+.flash-card{min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;cursor:pointer;transition:transform .3s;position:relative}
+.flash-card .term{font-size:1.3rem;font-weight:800;color:var(--pri)}
+.flash-card .def{font-size:.92rem;color:#333;margin-top:12px;display:none}
+.flash-card.flipped .def{display:block}
+.flash-card.flipped .term{font-size:1rem;margin-bottom:4px}
+.flash-card .hint{font-size:.75rem;color:#999;position:absolute;bottom:10px}
+.flash-card.flipped .hint{display:none}
+.module-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:700;color:#fff;margin-bottom:6px}
+.m1{background:#1565c0}.m2{background:#00695c}.m3{background:#6a1b9a}.m4{background:#e65100}.m5{background:#ad1457}
+.pair-box{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.pair-side{background:var(--sec);border-radius:var(--radius);padding:14px;text-align:center}
+.pair-side h4{color:var(--pri);font-size:.95rem;margin-bottom:6px}
+.pair-side p{font-size:.85rem}
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.check-item{padding:10px;border:2px solid #ccc;border-radius:8px;font-size:.85rem;cursor:pointer;text-align:center;transition:.2s}
+.check-item:hover{border-color:var(--pri)}
+.check-item.checked{border-color:var(--ok);background:#e8f5e9}
+.progress-bar{height:6px;background:#e0e0e0;border-radius:3px;margin:8px 0;overflow:hidden}
+.progress-bar .fill{height:100%;background:var(--ok);border-radius:3px;transition:width .4s}
+.landing{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;padding:20px}
+.landing h2{font-size:1.5rem;color:var(--pri);margin:12px 0 6px}
+.landing p{color:#666;max-width:420px;margin-bottom:12px;font-size:.9rem}
+.essay-step{background:var(--sec);border-radius:8px;padding:12px;margin:8px 0}
+.essay-step label{font-weight:700;font-size:.88rem;color:var(--pri);display:block;margin-bottom:4px}
+.essay-step textarea{width:100%;border:2px solid #ccc;border-radius:8px;padding:8px;font-size:.88rem;font-family:inherit;resize:vertical;min-height:60px}
+.essay-step textarea:focus{border-color:var(--pri);outline:none}
+.model-outline{display:none;background:#e8f5e9;border-left:4px solid var(--ok);padding:12px;margin-top:10px;border-radius:0 8px 8px 0;font-size:.85rem}
+.model-outline.show{display:block}
+.exam-q{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);display:none}
+.exam-q.active{display:block}
+.exam-nav{display:flex;flex-wrap:wrap;gap:4px;margin:10px 0}
+.exam-nav button{width:34px;height:34px;border-radius:6px;border:2px solid #ccc;background:#fff;font-size:.8rem;font-weight:700;cursor:pointer}
+.exam-nav button.answered{border-color:var(--pri);background:var(--sec)}
+.exam-nav button.current{border-color:var(--acc);background:#fff3e0}
+.exam-nav button.review-correct{border-color:var(--ok);background:#e8f5e9}
+.exam-nav button.review-wrong{border-color:var(--no);background:#ffebee}
+.score-big{font-size:2.5rem;font-weight:800;color:var(--pri);text-align:center;margin:16px 0}
+.score-sub{text-align:center;color:#666;font-size:.95rem;margin-bottom:16px}
+.rubric-table{width:100%;border-collapse:collapse;font-size:.82rem;margin:10px 0}
+.rubric-table th,.rubric-table td{border:1px solid #ddd;padding:8px;text-align:left}
+.rubric-table th{background:var(--pri);color:#fff}
+.self-q{padding:10px;margin:6px 0;background:var(--sec);border-radius:8px;font-size:.88rem}
+.self-q label{font-weight:600;display:block;margin-bottom:4px}
+.peel-check{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:4px 0}
+.peel-check span{padding:6px;border:2px solid #ccc;border-radius:6px;text-align:center;font-size:.78rem;font-weight:700;cursor:pointer;transition:.2s}
+.peel-check span.on{border-color:var(--ok);background:#e8f5e9}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:12px 0}
+.stat-box{background:var(--card);border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow)}
+.stat-box .num{font-size:1.8rem;font-weight:800;color:var(--pri)}
+.stat-box .label{font-size:.78rem;color:#666}
+footer{text-align:center;padding:20px;color:#999;font-size:.75rem}
+@media(max-width:480px){.tabs button{padding:8px 9px;font-size:.72rem}.pair-box{grid-template-columns:1fr}.check-grid{grid-template-columns:1fr}.peel-check{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <h1>PSIR101 Midterm Review</h1>
+  <div class="bar-right">
+    <span class="timer-display" id="timer-display">90:00</span>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar"></div>
+
+<div class="panel active" id="p-landing">
+  <div class="landing">
+    <h2>Midterm Review App</h2>
+    <p><strong>Exam: Thursday 24 April 2026</strong></p>
+    <p>30 points (20 MC + 10 essay) = 30% of your grade</p>
+    <p>Five tools to help you prepare:</p>
+    <p style="text-align:left;max-width:360px;font-size:.88rem"><strong>Flashcards</strong> — learn and review key concepts<br><strong>Theory Sorter</strong> — practise identifying which theory a statement reflects<br><strong>Confused Pairs</strong> — master the concepts students mix up most<br><strong>Essay Builder</strong> — practise structuring essay arguments<br><strong>Exam Simulator</strong> — take a timed mock exam under real conditions</p>
+    <button class="btn btn-pri" onclick="activateTab('t-flash')">Start Reviewing</button>
+  </div>
+</div>
+
+<div class="panel" id="p-flash"></div>
+<div class="panel" id="p-sorter"></div>
+<div class="panel" id="p-pairs"></div>
+<div class="panel" id="p-essay"></div>
+<div class="panel" id="p-exam"></div>
+<div class="panel" id="p-progress"></div>
+
+<footer>PSIR101 — Introduction to Global Politics — Eastern Mediterranean University — April 2026</footer>
+
+<script>
+/* ========== STATE ========== */
+const SK='mr2-state';
+let S=JSON.parse(localStorage.getItem(SK))||{flash:{},sorter:{},pairs:{},essays:{},exams:[]};
+function save(){localStorage.setItem(SK,JSON.stringify(S));}
+save();
+
+/* ========== TABS ========== */
+const tabs=[
+  {id:'t-landing',label:'Home',panel:'p-landing'},
+  {id:'t-flash',label:'Flashcards',panel:'p-flash'},
+  {id:'t-sorter',label:'Theory Sorter',panel:'p-sorter'},
+  {id:'t-pairs',label:'Confused Pairs',panel:'p-pairs'},
+  {id:'t-essay',label:'Essay Builder',panel:'p-essay'},
+  {id:'t-exam',label:'Exam Simulator',panel:'p-exam'},
+  {id:'t-progress',label:'Progress',panel:'p-progress'}
+];
+const tabBar=document.getElementById('tab-bar');
+tabs.forEach(t=>{
+  const b=document.createElement('button');b.textContent=t.label;b.id=t.id;
+  if(t.id==='t-landing')b.classList.add('active');
+  b.onclick=()=>{if(examRunning&&t.id!=='t-exam'){if(!confirm('Leaving will end your mock exam. Are you sure?'))return;endExam();}activateTab(t.id);};
+  tabBar.appendChild(b);
+});
+function activateTab(id){
+  tabs.forEach(t=>{
+    document.getElementById(t.id).classList.toggle('active',t.id===id);
+    document.getElementById(t.panel).classList.toggle('active',t.id===id);
+  });
+  if(id==='t-progress')renderProgress();
+}
+
+/* ========== FLASHCARD DATA ========== */
+const flashData=[
+  {mod:1,term:'Anarchy',def:'The absence of a central authority above states in the international system. It does not mean chaos — it means there is no world government.'},
+  {mod:1,term:'Realism',def:'A theory that sees world politics as a struggle for power and security among states. States are the main actors and focus on survival.'},
+  {mod:1,term:'Liberalism',def:'A theory that believes cooperation is possible through institutions, interdependence, and shared rules. States can achieve mutual benefits.'},
+  {mod:1,term:'Constructivism',def:'A theory that argues norms, identities, and shared ideas shape state behaviour. The international system is socially constructed.'},
+  {mod:1,term:'Marxism',def:'A theory that focuses on economic structures and how global capitalism creates inequality between the core and the periphery.'},
+  {mod:1,term:'Absolute Gains',def:'The total benefit a state gets from cooperation. If both sides benefit, cooperation is worth it — even if the other side benefits more. Associated with liberalism.'},
+  {mod:1,term:'Relative Gains',def:'How much a state gains compared to others. A state may refuse cooperation if the other gains more. Associated with realism.'},
+  {mod:1,term:'Problem-Solving Theory',def:'Theory that accepts the existing world order and tries to make it work better. It does not question the system itself.'},
+  {mod:1,term:'Critical Theory',def:'Theory that questions who benefits from the existing world order. Robert Cox: "Theory is always for someone and for some purpose."'},
+  {mod:1,term:'Material Factors',def:'Tangible things like military power, economic resources, and technology. Realists and Marxists emphasise these.'},
+  {mod:1,term:'Ideational Factors',def:'Intangible things like norms, identities, beliefs, and shared understandings. Constructivists emphasise these.'},
+  {mod:2,term:'Globalization',def:'The widening, deepening, and speeding up of worldwide interconnectedness — economic, political, cultural, technological, and environmental (Baylis et al.).'},
+  {mod:2,term:'Deterritorialization',def:'Activities and processes that extend beyond national boundaries. Geography becomes less of a barrier to interaction.'},
+  {mod:2,term:'Core-Periphery',def:'Core countries (wealthy, industrialised) benefit from the global system while periphery countries (poor, resource-exporting) are exploited. From dependency/world-systems theory.'},
+  {mod:2,term:'Dependency Theory',def:'Poverty in the Global South is actively produced by exploitative economic relationships with rich countries — not a natural starting condition.'},
+  {mod:2,term:'Unevenness of Globalization',def:'Globalization does not affect everyone equally. Some countries and groups benefit while others are left behind or made worse off.'},
+  {mod:2,term:'Pax Britannica',def:'Roughly 1850–1914. Britain dominated global trade and finance. Free trade, gold standard, massive capital flows, British naval power.'},
+  {mod:3,term:'IGO',def:'Intergovernmental Organization — members are sovereign states. Examples: UN, EU, NATO, African Union.'},
+  {mod:3,term:'NGO / INGO',def:'Non-governmental organization — not made up of states. Private, usually non-profit. Examples: Amnesty International, Doctors Without Borders, Oxfam.'},
+  {mod:3,term:'Supranationalism',def:'An international organisation can make binding decisions on member states without unanimous agreement. States give up some sovereignty. Example: EU.'},
+  {mod:3,term:'Intergovernmentalism',def:'States keep control. Decisions require consensus among governments. No authority above the state can impose decisions.'},
+  {mod:4,term:'UN Security Council',def:'5 permanent members with veto power + 10 non-permanent members. Can pass binding resolutions and authorise the use of force.'},
+  {mod:4,term:'Binding vs. Recommendations',def:'Only the Security Council passes binding resolutions. The General Assembly can only make recommendations.'},
+  {mod:4,term:'Veto Power',def:'Any P5 member (US, UK, France, Russia, China) can block any substantive Security Council resolution, even if all others support it.'},
+  {mod:4,term:'League of Nations',def:'Created after WWI (1920). Preceded the UN. Failed because major powers did not join or withdrew, and it could not prevent WWII.'},
+  {mod:4,term:'MDGs vs. SDGs',def:'MDGs (2000–2015): 8 goals, mainly for developing countries. SDGs (2015–2030): 17 goals, broader, apply to ALL countries.'},
+  {mod:4,term:'Peacekeeping',def:'Traditional UN operations: monitoring ceasefires, separating combatants. Military, limited, requires consent of parties.'},
+  {mod:4,term:'Peacebuilding',def:'Broader post-conflict work: rebuilding institutions, elections, reconciliation, addressing root causes. Emerged after the Cold War.'},
+  {mod:4,term:'Specialized Agencies',def:'Autonomous organisations linked to the UN by agreements: WHO, ILO, UNESCO. Different from UN funds/programmes like UNICEF.'},
+  {mod:5,term:'Gender (in IR)',def:'Social codes that define masculinity and femininity. Socially constructed — not the same as biological sex.'},
+  {mod:5,term:'Sex vs. Gender',def:'Sex = biological (male/female). Gender = social roles and expectations (masculinity/femininity). IR studies gender.'},
+  {mod:5,term:'Intersectionality',def:'Gender interacts with race, class, ethnicity, and sexuality to produce different experiences of inequality. They cannot be separated.'},
+  {mod:5,term:'Reproductive Economy',def:'Unpaid or undervalued work: childcare, cooking, cleaning, emotional labour. Feminist scholars argue it is invisible in traditional analysis.'},
+  {mod:5,term:'Hegemonic Masculinity',def:'R.W. Connell: the dominant ideal of masculinity — strength, rationality, heterosexuality, authority. It shapes politics and institutions.'},
+  {mod:5,term:'Gender-Blindness',def:'Traditional IR ignored gender entirely. By not asking about gender, mainstream theories gave an incomplete picture of world politics.'}
+];
+
+/* ========== FLASHCARDS ========== */
+(function(){
+  const p=document.getElementById('p-flash');
+  const modNames={1:'IR Theory',2:'Globalization',3:'Int\'l Orgs',4:'United Nations',5:'Gender'};
+  const modClass={1:'m1',2:'m2',3:'m3',4:'m4',5:'m5'};
+  let deck=[...flashData].sort(()=>Math.random()-.5);
+  let idx=0;
+  p.innerHTML=`
+    <div class="card"><h3>Concept Flashcards</h3><p>Tap the card to see the definition. Mark each concept as "Got it" or "Review again." Work through all ${flashData.length} concepts to make sure you know them.</p></div>
+    <div class="card" style="text-align:center">
+      <button class="btn btn-sm btn-out fl-f" data-m="all">All</button>
+      <button class="btn btn-sm btn-out fl-f" data-m="1">IR Theory</button>
+      <button class="btn btn-sm btn-out fl-f" data-m="2">Globalization</button>
+      <button class="btn btn-sm btn-out fl-f" data-m="3">IOs</button>
+      <button class="btn btn-sm btn-out fl-f" data-m="4">UN</button>
+      <button class="btn btn-sm btn-out fl-f" data-m="5">Gender</button>
+    </div>
+    <div id="fl-count" style="text-align:center;font-size:.85rem;color:#666;margin:8px 0"></div>
+    <div class="card flash-card" id="fl-card">
+      <span class="module-tag" id="fl-mod"></span>
+      <div class="term" id="fl-term"></div>
+      <div class="def" id="fl-def"></div>
+      <span class="hint">Tap to reveal definition</span>
+    </div>
+    <div style="text-align:center;margin:8px 0">
+      <button class="btn btn-no btn-sm" id="fl-again">Review again</button>
+      <button class="btn btn-ok btn-sm" id="fl-got">Got it</button>
+    </div>
+    <div id="fl-status" style="text-align:center;font-size:.85rem;color:#666;margin:8px 0"></div>`;
+
+  function showCard(){
+    if(idx>=deck.length){
+      document.getElementById('fl-count').textContent='You have been through all cards in this set. Showing them again.';
+      idx=0;deck.sort(()=>Math.random()-.5);
+    }
+    const c=deck[idx];
+    document.getElementById('fl-mod').className='module-tag '+modClass[c.mod];
+    document.getElementById('fl-mod').textContent=modNames[c.mod];
+    document.getElementById('fl-term').textContent=c.term;
+    document.getElementById('fl-def').textContent=c.def;
+    document.getElementById('fl-card').classList.remove('flipped');
+    document.getElementById('fl-count').textContent=`Card ${idx+1} of ${deck.length}`;
+    const mastered=Object.keys(S.flash).length;
+    document.getElementById('fl-status').textContent=`${mastered} of ${flashData.length} concepts mastered`;
+  }
+  document.getElementById('fl-card').onclick=()=>document.getElementById('fl-card').classList.toggle('flipped');
+  document.getElementById('fl-got').onclick=()=>{S.flash[deck[idx].term]=true;save();idx++;showCard();};
+  document.getElementById('fl-again').onclick=()=>{delete S.flash[deck[idx].term];save();deck.push(deck[idx]);idx++;showCard();};
+  p.querySelectorAll('.fl-f').forEach(b=>{
+    b.onclick=()=>{
+      const m=b.dataset.m;
+      deck=m==='all'?[...flashData].sort(()=>Math.random()-.5):flashData.filter(f=>f.mod==m).sort(()=>Math.random()-.5);
+      idx=0;showCard();
+    };
+  });
+  showCard();
+})();
+
+/* ========== THEORY SORTER ========== */
+const sorterData=[
+  {s:'States cooperate because institutions reduce the cost of making agreements and provide reliable information.',ans:'Liberalism'},
+  {s:'The structure of global capitalism transfers wealth from poor countries to rich countries systematically.',ans:'Marxism'},
+  {s:'The meaning of sovereignty has changed over time because states collectively redefine what it means through interaction.',ans:'Constructivism'},
+  {s:'Countries build nuclear weapons because they cannot trust other countries not to threaten them.',ans:'Realism'},
+  {s:'Organisations like the WTO help countries achieve mutual benefits through agreed rules on trade.',ans:'Liberalism'},
+  {s:'Global inequality is not an accident — it is built into the structure of the world economy.',ans:'Marxism'},
+  {s:'NATO survived the end of the Cold War because its members developed a shared identity, not just shared threats.',ans:'Constructivism'},
+  {s:'A rising power like China will inevitably challenge the existing order because that is what rising powers do.',ans:'Realism'},
+  {s:'The European Union shows that countries can share sovereignty and benefit from deep cooperation.',ans:'Liberalism'},
+  {s:'Multinational corporations exploit cheap labour in developing countries to maximise profit for shareholders in rich countries.',ans:'Marxism'},
+  {s:'Human rights norms spread globally because activists changed what states consider acceptable behaviour.',ans:'Constructivism'},
+  {s:'A country withdrew from international organisations because they no longer served its national interests.',ans:'Realism'},
+  {s:'Democratic countries rarely fight each other because their political systems encourage peaceful conflict resolution.',ans:'Liberalism'},
+  {s:'Free trade agreements benefit wealthy countries more because they write the rules to favour their own industries.',ans:'Marxism'},
+  {s:'A country\'s identity as a great power shapes its foreign policy more than its actual military capabilities.',ans:'Constructivism'},
+  {s:'Small states join alliances because they need protection from bigger, more powerful neighbours.',ans:'Realism'},
+  {s:'Theory should not just explain the world — it should ask who benefits from the current system and challenge injustice.',ans:'Critical Theory'},
+  {s:'A good theory accepts the existing order and tries to solve problems within it, such as reducing barriers to trade.',ans:'Problem-Solving Theory'},
+  {s:'Asking "where are the women?" in international politics reveals power structures that mainstream theories ignore.',ans:'Feminism'},
+  {s:'The global care chain shows how gender and class intersect across borders in the international political economy.',ans:'Feminism'},
+  {s:'International law only matters when powerful states decide to follow it. When it conflicts with national interest, states ignore it.',ans:'Realism'},
+  {s:'International institutions socialise states into following rules over time, even when it is not in their immediate interest.',ans:'Constructivism'},
+  {s:'Development aid from rich countries is not charity — it is a tool to maintain economic dependence and open markets for core-country exports.',ans:'Marxism'},
+  {s:'Regional trade agreements like ASEAN show that even rival states can build cooperative frameworks that benefit all members.',ans:'Liberalism'}
+];
+
+(function(){
+  const p=document.getElementById('p-sorter');
+  const labels=['Realism','Liberalism','Constructivism','Marxism','Critical Theory','Problem-Solving Theory','Feminism'];
+  const pool=[...sorterData].sort(()=>Math.random()-.5).slice(0,12);
+  p.innerHTML=`<div class="card"><h3>Theory Sorter</h3><p>Read each statement and pick the theory it reflects. This is the single most important skill for the exam — you need to be able to recognise which theory is being used.</p></div><div id="sort-list"></div><div style="text-align:center;margin:12px"><span id="sort-score"></span></div>`;
+  const list=document.getElementById('sort-list');
+  let correct=0,done=0;
+  pool.forEach((item,i)=>{
+    const c=document.createElement('div');c.className='card';c.id='si-'+i;
+    let h=`<p style="font-style:italic;margin-bottom:10px">"${item.s}"</p><div>`;
+    labels.forEach(l=>{h+=`<button class="opt-btn" data-si="${i}" data-pick="${l}">${l}</button>`;});
+    h+=`</div><div class="explain" id="exp-s-${i}">This reflects <strong>${item.ans}</strong>.</div>`;
+    c.innerHTML=h;list.appendChild(c);
+  });
+  list.addEventListener('click',e=>{
+    const b=e.target.closest('.opt-btn');if(!b)return;
+    const si=+b.dataset.si;
+    if(S.sorter['s'+si])return;
+    S.sorter['s'+si]=true;done++;
+    const ok=b.dataset.pick===pool[si].ans;
+    b.classList.add(ok?'correct':'wrong');
+    if(!ok)b.parentElement.querySelectorAll('.opt-btn').forEach(x=>{if(x.dataset.pick===pool[si].ans)x.classList.add('correct');});
+    else correct++;
+    document.getElementById('exp-s-'+si).classList.add('show');
+    b.parentElement.querySelectorAll('.opt-btn').forEach(x=>x.style.pointerEvents='none');
+    document.getElementById('sort-score').textContent=`${correct} of ${done} correct`;
+    save();
+  });
+})();
+
+/* ========== CONFUSED PAIRS ========== */
+const pairsData=[
+  {a:'Anarchy',adef:'No central authority above states. Not chaos — just no world government. All IR theories accept this as a starting point.',
+   b:'Chaos',bdef:'Total disorder and breakdown. This is NOT what anarchy means in IR. States can have order and cooperation even under anarchy.',
+   q:'A student writes: "Because of anarchy, the world is in constant chaos and there are no rules." What would you tell them?',
+   opts:['They are correct — anarchy does mean chaos','They are wrong — anarchy means no central authority, but states can still create rules and cooperate'],ans:1,
+   exp:'Anarchy is a technical term. It means no world government, not no order. Liberals argue that cooperation and institutions can exist under anarchy. Even realists accept that there are patterns and rules — they just think power matters most.'},
+  {a:'Sex',adef:'Biological differences — chromosomes, hormones, reproductive anatomy. A biological category.',
+   b:'Gender',bdef:'Socially constructed roles and expectations about masculinity and femininity. Varies across cultures and history. An analytical category in IR.',
+   q:'A friend says: "Gender is just another word for whether you are male or female." How would you respond using what you learned in class?',
+   opts:['They are right — gender and sex mean the same thing','They are mixing up two different concepts — sex is biological, gender is about social expectations and power'],ans:1,
+   exp:'This distinction is the foundation of the Gender module. Sex is about biology. Gender is about the social codes, roles, and power relations that societies build around biological difference. Gender can change across cultures and time periods.'},
+  {a:'IGO',adef:'Members are sovereign states. Created by treaties between governments. Examples: UN, EU, NATO, AU.',
+   b:'NGO / INGO',bdef:'Members are NOT states. Private organisations, usually non-profit. Examples: Amnesty International, Doctors Without Borders, Oxfam.',
+   q:'An organisation operates in 80 countries, works closely with governments, and addresses refugee crises. A classmate says it must be an IGO. Are they right?',
+   opts:['Yes — working with governments in many countries makes it an IGO','Not necessarily — what matters is whether its members are sovereign states, not who it works with'],ans:1,
+   exp:'The defining feature of an IGO is that its members are states. Many NGOs work with governments and operate globally, but that does not make them intergovernmental. Always ask: who are the members?'},
+  {a:'Supranationalism',adef:'An organisation can make binding decisions on member states, even without unanimous agreement. States give up some sovereignty. Strongest example: the EU.',
+   b:'Intergovernmentalism',bdef:'States keep control. Decisions need consensus. No authority above the state can impose decisions. Most international organisations work this way.',
+   q:'In Organisation X, all decisions require every member state to agree. One country blocks a proposal that 26 others support. What system is this?',
+   opts:['Supranationalism — the organisation made a decision','Intergovernmentalism — one state can block because consensus is required'],ans:1,
+   exp:'If one state can block a decision, that is intergovernmentalism — states retain control. Under supranationalism, the majority or a qualified majority can overrule individual states.'},
+  {a:'Absolute Gains',adef:'Total benefit from cooperation. If both sides gain, it is worth doing. Does not matter if the other side gains more. Liberals focus on this.',
+   b:'Relative Gains',bdef:'How your gains compare to the other side\'s. Even if you benefit, you may refuse if the other side benefits more. Realists focus on this.',
+   q:'Two countries negotiate a climate agreement. Country A will save $5 billion in disaster costs. Country B will save $20 billion. A realist adviser says Country A should not sign. Why?',
+   opts:['Because $5 billion is not enough money','Because Country B gains four times more, which shifts the balance of power in B\'s favour'],ans:1,
+   exp:'Realists worry about relative gains. Even though Country A benefits, Country B benefits much more — and in a competitive world, that shift in relative advantage matters. Liberals would say: take the $5 billion, both countries are better off.'},
+  {a:'Peacekeeping',adef:'Monitoring ceasefires, separating combatants, patrolling borders. Military, limited, traditional. Requires consent of the parties.',
+   b:'Peacebuilding',bdef:'Rebuilding institutions, holding elections, training police, reconciliation, addressing root causes of conflict. Broader. Emerged after the Cold War.',
+   q:'After a civil war ends, the UN helps the country write a new constitution, holds elections, and trains a new police force. What is this?',
+   opts:['Peacekeeping — the UN is involved in the country','Peacebuilding — it goes beyond military tasks to address the root causes of conflict'],ans:1,
+   exp:'Peacekeeping stops the fighting. Peacebuilding tries to prevent it from starting again by building institutions and addressing underlying problems. The shift from one to the other happened after the Cold War.'},
+  {a:'MDGs',adef:'Millennium Development Goals (2000–2015). Eight goals focused mainly on developing countries. Targets: halving poverty, primary education, child mortality.',
+   b:'SDGs',bdef:'Sustainable Development Goals (2015–2030). Seventeen goals. Broader scope. Apply to ALL countries — rich and poor. Include climate, inequality, sustainable cities.',
+   q:'A government official from Sweden says: "These new global goals apply to us too, not just to developing countries." Which goals is she talking about?',
+   opts:['The MDGs — they applied to everyone','The SDGs — unlike the MDGs, they are designed to be universal'],ans:1,
+   exp:'The SDGs were deliberately designed to apply to all countries. Sweden has SDG targets on climate action, gender equality, and sustainable consumption just like any developing country does. The MDGs focused mainly on the Global South.'},
+  {a:'Problem-Solving Theory',adef:'Accepts the existing order and asks: how do we make it work better? Does not question who benefits. Works within the system.',
+   b:'Critical Theory',bdef:'Questions the existing order. Asks: who benefits? Who is harmed? Why does the system look like this? Seeks to challenge and transform unjust structures.',
+   q:'Researcher A studies how to improve World Bank lending procedures. Researcher B asks why the World Bank exists and whose interests it serves. Who is the critical theorist?',
+   opts:['Researcher A — improving procedures requires critical thinking','Researcher B — questioning the purpose and beneficiaries of the institution is critical theory'],ans:1,
+   exp:'Problem-solving theory works within the system to fix it. Critical theory steps outside the system to question it. Robert Cox: "Theory is always for someone and for some purpose." Critical theory asks: for whom?'}
+];
+
+(function(){
+  const p=document.getElementById('p-pairs');
+  p.innerHTML=`<div class="card"><h3>Confused Pairs</h3><p>These are the concepts students mix up most often on exams. Study both definitions, then answer the question to check your understanding.</p></div><div id="pair-list"></div>`;
+  const list=document.getElementById('pair-list');
+  pairsData.forEach((pair,i)=>{
+    const c=document.createElement('div');c.className='card';c.id='pi-'+i;
+    c.innerHTML=`<div class="pair-box"><div class="pair-side"><h4>${pair.a}</h4><p>${pair.adef}</p></div><div class="pair-side"><h4>${pair.b}</h4><p>${pair.bdef}</p></div></div>
+    <div style="margin-top:10px;padding:10px;background:var(--sec);border-radius:8px"><p style="font-weight:700;font-size:.88rem;margin-bottom:8px">${pair.q}</p>
+    ${pair.opts.map((o,oi)=>`<button class="opt-btn" data-pi="${i}" data-oi="${oi}">${o}</button>`).join('')}
+    </div><div class="explain" id="exp-p-${i}">${pair.exp}</div>`;
+    list.appendChild(c);
+  });
+  list.addEventListener('click',e=>{
+    const b=e.target.closest('.opt-btn');if(!b)return;
+    const pi=+b.dataset.pi,oi=+b.dataset.oi;
+    if(S.pairs['p'+pi])return;S.pairs['p'+pi]=true;
+    const ok=oi===pairsData[pi].ans;
+    b.classList.add(ok?'correct':'wrong');
+    if(!ok)b.parentElement.querySelectorAll('.opt-btn').forEach(x=>{if(+x.dataset.oi===pairsData[pi].ans)x.classList.add('correct');});
+    document.getElementById('exp-p-'+pi).classList.add('show');
+    b.parentElement.querySelectorAll('.opt-btn').forEach(x=>x.style.pointerEvents='none');
+    save();
+  });
+})();
+
+/* ========== ESSAY BUILDER ========== */
+const essayTopics=[
+  {title:'Globalization and State Sovereignty',
+   prompt:'To what extent has globalization eroded state sovereignty? Discuss with reference to at least two theoretical perspectives.',
+   model:'<strong>Thesis:</strong> "Globalization has transformed state sovereignty rather than destroyed it — states have lost control in some areas but gained new tools in others."<br><br><strong>Theory 1 — Liberalism:</strong> Economic interdependence and supranational institutions limit what states can do alone. Example: EU regulations override national law; WTO dispute settlement binds member states. States voluntarily give up sovereignty to gain benefits.<br><br><strong>Theory 2 — Realism:</strong> States remain the most powerful actors. Example: Trump\'s tariff war shows one powerful state can reshape the global trading system overnight. Sovereignty is not eroded — states choose when to engage with globalization.<br><br><strong>Conclusion:</strong> Globalization changes what sovereignty looks like, but states still make the key decisions.'},
+  {title:'UN: Peacekeeping to Peacebuilding',
+   prompt:'Discuss the evolution of the United Nations from a focus on traditional peacekeeping to broader peacebuilding activities.',
+   model:'<strong>Thesis:</strong> "The UN shifted from peacekeeping to peacebuilding after the Cold War because traditional methods could not handle complex civil conflicts."<br><br><strong>Para 1 — Traditional peacekeeping:</strong> Cold War era. Monitoring ceasefires between states. Example: UNFICYP in Cyprus (1964). Required consent, impartiality, minimal force.<br><br><strong>Para 2 — Why the shift:</strong> Post-Cold War conflicts were internal (Somalia, Rwanda, Bosnia). Traditional peacekeeping could not stop genocide or rebuild collapsed states. The failures of the 1990s forced change.<br><br><strong>Para 3 — Peacebuilding:</strong> Brahimi Report (2000) recommended broader mandates. Modern missions include institution-building, elections, DDR, reconciliation. Examples: Timor-Leste, Sierra Leone.<br><br><strong>Conclusion:</strong> The evolution was necessary but created new challenges around sovereignty and resources.'},
+  {title:'Why States Create IOs',
+   prompt:'Why do states create International Organizations? Discuss with reference to at least two theoretical perspectives.',
+   model:'<strong>Thesis:</strong> "States create IOs for different reasons — to cooperate, to control, or to legitimise their interests."<br><br><strong>Theory 1 — Liberalism:</strong> IOs reduce transaction costs, share information, and solve problems no single state can handle alone. Example: WTO provides rules and dispute settlement for global trade.<br><br><strong>Theory 2 — Realism:</strong> Powerful states create IOs to institutionalise their own preferences. IOs reflect the distribution of power. Example: UNSC veto gives the P5 permanent control.<br><br><strong>Conclusion:</strong> IOs do facilitate cooperation, but the rules are shaped by power. Both perspectives have merit.'},
+  {title:'Realism vs. Liberalism on Cooperation',
+   prompt:'Compare realism and liberalism in terms of their expectations about state cooperation. Use at least one real-world example.',
+   model:'<strong>Thesis:</strong> "Realism and liberalism fundamentally disagree about whether lasting cooperation is possible under anarchy."<br><br><strong>Realism:</strong> Cooperation is difficult, temporary, constrained by the security dilemma and relative gains. Example: US and USSR cooperated against Nazi Germany in WWII but became enemies immediately after.<br><br><strong>Liberalism:</strong> Cooperation is possible, durable, and deepens through institutions. Example: EU member states have pooled sovereignty in trade, regulation, and currency.<br><br><strong>Conclusion:</strong> The EU supports liberalism; great-power rivalry supports realism. Which theory is right depends on where you look.'}
+];
+
+(function(){
+  const p=document.getElementById('p-essay');
+  p.innerHTML=`<div class="card"><h3>Essay Outline Builder</h3><p>Pick a topic and practise building an argument. Write your own outline, then reveal a model to compare against. Remember: <strong>Define → Explain → Apply → Reflect</strong> and use <strong>PEEL</strong> for each paragraph.</p></div><div id="essay-list"></div>`;
+  const list=document.getElementById('essay-list');
+  essayTopics.forEach((t,i)=>{
+    const c=document.createElement('div');c.className='card';
+    c.innerHTML=`<h3>${t.title}</h3><p style="font-style:italic;margin-bottom:12px">"${t.prompt}"</p>
+    <div class="essay-step"><label>1. Your Thesis (one sentence)</label><textarea placeholder="What is your argument?"></textarea></div>
+    <div class="essay-step"><label>2. Theory 1</label><textarea placeholder="Which theory? What does it say about this?"></textarea></div>
+    <div class="essay-step"><label>3. Theory 2</label><textarea placeholder="Which theory? What does it say about this?"></textarea></div>
+    <div class="essay-step"><label>4. Real-world example(s)</label><textarea placeholder="Name specific events, decisions, or institutions..."></textarea></div>
+    <div class="essay-step"><label>5. Conclusion</label><textarea placeholder="What is your judgement?"></textarea></div>
+    <div style="text-align:center;margin:10px 0"><button class="btn btn-acc btn-sm" id="er-${i}">Reveal Model Outline</button></div>
+    <div class="model-outline" id="em-${i}">${t.model}</div>`;
+    list.appendChild(c);
+  });
+  list.addEventListener('click',e=>{
+    const b=e.target.closest('button[id^="er-"]');if(!b)return;
+    const i=b.id.split('-')[1];
+    document.getElementById('em-'+i).classList.add('show');
+    S.essays['e'+i]=true;save();
+    b.textContent='Model outline shown';b.disabled=true;b.style.opacity='.6';
+  });
+})();
+
+/* ========== EXAM SIMULATOR — MCQ BANK (60 questions) ========== */
+const examBank=[
+  // MODULE 1 — IR Theory (12 questions)
+  {mod:1,q:'Which theory argues that the international system is defined by competition for power among self-interested states?',
+   opts:['Liberalism','Constructivism','Realism','Marxism','Feminism'],ans:2,
+   exp:'Realism sees world politics as a struggle for power and security among states in an anarchic system.'},
+  {mod:1,q:'A scholar argues that international institutions help states overcome collective action problems by reducing uncertainty. This view is most associated with:',
+   opts:['Realism','Marxism','Feminism','Liberalism','Constructivism'],ans:3,
+   exp:'Liberals believe institutions reduce transaction costs, provide information, and make cooperation possible.'},
+  {mod:1,q:'The statement "anarchy is what states make of it" is most closely associated with:',
+   opts:['Realism','Liberalism','Marxism','Constructivism','Feminism'],ans:3,
+   exp:'This is Alexander Wendt\'s famous constructivist claim — anarchy does not have a single fixed meaning; its effects depend on how states understand and interact with each other.'},
+  {mod:1,q:'A theory that asks "who benefits from the current international order?" rather than trying to make it work better is called:',
+   opts:['Problem-solving theory','Realism','Critical theory','Liberalism','Constructivism'],ans:2,
+   exp:'Robert Cox distinguished critical theory (which questions the existing order) from problem-solving theory (which works within it).'},
+  {mod:1,q:'Country A refuses to sign an arms control treaty even though both sides would benefit, because Country B would gain a larger military advantage. This reasoning reflects:',
+   opts:['Absolute gains thinking','Liberal institutionalism','Relative gains thinking','Constructivism','Marxist analysis'],ans:2,
+   exp:'Realists focus on relative gains — how your gains compare to the other side. Even mutual benefit is rejected if the other side gains more.'},
+  {mod:1,q:'Which factor would a constructivist consider MOST important in explaining why a state goes to war?',
+   opts:['The size of its military','Its economic resources','How it defines its identity and interests through social interaction','Its geographic position','The distribution of power in the system'],ans:2,
+   exp:'Constructivists emphasise ideational factors: norms, identity, and shared understandings shape what states want and how they behave.'},
+  {mod:1,q:'A scholar who studies global capitalism and argues that wealthy nations systematically exploit poorer ones is working within which tradition?',
+   opts:['Realism','Liberalism','Constructivism','Marxism','Problem-solving theory'],ans:3,
+   exp:'Marxism focuses on how global capitalism creates and maintains structural inequality between rich and poor countries.'},
+  {mod:1,q:'Which pair of concepts is MOST central to the disagreement between realists and liberals about international cooperation?',
+   opts:['Norms vs. identities','Core vs. periphery','Absolute gains vs. relative gains','Sex vs. gender','Peacekeeping vs. peacebuilding'],ans:2,
+   exp:'Liberals think states focus on absolute gains (total benefit) which makes cooperation attractive. Realists think states worry about relative gains (who gains more) which makes cooperation difficult.'},
+  {mod:1,q:'Robert Cox argued that "theory is always for someone and for some purpose." This statement challenges the idea that:',
+   opts:['States are the most important actors','Theories can be completely objective and neutral','International institutions promote cooperation','Norms shape state behaviour','Military power determines outcomes'],ans:1,
+   exp:'Cox\'s point is that all theory serves particular interests. Problem-solving theories serve the existing power structure; critical theories challenge it. No theory is truly neutral.'},
+  {mod:1,q:'A constructivist would argue that the end of the Cold War was surprising because:',
+   opts:['The USSR ran out of money','NATO had superior military power','Soviet leaders changed their understanding of their own identity and interests','The US imposed crippling economic sanctions','The UN brokered a peace deal'],ans:2,
+   exp:'Constructivists explain the peaceful end of the Cold War through ideational change — Gorbachev redefined Soviet identity and interests, making cooperation possible where realists expected continued competition.'},
+  {mod:1,q:'Which approach would be LEAST likely to question the existing structure of the international system?',
+   opts:['Feminism','Marxism','Problem-solving theory','Critical theory','Post-colonialism'],ans:2,
+   exp:'Problem-solving theory takes the world as it is and tries to make it work more smoothly. The other four approaches all challenge existing structures in different ways.'},
+  {mod:1,q:'A diplomat says: "We must join this alliance because our neighbour is becoming too powerful." This reasoning reflects:',
+   opts:['Liberal institutionalism','Constructivism','Balance of power thinking (realism)','Marxist analysis','Feminist critique'],ans:2,
+   exp:'Balancing against a rising power is a core realist concept. States form alliances not out of shared values but to counter threats.'},
+
+  // MODULE 2 — Globalization (12 questions)
+  {mod:2,q:'Which definition best captures globalization as used in the Baylis et al. textbook?',
+   opts:['The spread of American culture worldwide','The widening, deepening, and speeding up of global interconnectedness','The decline of the nation-state','A purely economic phenomenon driven by trade','The victory of capitalism over communism'],ans:1,
+   exp:'Baylis, Smith & Owens define globalization as the widening, deepening, and speeding up of worldwide interconnectedness across all dimensions of life.'},
+  {mod:2,q:'A company headquartered in Japan designs products in California, manufactures them in Vietnam, and sells them in Europe. This illustrates:',
+   opts:['Nationalism','Isolationism','Deterritorialization','Cultural imperialism','Protectionism'],ans:2,
+   exp:'Deterritorialization means activities transcend national boundaries. Production, design, and consumption happening in different countries is a classic example.'},
+  {mod:2,q:'A Marxist scholar argues that free trade agreements primarily benefit wealthy nations at the expense of developing countries. This reflects which concept?',
+   opts:['Absolute gains','Supranationalism','Deterritorialization','Core-periphery inequality','Intergovernmentalism'],ans:3,
+   exp:'The core-periphery framework argues that the global economic system structurally benefits wealthy (core) nations while exploiting poorer (periphery) ones.'},
+  {mod:2,q:'Which statement about the history of globalization is MOST accurate?',
+   opts:['Globalization began in the 1990s with the internet','Globalization is entirely new and has no historical precedent','There have been multiple waves of globalization stretching back centuries','Globalization only refers to economic trade','The first wave of globalization happened after World War II'],ans:2,
+   exp:'Globalization has occurred in waves: early exploration, the Pax Britannica era, post-WWII institutions, and late 20th century digital integration.'},
+  {mod:2,q:'The period 1850–1914 is associated with globalization under whose dominance?',
+   opts:['The United States','The Soviet Union','The United Nations','Britain','China'],ans:3,
+   exp:'The Pax Britannica era saw massive expansion of free trade, capital flows, and British naval supremacy — an early and intense wave of economic globalization.'},
+  {mod:2,q:'A critic argues that globalization makes rich countries richer and poor countries poorer. This view is MOST consistent with:',
+   opts:['Liberal optimism','Realist security analysis','Constructivist identity theory','Dependency theory','Problem-solving theory'],ans:3,
+   exp:'Dependency theorists argue that globalization deepens structural inequality — the poverty of the periphery is produced by its relationship with the core.'},
+  {mod:2,q:'Which of the following is an example of the cultural dimension of globalization?',
+   opts:['A trade agreement between two countries','The spread of K-pop music to audiences worldwide','A military alliance between neighbouring states','A country building nuclear weapons','An increase in tariff rates'],ans:1,
+   exp:'Globalization has cultural, economic, political, technological, and environmental dimensions. The global spread of music, film, food, and fashion is cultural globalization.'},
+  {mod:2,q:'A liberal would argue that globalization:',
+   opts:['Is entirely negative and exploitative','Undermines state power completely','Creates opportunities for mutual benefit through trade and cooperation','Only benefits military powers','Is irrelevant to international relations'],ans:2,
+   exp:'Liberals are generally optimistic about globalization, arguing it creates interdependence and mutual benefits through trade, institutions, and cooperation.'},
+  {mod:2,q:'Which claim about globalization would a realist MOST agree with?',
+   opts:['Globalization makes war impossible','Globalization has eliminated state sovereignty','States still control the most important decisions and can reverse globalization when it suits them','Global institutions are more powerful than states','Globalization benefits everyone equally'],ans:2,
+   exp:'Realists argue that states remain the key actors and retain the ability to shape, limit, or reverse globalization through policy choices like tariffs or withdrawal from treaties.'},
+  {mod:2,q:'The concept of "unevenness" in relation to globalization means:',
+   opts:['Globalization affects all countries in exactly the same way','Some countries and groups benefit much more than others','Globalization has completely stopped','Only large countries are affected by globalization','Globalization is a myth'],ans:1,
+   exp:'The unevenness of globalization is a central concept — its effects vary dramatically across countries, regions, social classes, and genders.'},
+  {mod:2,q:'Andre Gunder Frank argued that underdevelopment in poor countries is:',
+   opts:['A natural stage that all countries go through','Caused by a lack of effort by developing countries','Actively produced by the global capitalist system','Unrelated to international trade','Easily fixed by foreign aid'],ans:2,
+   exp:'Frank\'s "development of underdevelopment" thesis argues that periphery poverty is not natural but is created and maintained by exploitative relationships with core economies.'},
+  {mod:2,q:'A country decides to impose heavy tariffs on imported goods to protect its own industries. This is an example of:',
+   opts:['Deterritorialization','Free trade','Protectionism','Supranationalism','Peacebuilding'],ans:2,
+   exp:'Protectionism is the opposite of free trade — using tariffs, quotas, or regulations to shield domestic industries from foreign competition.'},
+
+  // MODULE 3 — International Organizations (12 questions)
+  {mod:3,q:'What is the defining feature that makes an organisation "intergovernmental"?',
+   opts:['It operates in more than one country','It receives funding from governments','Its members are sovereign states','It has an office at the United Nations','It deals with political issues'],ans:2,
+   exp:'The key feature of an IGO is that its members are sovereign states, joined by formal agreements or treaties.'},
+  {mod:3,q:'Which of the following is NOT an intergovernmental organisation?',
+   opts:['NATO','The African Union','Doctors Without Borders','The European Union','The United Nations'],ans:2,
+   exp:'Doctors Without Borders (MSF) is an international NGO — its members are medical professionals and volunteers, not states.'},
+  {mod:3,q:'An organisation where decisions require all member states to agree, and any single state can block a proposal, operates on the principle of:',
+   opts:['Supranationalism','Majority rule','Intergovernmentalism','Deterritorialization','Peacebuilding'],ans:2,
+   exp:'Intergovernmentalism means states retain control and can block decisions. No authority above the state can overrule it.'},
+  {mod:3,q:'The European Commission can propose regulations that become law across all EU member states, even if some governments disagree. This is an example of:',
+   opts:['Intergovernmentalism','Bilateral diplomacy','Supranationalism','Peacekeeping','Protectionism'],ans:2,
+   exp:'When an organisation can impose binding rules without unanimous consent, that is supranationalism. The EU is the strongest example.'},
+  {mod:3,q:'A realist would explain the creation of international organisations by arguing that:',
+   opts:['States create IOs to promote justice and equality','IOs emerge from shared norms and identities','Powerful states create IOs to serve their own interests','IOs replace the need for state power','IOs always constrain state behaviour'],ans:2,
+   exp:'Realists see IOs as tools of powerful states — created to institutionalise their preferences, not to promote equal cooperation.'},
+  {mod:3,q:'A liberal would argue that the main benefit of international organisations is:',
+   opts:['They allow powerful states to dominate weaker ones','They reduce the costs of cooperation and help states solve shared problems','They are irrelevant to real power politics','They replace state sovereignty entirely','They promote revolution against capitalism'],ans:1,
+   exp:'Liberals argue IOs reduce transaction costs, provide information, and create frameworks for cooperation that benefit all members.'},
+  {mod:3,q:'A constructivist explanation for why states follow international rules even when it is costly would emphasise:',
+   opts:['Fear of military punishment','Economic self-interest','The socialising effect of norms and institutional culture','The distribution of military power','Class struggle'],ans:2,
+   exp:'Constructivists argue that institutions socialise states — over time, states internalise norms and follow rules because they become part of their identity, not just because of costs and benefits.'},
+  {mod:3,q:'Which of the following best explains why the number of IOs has grown dramatically since 1945?',
+   opts:['States have lost all sovereignty','There are fewer conflicts to deal with','Global problems became more complex and interconnected, requiring collective responses','National governments were replaced by international ones','IOs forced states to join'],ans:2,
+   exp:'Growing interdependence, new transnational challenges (environment, trade, health), and the complexity of global governance drove the proliferation of IOs.'},
+  {mod:3,q:'A Marxist would argue that international economic organisations like the IMF and World Bank:',
+   opts:['Promote equal development for all countries','Serve the interests of wealthy core countries at the expense of the periphery','Are neutral technical institutions','Have no connection to global capitalism','Successfully eliminate poverty'],ans:1,
+   exp:'Marxists view international economic institutions as tools that maintain core-periphery inequality through conditionality, structural adjustment, and market liberalisation policies.'},
+  {mod:3,q:'An organisation where members are private citizens and non-profit groups working across borders on human rights issues is best classified as:',
+   opts:['An IGO','A state','A multinational corporation','An INGO','A specialized agency'],ans:3,
+   exp:'An international NGO (INGO) is made up of private actors, not states. Human rights organisations like Human Rights Watch or Amnesty International are classic examples.'},
+  {mod:3,q:'Which statement about the relationship between IOs and state sovereignty is MOST accurate?',
+   opts:['IOs always strengthen sovereignty','IOs always weaken sovereignty','The relationship depends on the type of IO and the theoretical perspective you apply','IOs have no effect on sovereignty','Sovereignty disappeared when IOs were created'],ans:2,
+   exp:'The IO-sovereignty relationship is complex and contested. Realists say IOs are tools of states (sovereignty preserved). Liberals say states voluntarily limit sovereignty for benefits. The answer depends on your theoretical lens.'},
+  {mod:3,q:'A country joins a regional trade organisation hoping to increase its exports and economic growth. Which theoretical perspective best explains this decision?',
+   opts:['Marxism — the country is being exploited','Realism — the country is balancing against a rival','Liberalism — the country expects absolute gains from cooperation','Constructivism — the country\'s identity requires membership','Feminism — the country is addressing gender inequality'],ans:2,
+   exp:'Joining an organisation for mutual economic benefit reflects liberal thinking about absolute gains and the benefits of institutional cooperation.'},
+
+  // MODULE 4 — United Nations (12 questions)
+  {mod:4,q:'Which body in the UN system has the power to make decisions that all member states are legally required to follow?',
+   opts:['The General Assembly','ECOSOC','The Secretariat','The Security Council','The International Court of Justice'],ans:3,
+   exp:'Only the Security Council can pass binding resolutions under Chapter VII of the UN Charter. The General Assembly passes recommendations.'},
+  {mod:4,q:'The right of any permanent member of the Security Council to block a resolution is called:',
+   opts:['Supranationalism','Intergovernmentalism','Majority rule','The veto power','Collective security'],ans:3,
+   exp:'The five permanent members (US, UK, France, Russia, China) each have veto power — they can block any substantive resolution.'},
+  {mod:4,q:'Which international organisation was created after World War I, preceded the United Nations, but ultimately failed to prevent another world war?',
+   opts:['NATO','The European Union','The League of Nations','The World Trade Organization','ASEAN'],ans:2,
+   exp:'The League of Nations (1920) was the first major attempt at a global peace organisation. It failed because key states did not join or withdrew, and it could not enforce its decisions.'},
+  {mod:4,q:'A country proposes expanding the permanent membership of the Security Council to include nations from Africa, Asia, and Latin America. This is an example of:',
+   opts:['Peacekeeping','Peacebuilding','Security Council reform','Deterritorialization','Dependency theory'],ans:2,
+   exp:'Expanding permanent membership is one of the most discussed Security Council reforms — aimed at making the Council more representative of the modern world.'},
+  {mod:4,q:'The shift from traditional peacekeeping to peacebuilding happened primarily:',
+   opts:['During World War II','During the Cold War','After the Cold War, in the 1990s','In the 2020s','Before the League of Nations'],ans:2,
+   exp:'The end of the Cold War brought a wave of complex internal conflicts (Somalia, Rwanda, Bosnia) that traditional peacekeeping could not handle, driving the shift to broader peacebuilding.'},
+  {mod:4,q:'Which of the following activities would be classified as peacebuilding rather than peacekeeping?',
+   opts:['Monitoring a ceasefire between two armies','Patrolling a demilitarised zone','Helping a post-conflict country hold elections and rebuild its judiciary','Separating combatants along a border','Observing a weapons handover'],ans:2,
+   exp:'Elections and judicial reform address root causes of conflict — that is peacebuilding. The other options are traditional peacekeeping activities.'},
+  {mod:4,q:'The Sustainable Development Goals differ from the Millennium Development Goals in that the SDGs:',
+   opts:['Have fewer goals','Apply only to Africa','Were created before the MDGs','Are broader in scope and apply to all countries','Focus only on economic growth'],ans:3,
+   exp:'The SDGs (17 goals, 2015–2030) are universal and broader than the MDGs (8 goals, 2000–2015), covering climate, inequality, sustainable cities, and more.'},
+  {mod:4,q:'A realist critique of the United Nations would argue that:',
+   opts:['The UN successfully overrides great-power interests','The UN is a neutral and effective body','The UN is constrained by the interests of powerful states, especially the P5','The UN has made state sovereignty irrelevant','The UN always acts in the interest of peace'],ans:2,
+   exp:'Realists see the UN as reflecting the distribution of power. The P5 veto ensures that no resolution can pass against the interests of any permanent member.'},
+  {mod:4,q:'UNICEF is best classified as:',
+   opts:['A principal organ of the UN','A specialized agency like WHO','A fund established by the General Assembly','An intergovernmental organisation separate from the UN','A non-governmental organisation'],ans:2,
+   exp:'UNICEF is a UN fund/programme — a subsidiary body of the General Assembly. It is NOT a specialized agency (like WHO, ILO, or UNESCO) despite being part of the UN system.'},
+  {mod:4,q:'Which of the following is NOT one of the six principal organs of the United Nations?',
+   opts:['The General Assembly','The Security Council','The World Health Organization','ECOSOC','The International Court of Justice'],ans:2,
+   exp:'WHO is a specialized agency linked to the UN, not a principal organ. The six principal organs are: General Assembly, Security Council, ECOSOC, Trusteeship Council, ICJ, and Secretariat.'},
+  {mod:4,q:'The failures in Rwanda (1994) and Srebrenica (1995) demonstrated that:',
+   opts:['Traditional peacekeeping was sufficient for all conflicts','The UN had too many troops','The Security Council always acts quickly and effectively','Traditional peacekeeping could not handle complex civil wars and humanitarian crises','The UN should be abolished'],ans:3,
+   exp:'Rwanda and Srebrenica exposed the limits of traditional peacekeeping — neutral observation and ceasefire monitoring were inadequate when faced with genocide and ethnic cleansing.'},
+  {mod:4,q:'A proposal to remove or limit the veto power of the P5 is controversial because:',
+   opts:['No one has ever suggested it','The General Assembly has already abolished it','The permanent members would never agree to give up their own privilege','The veto is not important','Small states support the veto'],ans:2,
+   exp:'Veto reform is the most politically difficult aspect of Security Council reform because the P5 themselves would need to agree — and no permanent member has shown willingness to surrender this power.'},
+
+  // MODULE 5 — Gender (12 questions)
+  {mod:5,q:'In academic IR, "gender" refers to:',
+   opts:['Biological differences between males and females','Socially constructed roles and expectations about masculinity and femininity','A synonym for "women"','Physical strength','Reproductive biology'],ans:1,
+   exp:'Gender in IR is about social codes — the expectations, roles, and power relations societies construct around the categories of masculine and feminine.'},
+  {mod:5,q:'The concept of intersectionality argues that:',
+   opts:['Gender is the only form of inequality that matters','All women experience oppression in the same way','Gender interacts with race, class, and other power structures to produce different experiences','Men are not affected by gender','Biological sex determines all social outcomes'],ans:2,
+   exp:'Intersectionality (Crenshaw) shows that gender does not operate alone — it intersects with race, class, sexuality, and other structures to create different experiences of power and inequality.'},
+  {mod:5,q:'R.W. Connell\'s concept of "hegemonic masculinity" refers to:',
+   opts:['The idea that all men are violent','The dominant form of masculinity held up as the ideal in a society','A biological trait found in all males','A feminist theory about women\'s empowerment','A type of international organisation'],ans:1,
+   exp:'Hegemonic masculinity is the culturally dominant ideal of manhood — often associated with traits like rationality, authority, heterosexuality, and physical strength. It shapes politics and institutions.'},
+  {mod:5,q:'When feminist scholars describe traditional IR as "gender-blind," they mean that:',
+   opts:['IR scholars could not see properly','Mainstream IR successfully addressed all gender issues','Traditional IR theories largely ignored how gender shapes global politics','Gender is irrelevant to IR','Women were already fully represented in IR scholarship'],ans:2,
+   exp:'Gender-blindness means that mainstream theories did not ask questions about gender — they assumed world politics could be understood without considering masculinity, femininity, or the roles of women.'},
+  {mod:5,q:'The "reproductive economy" includes:',
+   opts:['Stock market trading','Arms manufacturing','Oil production','Childcare, cooking, cleaning, and emotional labour','International trade in goods'],ans:3,
+   exp:'The reproductive economy refers to the unpaid and undervalued care work that sustains societies. Feminist scholars argue this work — mostly done by women — is systematically invisible in traditional economic and IR analysis.'},
+  {mod:5,q:'A scholar argues that ideas about "being a real man" influence how states make decisions about going to war. This analysis draws on:',
+   opts:['Realist balance of power theory','Liberal institutionalism','Marxist class analysis','Gender analysis of masculinity in IR','Problem-solving theory'],ans:3,
+   exp:'Analysing how constructions of masculinity shape foreign policy and security decisions is a core contribution of feminist/gender scholarship in IR.'},
+  {mod:5,q:'Which of the following statements about gender in IR is correct?',
+   opts:['Gender analysis only applies to women','Gender is purely a biological concept','Gender analysis examines both masculinity and femininity and how they shape world politics','Gender has no connection to security issues','Only feminist scholars use the concept of gender'],ans:2,
+   exp:'Gender analysis in IR examines how ideas of both masculinity and femininity shape conflict, security, institutions, and the global economy — it is not limited to studying women.'},
+  {mod:5,q:'A feminist scholar studying a peace negotiation notices that all negotiators are men and asks how this affects the outcome. This reflects the question:',
+   opts:['"Who has the most weapons?"','"What is the GDP of each country?"','"Where are the women?"','"Which country is most powerful?"','"How efficient is the process?"'],ans:2,
+   exp:'"Where are the women?" is Cynthia Enloe\'s foundational feminist question — it draws attention to women\'s absence from (or invisible presence in) international politics and asks what difference it makes.'},
+  {mod:5,q:'A country has laws guaranteeing equal pay, but women still earn significantly less than men. An intersectional analysis would explain this by pointing to:',
+   opts:['The failure of legal systems entirely','The interaction of gender with class, race, ethnicity, and other factors that create different experiences for different groups of women','The natural superiority of men','The irrelevance of gender to economics','The success of existing equality policies'],ans:1,
+   exp:'Intersectionality explains that formal legal equality does not guarantee real equality because gender interacts with class, race, and other structures to produce different outcomes for different women.'},
+  {mod:5,q:'The claim that "gender is not just about women — it is about how masculinity and femininity shape global politics" is significant because:',
+   opts:['It narrows the scope of gender analysis','It excludes women from the discussion','It broadens gender analysis to include the study of masculinity and its role in war, security, and diplomacy','It argues that gender is irrelevant','It supports the idea that gender is purely biological'],ans:2,
+   exp:'This claim broadens the field — gender analysis includes studying how dominant ideas of masculinity shape decisions about war, military spending, diplomatic styles, and institutional culture.'},
+  {mod:5,q:'A researcher argues that the global care chain — where women from poor countries migrate to do domestic work in rich countries — shows how gender and class operate together across borders. This is an example of:',
+   opts:['Realist security analysis','Liberal trade theory','Intersectional feminist analysis','Problem-solving theory','Constructivist identity theory'],ans:2,
+   exp:'The global care chain is a key example in feminist IR — it shows how gender, class, race, and global inequality intersect in the international political economy.'},
+  {mod:5,q:'A student says: "The Gender module is only relevant for women students." What is wrong with this statement?',
+   opts:['Nothing — gender studies is only for women','Gender shapes everyone\'s lives — masculinity, femininity, and their interaction with power affect all of global politics, not just women\'s experiences','Gender is too abstract to be relevant to anyone','Only biologists should study gender','Gender studies has been completed and there is nothing left to learn'],ans:1,
+   exp:'Gender is an analytical category that applies to everyone. It shapes how wars are fought, how institutions are designed, how economies function, and how power operates — regardless of who is studying it.'}
+];
+
+/* ========== MOCK ESSAY PROMPTS ========== */
+const mockEssays=[
+  {prompt:'Is the state still the most important actor in world politics? Discuss with reference to at least two theoretical perspectives.',
+   model:'<strong>Thesis:</strong> "While new actors have emerged, the state remains central — but different theories disagree about why and how."<br><br><strong>Theory 1 — Realism:</strong> The state is and always will be the primary actor because security is the ultimate concern, and only states control military force. Example: despite globalisation, it was state decisions (Trump\'s tariffs, Russia\'s invasion of Ukraine) that reshaped the international order, not corporations or NGOs.<br><br><strong>Theory 2 — Liberalism:</strong> The state is important but not alone. International organisations, NGOs, and multinational corporations all play significant roles. Example: the EU makes binding rules on 27 states; Amnesty International influences human rights norms. States share the stage.<br><br><strong>Alternative — Marxism:</strong> The state serves the interests of capital. Multinational corporations are arguably more powerful than many states. Economic structures matter more than state decisions.<br><br><strong>Conclusion:</strong> The state remains central but its role has changed. The answer depends on which dimension of world politics you examine.'},
+  {prompt:'What are the main challenges facing the United Nations in the 21st century? Discuss with reference to specific examples.',
+   model:'<strong>Thesis:</strong> "The UN faces structural, political, and legitimacy challenges that threaten its effectiveness."<br><br><strong>Challenge 1 — Security Council gridlock:</strong> The P5 veto paralyses action on major conflicts. Example: Russia and China have blocked resolutions on Syria multiple times. The Council cannot act when permanent members are directly involved in or allied with parties to conflict.<br><br><strong>Challenge 2 — Representation and legitimacy:</strong> The Security Council reflects the power distribution of 1945, not 2026. No permanent members from Africa, Latin America, or South Asia undermines the Council\'s global legitimacy. Reform proposals exist but the P5 block changes that would dilute their power.<br><br><strong>Challenge 3 — Funding and withdrawal:</strong> The US withdrawal from multiple UN bodies (2025–26) shows that the organisation depends on member state willingness to participate and pay.<br><br><strong>Conclusion:</strong> The UN remains indispensable but needs reform it may never get, because the states that benefit most from the current structure are the ones with the power to block change.'},
+  {prompt:'Do international organisations constrain or enable powerful states? Discuss with reference to at least two theoretical perspectives.',
+   model:'<strong>Thesis:</strong> "International organisations both constrain and enable powerful states — which effect dominates depends on your theoretical lens."<br><br><strong>Theory 1 — Realism (IOs enable):</strong> Powerful states create IOs to institutionalise their preferences. The IMF voting structure gives the US effective veto power. NATO serves US security interests. IOs are tools of the powerful, not constraints on them.<br><br><strong>Theory 2 — Liberalism (IOs constrain):</strong> Once created, IOs develop their own rules and procedures that even powerful states must follow. WTO dispute settlement has ruled against the US multiple times. EU regulations constrain even the largest member states. IOs create expectations and reputational costs for breaking rules.<br><br><strong>Conclusion:</strong> Both are partially right. IOs reflect power at their creation (realism) but develop autonomous influence over time (liberalism). The US shapes the UN but is also constrained by it.'},
+  {prompt:'To what extent do realism and constructivism offer different understandings of why states go to war? Use at least one real-world example.',
+   model:'<strong>Thesis:</strong> "Realism and constructivism locate the causes of war in fundamentally different places — material power versus ideas and identity."<br><br><strong>Realism:</strong> War happens because of the security dilemma, shifts in the balance of power, and the anarchic structure of the system. States go to war to protect themselves or gain advantage. Example: Russia\'s invasion of Ukraine can be explained as a response to NATO expansion threatening Russian security — a classic realist security dilemma.<br><br><strong>Constructivism:</strong> War happens because of how states construct their identities and define threats. The same objective situation can lead to war or peace depending on how actors interpret it. Example: Russia\'s war in Ukraine is also about identity — Russia\'s self-image as a great power and its view of Ukraine as part of its historical sphere of influence shaped the decision to invade.<br><br><strong>Conclusion:</strong> Realism explains the structural pressures; constructivism explains why those pressures led to war in this case and not others. Both are needed for a complete picture.'}
+];
+
+/* ========== EXAM SIMULATOR ========== */
+let examRunning=false;
+let examTimer=null;
+let examTimeLeft=5400; // 90 minutes in seconds
+let examQuestions=[];
+let examAnswers={};
+let examEssayChoice=-1;
+let currentQ=0;
+let examPhase='setup'; // setup, mc, essay, review
+
+(function(){
+  const p=document.getElementById('p-exam');
+  renderExamSetup();
+
+  function renderExamSetup(){
+    examPhase='setup';
+    document.getElementById('timer-display').classList.remove('active');
+    p.innerHTML=`
+      <div class="card">
+        <h3>Exam Simulator</h3>
+        <p>Take a timed mock exam under real conditions. The format mirrors your actual midterm exactly:</p>
+        <p><strong>Part A:</strong> 20 multiple-choice questions (1 point each)</p>
+        <p><strong>Part B:</strong> 1 essay from a choice of 4 prompts (10 points)</p>
+        <p><strong>Time:</strong> 90 minutes</p>
+        <p>Questions are drawn randomly from a bank of 60, so every mock exam is different. You can take it as many times as you like.</p>
+        <p style="margin-top:10px">You can also choose to practise just the MC section (no essay, no timer) for quick revision.</p>
+      </div>
+      <div style="text-align:center;margin:16px 0">
+        <button class="btn btn-pri" id="start-full">Start Full Mock Exam (90 min)</button>
+        <button class="btn btn-out" id="start-mc">MC Only (no timer)</button>
+      </div>
+      ${S.exams.length?`<div class="card"><h3>Past Attempts</h3>${S.exams.map((ex,i)=>`<p>Attempt ${i+1}: MC ${ex.mc}/20 — ${ex.date}</p>`).join('')}</div>`:''}`;
+    document.getElementById('start-full').onclick=()=>startExam(true);
+    document.getElementById('start-mc').onclick=()=>startExam(false);
+  }
+
+  function startExam(full){
+    // Select 4 random questions per module
+    examQuestions=[];
+    for(let m=1;m<=5;m++){
+      const pool=examBank.filter(q=>q.mod===m).sort(()=>Math.random()-.5).slice(0,4);
+      examQuestions.push(...pool);
+    }
+    // Shuffle all 20
+    examQuestions.sort(()=>Math.random()-.5);
+    // Randomise option order within each question
+    examQuestions.forEach(q=>{
+      const indices=[0,1,2,3,4].sort(()=>Math.random()-.5);
+      const newOpts=indices.map(i=>q.opts[i]);
+      const newAns=indices.indexOf(q.ans);
+      q._opts=newOpts;q._ans=newAns;
+    });
+    examAnswers={};examEssayChoice=-1;currentQ=0;
+    examRunning=true;examPhase='mc';
+
+    if(full){
+      examTimeLeft=5400;
+      document.getElementById('timer-display').classList.add('active');
+      updateTimerDisplay();
+      examTimer=setInterval(()=>{
+        examTimeLeft--;
+        updateTimerDisplay();
+        if(examTimeLeft<=0){clearInterval(examTimer);endExam();}
+      },1000);
+    }
+    renderMCPhase();
+  }
+
+  function updateTimerDisplay(){
+    const m=Math.floor(examTimeLeft/60);const s=examTimeLeft%60;
+    const el=document.getElementById('timer-display');
+    el.textContent=`${m}:${s<10?'0':''}${s}`;
+    el.classList.toggle('warn',examTimeLeft<=300);
+  }
+
+  function renderMCPhase(){
+    const q=examQuestions[currentQ];
+    const letters='ABCDE';
+    let navHtml='<div class="exam-nav">';
+    examQuestions.forEach((_,i)=>{
+      let cls=i===currentQ?'current':'';
+      if(examAnswers[i]!==undefined)cls+=' answered';
+      navHtml+=`<button class="${cls}" data-qi="${i}">${i+1}</button>`;
+    });
+    navHtml+='</div>';
+
+    p.innerHTML=`
+      <div class="card">
+        <p style="font-size:.85rem;color:#666">Question ${currentQ+1} of 20</p>
+        ${navHtml}
+      </div>
+      <div class="card">
+        <p style="font-weight:700;margin-bottom:10px">${currentQ+1}. ${q.q}</p>
+        ${q._opts.map((o,oi)=>`<button class="opt-btn exam-opt${examAnswers[currentQ]===oi?' selected':''}" data-oi="${oi}">${letters[oi]}) ${o}</button>`).join('')}
+      </div>
+      <div style="display:flex;justify-content:space-between;margin:10px 0">
+        <button class="btn btn-out btn-sm" id="eq-prev" ${currentQ===0?'disabled':''}>Previous</button>
+        ${currentQ<19?`<button class="btn btn-pri btn-sm" id="eq-next">Next</button>`:`<button class="btn btn-acc btn-sm" id="eq-finish">${examTimer?'Go to Essay':'Submit Exam'}</button>`}
+      </div>`;
+
+    p.querySelectorAll('.exam-opt').forEach(b=>{
+      b.onclick=()=>{
+        examAnswers[currentQ]=+b.dataset.oi;
+        renderMCPhase();
+      };
+    });
+    p.querySelectorAll('.exam-nav button').forEach(b=>{
+      b.onclick=()=>{currentQ=+b.dataset.qi;renderMCPhase();};
+    });
+    if(document.getElementById('eq-prev'))document.getElementById('eq-prev').onclick=()=>{currentQ--;renderMCPhase();};
+    if(document.getElementById('eq-next'))document.getElementById('eq-next').onclick=()=>{currentQ++;renderMCPhase();};
+    if(document.getElementById('eq-finish'))document.getElementById('eq-finish').onclick=()=>{
+      if(examTimer)renderEssayPhase();
+      else endExam();
+    };
+  }
+
+  function renderEssayPhase(){
+    examPhase='essay';
+    const essays=mockEssays.sort(()=>Math.random()-.5).slice(0,4);
+    p.innerHTML=`
+      <div class="card">
+        <h3>Part B — Essay</h3>
+        <p>Choose ONE of the following questions and write your answer below. Remember: <strong>Define → Explain → Apply → Reflect</strong> and <strong>PEEL</strong> for each paragraph.</p>
+      </div>
+      ${essays.map((e,i)=>`<div class="card" style="cursor:pointer;border:2px solid ${examEssayChoice===i?'var(--pri)':'transparent'}" id="ec-${i}">
+        <p><strong>Option ${i+1}:</strong> ${e.prompt}</p>
+      </div>`).join('')}
+      <div class="card" id="essay-write-area" style="display:${examEssayChoice>=0?'block':'none'}">
+        <label style="font-weight:700;color:var(--pri);display:block;margin-bottom:6px">Your Essay (200–250 words)</label>
+        <textarea id="exam-essay-text" style="width:100%;min-height:250px;border:2px solid #ccc;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical" placeholder="Write your essay here..."></textarea>
+        <p id="word-count" style="text-align:right;font-size:.8rem;color:#666;margin-top:4px">0 words</p>
+      </div>
+      <div style="text-align:center;margin:16px 0">
+        <button class="btn btn-acc" id="submit-exam">Submit Exam</button>
+      </div>`;
+
+    // Store essays for review
+    p._mockEssays=essays;
+
+    essays.forEach((_,i)=>{
+      document.getElementById('ec-'+i).onclick=()=>{
+        examEssayChoice=i;
+        essays.forEach((_,j)=>{document.getElementById('ec-'+j).style.borderColor=j===i?'var(--pri)':'transparent';});
+        document.getElementById('essay-write-area').style.display='block';
+      };
+    });
+
+    const ta=document.getElementById('exam-essay-text');
+    if(ta)ta.oninput=()=>{
+      const wc=ta.value.trim().split(/\s+/).filter(w=>w).length;
+      document.getElementById('word-count').textContent=wc+' words';
+    };
+
+    document.getElementById('submit-exam').onclick=()=>endExam();
+  }
+
+  window.endExam=function(){
+    if(examTimer){clearInterval(examTimer);examTimer=null;}
+    examRunning=false;
+    document.getElementById('timer-display').classList.remove('active');
+
+    // Score MC
+    let mcScore=0;
+    examQuestions.forEach((q,i)=>{if(examAnswers[i]===q._ans)mcScore++;});
+
+    // Save attempt
+    S.exams.push({mc:mcScore,date:new Date().toLocaleDateString()});save();
+
+    renderReview(mcScore);
+  };
+
+  function renderReview(mcScore){
+    examPhase='review';
+    const letters='ABCDE';
+    let html=`
+      <div class="card" style="text-align:center">
+        <h3>Mock Exam Results</h3>
+        <div class="score-big">${mcScore}/20</div>
+        <div class="score-sub">Multiple Choice Score</div>
+        <div class="progress-bar"><div class="fill" style="width:${mcScore/20*100}%"></div></div>
+        <p style="margin-top:8px;font-size:.9rem">${mcScore>=16?'Excellent — you are well prepared.':mcScore>=12?'Good — review the questions you got wrong below.':mcScore>=8?'You need more revision. Study the explanations below carefully.':'Significant gaps in your knowledge. Go back to the Flashcards and Confused Pairs tabs and work through them before trying again.'}</p>
+      </div>
+      <div class="card"><h3>Question-by-Question Review</h3></div>`;
+
+    examQuestions.forEach((q,i)=>{
+      const picked=examAnswers[i];
+      const correct=q._ans;
+      const isRight=picked===correct;
+      html+=`<div class="card" style="border-left:4px solid ${isRight?'var(--ok)':'var(--no)'}">
+        <p style="font-weight:700;margin-bottom:8px">${i+1}. ${q.q}</p>`;
+      q._opts.forEach((o,oi)=>{
+        let cls='';
+        if(oi===correct)cls='correct';
+        else if(oi===picked&&!isRight)cls='wrong';
+        html+=`<div class="opt-btn ${cls}" style="pointer-events:none">${letters[oi]}) ${o}</div>`;
+      });
+      if(picked===undefined)html+=`<p style="color:var(--no);font-weight:700;font-size:.85rem;margin-top:6px">You did not answer this question.</p>`;
+      html+=`<div class="explain show">${q.exp}</div></div>`;
+    });
+
+    // Essay self-assessment
+    html+=`<div class="card"><h3>Essay Self-Assessment</h3>`;
+    if(examEssayChoice>=0&&document.getElementById('exam-essay-text')){
+      const essayText=document.getElementById('exam-essay-text').value;
+      const wc=essayText.trim().split(/\s+/).filter(w=>w).length;
+      html+=`<p>You wrote <strong>${wc} words</strong> (target: 200–250).</p>
+        <p style="margin:10px 0">Now honestly assess your own essay using the checklist below. This is how the markers will evaluate your work:</p>
+
+        <div class="self-q">
+          <label>1. Did you start with a clear thesis statement?</label>
+          <p style="font-size:.82rem;color:#666">A thesis takes a position — it says what you argue, not just what you will discuss.</p>
+        </div>
+
+        <div class="self-q">
+          <label>2. Did you use at least two theoretical perspectives?</label>
+          <p style="font-size:.82rem;color:#666">Tick which theories you used:</p>
+          <div class="check-grid" id="theory-checks">
+            <div class="check-item" onclick="this.classList.toggle('checked')">Realism</div>
+            <div class="check-item" onclick="this.classList.toggle('checked')">Liberalism</div>
+            <div class="check-item" onclick="this.classList.toggle('checked')">Constructivism</div>
+            <div class="check-item" onclick="this.classList.toggle('checked')">Marxism</div>
+            <div class="check-item" onclick="this.classList.toggle('checked')">Feminism</div>
+            <div class="check-item" onclick="this.classList.toggle('checked')">Critical Theory</div>
+          </div>
+        </div>
+
+        <div class="self-q">
+          <label>3. Did you include specific real-world examples?</label>
+          <p style="font-size:.82rem;color:#666">Not just "the UN" or "globalization" — a specific event, resolution, policy, or case.</p>
+        </div>
+
+        <div class="self-q">
+          <label>4. Did your paragraphs follow PEEL?</label>
+          <p style="font-size:.82rem;color:#666">For each paragraph, check which elements you included:</p>
+          <p style="font-size:.82rem;font-weight:600;margin:4px 0">Paragraph 1:</p>
+          <div class="peel-check"><span onclick="this.classList.toggle('on')">Point</span><span onclick="this.classList.toggle('on')">Evidence</span><span onclick="this.classList.toggle('on')">Explanation</span><span onclick="this.classList.toggle('on')">Link</span></div>
+          <p style="font-size:.82rem;font-weight:600;margin:4px 0">Paragraph 2:</p>
+          <div class="peel-check"><span onclick="this.classList.toggle('on')">Point</span><span onclick="this.classList.toggle('on')">Evidence</span><span onclick="this.classList.toggle('on')">Explanation</span><span onclick="this.classList.toggle('on')">Link</span></div>
+          <p style="font-size:.82rem;font-weight:600;margin:4px 0">Paragraph 3:</p>
+          <div class="peel-check"><span onclick="this.classList.toggle('on')">Point</span><span onclick="this.classList.toggle('on')">Evidence</span><span onclick="this.classList.toggle('on')">Explanation</span><span onclick="this.classList.toggle('on')">Link</span></div>
+        </div>
+
+        <div class="self-q">
+          <label>5. Did you write a conclusion with your own judgement?</label>
+          <p style="font-size:.82rem;color:#666">A conclusion is not a summary — it states which perspective you find more convincing and why.</p>
+        </div>
+
+        <div class="self-q">
+          <label>6. Based on the rubric below, which band does your essay fall into?</label>
+          <table class="rubric-table">
+            <tr><th>Band</th><th>Marks</th><th>What it looks like</th></tr>
+            <tr><td>Excellent</td><td>9–10</td><td>Clear thesis, accurate theory, strong examples, well-structured, critical evaluation</td></tr>
+            <tr><td>Good</td><td>7–8</td><td>Clear argument, mostly accurate theory, relevant examples, minor gaps</td></tr>
+            <tr><td>Satisfactory</td><td>5–6</td><td>Basic argument, some theory, limited examples, structure needs work</td></tr>
+            <tr><td>Weak</td><td>3–4</td><td>Vague argument, theoretical errors, few examples, poor organisation</td></tr>
+            <tr><td>Inadequate</td><td>0–2</td><td>No argument, major errors, no structure</td></tr>
+          </table>
+        </div>`;
+
+      // Model answer
+      if(p._mockEssays&&p._mockEssays[examEssayChoice]){
+        html+=`<div style="margin-top:12px"><button class="btn btn-acc btn-sm" onclick="document.getElementById('model-rev').classList.add('show');this.disabled=true;this.style.opacity='.6';this.textContent='Model shown';">Show Model Outline</button></div>
+        <div class="model-outline" id="model-rev">${p._mockEssays[examEssayChoice].model}</div>`;
+      }
+    } else {
+      html+=`<p>You did not write an essay. In the real exam, the essay is worth 10 points — one third of your grade. Always attempt it.</p>`;
+    }
+    html+=`</div>`;
+
+    html+=`<div style="text-align:center;margin:16px 0"><button class="btn btn-pri" id="retake">Take Another Mock Exam</button> <button class="btn btn-out" id="back-home">Back to Home</button></div>`;
+
+    p.innerHTML=html;
+    document.getElementById('retake').onclick=()=>renderExamSetup();
+    document.getElementById('back-home').onclick=()=>activateTab('t-landing');
+  }
+
+  // Expose for tab switching
+  window.renderExamSetup=renderExamSetup;
+})();
+
+/* ========== PROGRESS ========== */
+function renderProgress(){
+  const p=document.getElementById('p-progress');
+  const flashDone=Object.keys(S.flash).length;
+  const sorterDone=Object.keys(S.sorter).length;
+  const pairsDone=Object.keys(S.pairs).filter(k=>k.startsWith('p')).length;
+  const essaysDone=Object.keys(S.essays).length;
+  const examsTaken=S.exams.length;
+  const total=flashData.length+12+pairsData.length+4;
+  const done=flashDone+sorterDone+pairsDone+essaysDone;
+
+  p.innerHTML=`
+    <div class="card">
+      <h3>Your Progress</h3>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="num">${flashDone}/${flashData.length}</div><div class="label">Flashcards Mastered</div></div>
+        <div class="stat-box"><div class="num">${sorterDone}/12</div><div class="label">Theory Sorter</div></div>
+        <div class="stat-box"><div class="num">${pairsDone}/${pairsData.length}</div><div class="label">Confused Pairs</div></div>
+        <div class="stat-box"><div class="num">${essaysDone}/4</div><div class="label">Essay Outlines</div></div>
+        <div class="stat-box"><div class="num">${examsTaken}</div><div class="label">Mock Exams Taken</div></div>
+      </div>
+      <div class="progress-bar"><div class="fill" style="width:${Math.round(done/total*100)}%"></div></div>
+      <p style="text-align:center;font-size:.88rem;color:#666;margin-top:8px">Review progress: ${Math.round(done/total*100)}% complete</p>
+    </div>
+    <div class="card">
+      <h3>Am I Ready?</h3>
+      <p>${flashDone>=flashData.length?'You have reviewed all flashcard concepts.':'You still have '+(flashData.length-flashDone)+' flashcard concepts to review.'}</p>
+      <p>${sorterDone>=12?'You have completed the Theory Sorter.':'You have '+sorterDone+' of 12 Theory Sorter questions done.'}</p>
+      <p>${pairsDone>=pairsData.length?'You have completed all Confused Pairs.':'You have '+pairsDone+' of '+pairsData.length+' Confused Pairs done.'}</p>
+      <p>${essaysDone>=4?'You have practised all four essay outlines.':'You have practised '+essaysDone+' of 4 essay outlines.'}</p>
+      <p>${examsTaken>0?'You have taken '+examsTaken+' mock exam(s). Latest MC score: '+S.exams[S.exams.length-1].mc+'/20.':'You have not taken a mock exam yet. Try the Exam Simulator tab.'}</p>
+    </div>
+    <div class="card">
+      <h3>Exam Reminder</h3>
+      <p><strong>Date:</strong> Thursday, 24 April 2026</p>
+      <p><strong>Worth:</strong> 30% of your final grade</p>
+      <p><strong>Format:</strong> 20 MC (1 pt each) + 1 essay (10 pts) = 30 points</p>
+      <p><strong>Covers:</strong> Modules 1–5 (IR Theory, Globalization, IOs, UN, Gender)</p>
+      <p><strong>Bring:</strong> A pen. Nothing else.</p>
+    </div>
+    <div style="text-align:center;margin:16px"><button class="btn btn-no" onclick="if(confirm('Reset all progress? This cannot be undone.')){localStorage.removeItem('${SK}');location.reload();}">Reset All Progress</button></div>`;
+}
+</script>
+</body>
+</html>
