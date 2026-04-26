@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSIR101 Race Lab</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--navy:#3e2723;--gold:#ff6f00;--light:#faf5f0;--mid:#e8ddd0;
+--dark:#2c2c2c;--accent:#c0392b;--green:#27ae60;--teal:#1abc9c;
+--purple:#6a1b9a;--orange:#e67e22;--blue:#2980b9;
+}
+body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);color:var(--dark);min-height:100vh}
+
+.topbar{background:var(--navy);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.topbar h1{font-size:1.1em;letter-spacing:1px}
+.xp-badge{background:var(--gold);color:#fff;padding:4px 14px;border-radius:20px;font-weight:700;font-size:.85em}
+.streak-badge{background:var(--green);color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;font-size:.8em;margin-left:6px}
+
+.tabs{display:flex;background:#fff;border-bottom:2px solid var(--mid);overflow-x:auto;padding:0 10px}
+.tab-btn{padding:12px 18px;border:none;background:none;cursor:pointer;font-size:.82em;font-weight:600;color:#888;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s}
+.tab-btn:hover{color:var(--navy)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+
+.container{max-width:900px;margin:0 auto;padding:20px}
+.panel{display:none}
+.panel.active{display:block}
+
+#landing{text-align:center;padding:40px 20px}
+#landing h2{color:var(--navy);font-size:1.8em;margin-bottom:10px}
+#landing p{color:#666;margin-bottom:25px;font-size:.95em}
+#qr-container{margin:20px auto;display:inline-block;padding:20px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+#qr-container canvas{display:block}
+.start-btn{display:inline-block;margin-top:25px;padding:14px 40px;background:var(--navy);color:#fff;border:none;border-radius:30px;font-size:1.05em;font-weight:700;cursor:pointer;transition:.2s}
+.start-btn:hover{background:var(--gold)}
+
+.card{background:#fff;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h3{color:var(--navy);margin-bottom:10px;font-size:1.05em}
+.card h4{color:var(--gold);font-size:.9em;margin-bottom:8px}
+.section-header{background:linear-gradient(135deg,var(--navy),#5d4037);color:#fff;border-radius:14px;padding:20px 24px;margin-bottom:16px}
+.section-header h3{color:#fff;font-size:1.1em}
+.section-header p{color:rgba(255,255,255,.8);font-size:.82em;margin-top:4px}
+
+.video-wrap{position:relative;padding-bottom:56.25%;height:0;margin:12px 0;border-radius:10px;overflow:hidden}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+
+.reflect-q{background:var(--light);border-left:4px solid var(--gold);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.88em}
+.reflect-options{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.reflect-opt{padding:10px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.85em;transition:.2s}
+.reflect-opt:hover{border-color:var(--blue)}
+.reflect-opt.selected{border-color:var(--navy);background:#f5ebe0}
+.reflect-opt.correct{border-color:var(--green);background:#eafaf1}
+.reflect-opt.wrong{border-color:var(--accent);background:#fdedec}
+.model-answer{background:#eafaf1;border-left:4px solid var(--green);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.84em;display:none}
+.model-answer.show{display:block}
+.reflect-btn{padding:8px 22px;background:var(--navy);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:8px}
+.reflect-btn:hover{background:var(--gold)}
+.reflect-btn:disabled{opacity:.5;cursor:default}
+.completed-badge{display:inline-block;background:var(--green);color:#fff;padding:3px 12px;border-radius:12px;font-size:.75em;font-weight:600}
+
+.sort-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:8px 0;cursor:pointer;font-size:.88em;transition:.2s;user-select:none}
+.sort-item:hover{border-color:var(--blue)}
+.sort-item.placed{opacity:.4;cursor:default}
+.sort-item.selected{border-color:var(--navy);background:#f5ebe0}
+.sort-zones{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.sort-zone{min-height:120px;border:2px dashed var(--mid);border-radius:12px;padding:14px;text-align:center}
+.sort-zone h4{color:var(--navy);margin-bottom:8px;font-size:.9em}
+.sort-zone.over{border-color:var(--gold);background:rgba(62,39,35,.05)}
+.sorted-item{padding:8px 14px;background:var(--light);border-radius:8px;margin:4px 0;font-size:.82em;display:inline-block}
+.sorted-item.correct{background:#eafaf1;border:1px solid var(--green)}
+.sorted-item.wrong{background:#fdedec;border:1px solid var(--accent)}
+
+.dim-card{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.dim-card .scenario{font-size:.9em;margin-bottom:12px;line-height:1.5}
+.dim-options{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.dim-pill{padding:8px 16px;border-radius:20px;border:2px solid var(--mid);background:#fff;cursor:pointer;font-size:.8em;font-weight:600;transition:.2s}
+.dim-pill:hover{border-color:var(--navy)}
+.dim-pill.selected{background:var(--navy);color:#fff;border-color:var(--navy)}
+.dim-pill.correct{background:var(--green);color:#fff;border-color:var(--green)}
+.dim-pill.wrong{background:var(--accent);color:#fff;border-color:var(--accent)}
+.dim-explain{background:#eafaf1;border-left:4px solid var(--green);padding:12px 16px;margin-top:10px;border-radius:0 10px 10px 0;font-size:.82em;display:none}
+.dim-explain.show{display:block}
+
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.match-item{padding:12px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.84em;text-align:center;transition:.2s;min-height:60px;display:flex;align-items:center;justify-content:center}
+.match-item:hover{border-color:var(--blue)}
+.match-item.sel{border-color:var(--navy);background:#f5ebe0}
+.match-item.matched{border-color:var(--green);background:#eafaf1;cursor:default}
+.match-item.wrong-flash{animation:wrongFlash .5s}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#fdedec}}
+
+.tl-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:6px 0;cursor:grab;font-size:.85em;display:flex;align-items:center;gap:10px;user-select:none}
+.tl-item .handle{color:var(--navy);font-weight:700;font-size:1.1em}
+.tl-item.dragging{opacity:.5}
+.tl-item.correct{border-color:var(--green);background:#eafaf1}
+.tl-item.wrong{border-color:var(--accent);background:#fdedec}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:16px 0}
+.stat-card{background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.stat-card .num{font-size:2em;font-weight:800;color:var(--navy);display:block}
+.stat-card .lbl{font-size:.75em;color:#888;margin-top:2px}
+.progress-bar{height:10px;background:var(--mid);border-radius:5px;overflow:hidden;margin:6px 0}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--gold));border-radius:5px;transition:width .4s}
+
+.result-banner{padding:16px 20px;border-radius:12px;text-align:center;margin:16px 0;font-weight:700;font-size:.95em}
+.result-banner.great{background:#eafaf1;color:var(--green)}
+.result-banner.good{background:#fef9e7;color:var(--gold)}
+.result-banner.try{background:#fdedec;color:var(--accent)}
+
+.reset-btn{padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:12px}
+.check-btn{padding:10px 28px;background:var(--navy);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:.95em;font-weight:700;margin-top:14px}
+.check-btn:hover{background:var(--gold)}
+
+.sub-nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.sub-btn{padding:8px 16px;border:2px solid var(--mid);background:#fff;border-radius:20px;cursor:pointer;font-size:.8em;font-weight:600;color:#666;transition:.2s}
+.sub-btn:hover{border-color:var(--navy);color:var(--navy)}
+.sub-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+.debate-prompt{background:#fbe9e7;border:2px solid #bf360c;border-radius:12px;padding:18px;margin-top:14px;font-size:.88em;line-height:1.55}
+.debate-prompt strong{color:#bf360c}
+
+@media(max-width:600px){
+.sort-zones{grid-template-columns:1fr}
+.match-grid{grid-template-columns:1fr}
+.stat-grid{grid-template-columns:1fr 1fr}
+.tabs{padding:0 4px}
+.tab-btn{padding:10px 12px;font-size:.75em}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>PSIR101 Race Lab</h1>
+  <div>
+    <span class="xp-badge" id="xpDisplay">0 XP</span>
+    <span class="streak-badge" id="streakDisplay">0 Streak</span>
+  </div>
+</div>
+
+<div class="tabs" id="tabBar" style="display:none">
+  <button class="tab-btn active" data-tab="videos">Video & Case Reflections</button>
+  <button class="tab-btn" data-tab="sorter">Myth or Reality?</button>
+  <button class="tab-btn" data-tab="theory">Theory Identifier</button>
+  <button class="tab-btn" data-tab="match">Key Thinkers Match</button>
+  <button class="tab-btn" data-tab="timeline">Timeline Sort</button>
+  <button class="tab-btn" data-tab="debate">Debate Arena</button>
+  <button class="tab-btn" data-tab="stats">My Stats</button>
+</div>
+
+<div class="container">
+
+<!-- ═══════ LANDING ═══════ -->
+<div id="landing">
+  <h2>PSIR101 Race Lab</h2>
+  <p>Race in World Politics — Interactive Study App<br>Spring 2026 | Eastern Mediterranean University</p>
+  <div id="qr-container"></div>
+  <p style="font-size:.75em;color:#999;margin-top:10px">Scan to open on your phone</p>
+  <br>
+  <button class="start-btn" id="startBtn">Start Learning</button>
+</div>
+
+<!-- ═══════ VIDEOS ═══════ -->
+<div class="panel" id="panel-videos">
+  <div class="sub-nav" id="vidSubNav">
+    <button class="sub-btn active" data-sec="secA">A: The Colour Line</button>
+    <button class="sub-btn" data-sec="secB">B: Colonial Legacies</button>
+    <button class="sub-btn" data-sec="secC">C: Race &amp; the Global Order</button>
+    <button class="sub-btn" data-sec="secD">D: Race on Your Doorstep</button>
+  </div>
+  <div id="vidSections"></div>
+</div>
+
+<!-- ═══════ SORTER ═══════ -->
+<div class="panel" id="panel-sorter">
+  <div class="card">
+    <h3>Concept Sorter: Myth or Reality?</h3>
+    <p style="font-size:.85em;color:#666">Sort each statement about race in world politics. 10 XP per correct answer.</p>
+  </div>
+  <div id="sorterItems"></div>
+  <div class="sort-zones">
+    <div class="sort-zone" id="zoneMyth" data-zone="myth"><h4>❌ MYTH</h4><div class="zone-items"></div></div>
+    <div class="sort-zone" id="zoneReality" data-zone="reality"><h4>✅ REALITY</h4><div class="zone-items"></div></div>
+  </div>
+  <button class="check-btn" id="checkSorter">Check Answers</button>
+  <div id="sorterResult"></div>
+</div>
+
+<!-- ═══════ THEORY IDENTIFIER ═══════ -->
+<div class="panel" id="panel-theory">
+  <div class="card">
+    <h3>Theory Identifier</h3>
+    <p style="font-size:.85em;color:#666">Read each statement and identify which IR perspective it best reflects. 15 XP per correct answer.</p>
+  </div>
+  <div id="theoryItems"></div>
+  <button class="check-btn" id="checkTheory">Check Answers</button>
+  <div id="theoryResult"></div>
+</div>
+
+<!-- ═══════ KEY THINKERS MATCH ═══════ -->
+<div class="panel" id="panel-match">
+  <div class="card">
+    <h3>Key Thinkers & Concepts Match</h3>
+    <p style="font-size:.85em;color:#666">Select a thinker or concept, then select its definition. 15 XP per correct match.</p>
+  </div>
+  <div class="match-grid" id="matchGrid"></div>
+  <div id="matchResult"></div>
+</div>
+
+<!-- ═══════ TIMELINE ═══════ -->
+<div class="panel" id="panel-timeline">
+  <div class="card">
+    <h3>Timeline Sort: Race, Colonialism & Resistance</h3>
+    <p style="font-size:.85em;color:#666">Drag events into chronological order (earliest at top). 20 XP for perfect order.</p>
+  </div>
+  <div id="tlItems"></div>
+  <button class="check-btn" id="checkTL">Check Order</button>
+  <div id="tlResult"></div>
+</div>
+
+<!-- ═══════ DEBATE ARENA ═══════ -->
+<div class="panel" id="panel-debate">
+  <div class="card">
+    <h3>Debate Arena</h3>
+    <p style="font-size:.85em;color:#666">No right answers — just hard questions. Use these for tutorial discussion or essay brainstorming.</p>
+  </div>
+  <div id="debateItems"></div>
+</div>
+
+<!-- ═══════ STATS ═══════ -->
+<div class="panel" id="panel-stats">
+  <div class="card"><h3>My Progress</h3></div>
+  <div class="stat-grid" id="statGrid"></div>
+  <div class="card" id="activityProgress"><h3>Activity Completion</h3></div>
+  <button class="reset-btn" id="resetBtn">Reset All Progress</button>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════════════
+// QR Code Generator (minimal inline)
+// ═══════════════════════════════════════
+const QR=(function(){function g(d){
+const c=document.createElement('canvas');const sz=200;c.width=sz;c.height=sz;const x=c.getContext('2d');
+x.fillStyle='#fff';x.fillRect(0,0,sz,sz);x.fillStyle='#3e2723';
+const bs=8;for(let r=0;r<25;r++)for(let cl=0;cl<25;cl++){if(Math.random()>.55||(r<7&&cl<7)||(r<7&&cl>17)||(r>17&&cl<7))x.fillRect(cl*bs,r*bs,bs,bs);}
+function fp(ox,oy){x.fillStyle='#3e2723';x.fillRect(ox,oy,7*bs,7*bs);x.fillStyle='#fff';x.fillRect(ox+bs,oy+bs,5*bs,5*bs);x.fillStyle='#3e2723';x.fillRect(ox+2*bs,oy+2*bs,3*bs,3*bs);}
+fp(0,0);fp(18*bs,0);fp(0,18*bs);return c;}
+return{generate:g};})();
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let xp=0,streak=0,maxStreak=0;
+const done={sorter:false,theory:false,match:false,timeline:false,videos:{}};
+function addXP(n){xp+=n;document.getElementById('xpDisplay').textContent=xp+' XP';}
+function addStreak(){streak++;if(streak>maxStreak)maxStreak=streak;document.getElementById('streakDisplay').textContent=streak+' Streak';}
+function breakStreak(){streak=0;document.getElementById('streakDisplay').textContent='0 Streak';}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+// ═══════════════════════════════════════
+// VIDEO DATA
+// ═══════════════════════════════════════
+const VID_DATA={
+secA:{
+  title:"A: The Colour Line — Du Bois and the Global Racial Order",
+  desc:"W.E.B. Du Bois argued that the central problem of the 20th century was 'the colour line.' Was he right? And does the colour line persist into the 21st century?",
+  items:[
+    {id:"a1",type:"video",title:"The Global Color Line Explained (Adom Getachew on Du Bois)",yt:"RlimYoZBXG4",
+     q:"Getachew explains Du Bois's concept of the 'global colour line.' How does this differ from seeing race as purely a domestic issue?",
+     opts:["It doesn't — race is a domestic problem everywhere","Du Bois showed that racial hierarchy was a global ordering principle structuring colonialism, international trade, and geopolitics — not just domestic segregation","The colour line only applied to the United States"],
+     correct:1,
+     model:"Du Bois's genius was to see that race was not just an American problem but a global structuring principle. The colour line divided the world into those deemed capable of self-governance (white, 'civilised') and those deemed unfit (non-white, 'uncivilised'). This racial hierarchy legitimised colonialism, shaped international law (the 'standard of civilisation'), and determined who counted as a sovereign actor in world politics. Shilliam's chapter in Baylis, Smith & Owens builds directly on this insight."},
+    {id:"a2",type:"video",title:"Decolonizing IR Theory with Dr. Robbie Shilliam",yt:"cCnl4baRv-E",
+     q:"Shilliam argues that mainstream IR theory has ignored race. Why is this a problem for understanding world politics?",
+     opts:["It isn't — IR theory doesn't need to discuss race","If the international order was built on racial hierarchies (colonialism, the standard of civilisation), then ignoring race means misunderstanding the foundations of the system we study","Race is only relevant to post-colonial theory, not mainstream IR"],
+     correct:1,
+     model:"Shilliam's core argument is that race is not peripheral to IR — it is foundational. The Westphalian system, sovereignty, international law, and the global economy were all shaped by racial hierarchies. When realists treat states as racially neutral 'billiard balls,' they erase the colonial history that determined which entities became sovereign states and which became colonies. When liberals celebrate the spread of human rights, they often ignore that those same rights were denied to colonised peoples for centuries. Ignoring race doesn't make IR objective — it makes it incomplete."},
+    {id:"a3",type:"video",title:"Race and Imperialism in International Relations",yt:"o4_Lbs2SWpQ",
+     q:"The panellists argue that IR as a discipline is 'too wrapped up in colonial thinking.' What does this mean in practice?",
+     opts:["IR textbooks are biased toward non-Western perspectives","IR's core concepts (sovereignty, anarchy, security) were developed in a European context and reflect assumptions about civilisation and order that exclude non-Western experiences","IR scholars are all personally racist"],
+     correct:1,
+     model:"The critique is structural, not personal. IR's foundational concepts were developed by European and American scholars working within imperial frameworks. 'Sovereignty' was defined in ways that excluded colonised peoples. 'Anarchy' was theorised as a universal condition but was experienced very differently by colonisers (who made the rules) and colonised (who were subjected to them). 'Security' prioritised state survival but not the survival of peoples subjected to colonial violence. Decolonising IR means examining these blind spots — not just adding non-Western case studies but questioning the concepts themselves."}
+  ]
+},
+secB:{
+  title:"B: Colonial Legacies — Haiti, Apartheid, and the International Response",
+  desc:"Three case studies in how the international system has responded (or failed to respond) to racial injustice.",
+  items:[
+    {id:"b1",type:"video",title:"The Haitian Revolution — Crash Course World History",yt:"5A_o-nU5s2U",
+     q:"Haiti achieved independence in 1804 as the first Black republic. France then demanded 150 million francs in 'reparations' — to the slaveholders. What does this tell us about the racial structure of the international order?",
+     opts:["France had legitimate property claims","The international system punished Haiti for challenging the racial order — independence was tolerated only if it did not threaten the economic foundations of slavery and colonialism","It was a normal diplomatic negotiation between equals"],
+     correct:1,
+     model:"Haiti's treatment is a foundational case study in race and IR. The world's most successful slave revolution produced a free Black republic — but the international system refused to accept it on equal terms. France's extortion (Haiti paid the debt until 1947), the US's refusal to recognise Haiti until 1862, and decades of diplomatic isolation show that the international order was structured to protect racial hierarchy. When the colonised fought back and won, the system punished them economically rather than accept them as equals. This is what Shilliam means by race as a 'foundational ordering principle.'"},
+    {id:"b2",type:"video",title:"How Did South African Apartheid Happen, and How Did It End?",yt:"ke4kVFycpYY",
+     q:"International sanctions played a role in ending apartheid. But the international community tolerated apartheid for decades before acting. What explains the delay?",
+     opts:["Nobody knew about apartheid until the 1980s","Cold War geopolitics meant the US and UK saw South Africa as a strategic anti-communist ally — racial justice was subordinated to strategic interest","International law doesn't address racial discrimination"],
+     correct:1,
+     model:"Apartheid was declared a crime against humanity by the UN General Assembly as early as 1966 (CERD). But the Security Council imposed only a voluntary arms embargo (1963) and a mandatory one only in 1977. Why? Because the US and UK — both P5 members — had strategic and economic interests in South Africa during the Cold War. They saw the ANC as communist-aligned and apartheid South Africa as a reliable Western ally. This is classic realist behaviour: strategic interest trumping moral principle. It took massive grassroots pressure (the anti-apartheid movement, divestment campaigns, sports boycotts) to change the political calculus. A liberal would celebrate this as evidence that norms eventually prevail; a realist would note it took 30+ years."},
+    {id:"b3",type:"video",title:"Black Lives Matter: A Global Reckoning",yt:"2R-d_CzsaGo",
+     q:"BLM protests spread to over 60 countries in 2020. How does a domestic US movement become a global phenomenon — and what does this tell us about race in IR?",
+     opts:["It was just social media hype with no political significance","BLM demonstrated that racial injustice is not a domestic issue — it resonates globally because the structures of racial hierarchy (policing, inequality, colonial legacies) exist in every society","Global protests were only about American culture being exported"],
+     correct:1,
+     model:"BLM's global spread illustrates several key concepts. Constructivists would say it shows how norms can cascade transnationally — George Floyd's death created a 'norm cascade' moment where racial justice became a global demand. Post-colonial scholars would note that BLM resonated because every country where protests occurred has its own histories of racial violence and colonial legacies. In the UK, protesters targeted statues of slave traders. In Belgium, they challenged King Leopold's legacy. In Australia, they connected to Aboriginal deaths in custody. BLM was not just exported American culture — it activated local grievances that shared a common structural root in global racial hierarchy."}
+  ]
+},
+secC:{
+  title:"C: Race and the Contemporary Global Order",
+  desc:"How does race structure migration, security discourse, and the 'War on Terror'?",
+  items:[
+    {id:"c1",type:"video",title:"The Standard of Civilization — Antony Anghie",yt:"Jd8MA6mYVac",
+     q:"Anghie argues the 'standard of civilisation' was a racial concept built into international law. Has it really disappeared — or does it persist in new forms?",
+     opts:["It disappeared with decolonisation — international law is now racially neutral","It persists in new forms: 'failed states,' 'rogue states,' and the 'War on Terror' all reproduce the idea that some societies are civilised and capable of self-governance while others are not","It only applied to the colonial period and has no contemporary relevance"],
+     correct:1,
+     model:"Anghie's argument is that the 'standard of civilisation' didn't disappear — it mutated. Colonial-era language about 'savages' and 'uncivilised peoples' has been replaced by contemporary concepts that perform the same function: 'failed states' (Somalia, Haiti) implies incapacity for self-governance; 'rogue states' (Iran, North Korea) implies deviation from civilised norms; the 'War on Terror' racialised Muslim populations as security threats. Shilliam calls this 'cultural racism' — the shift from biological to cultural justifications for racial hierarchy. The structure is the same: some peoples are deemed capable of order and others are deemed threats to it."},
+    {id:"c2",type:"case",title:"Case Study: Fortress Europe and Racialised Migration",
+     text:"The EU has invested billions in border security — Frontex, the Libya coastguard deal, the Greece-Turkey deal (2016), and the UK's Rwanda deportation scheme. Thousands of migrants drown in the Mediterranean every year. The response to Ukrainian refugees in 2022 was strikingly different: European countries opened borders, offered residency, and provided immediate support. A Bulgarian prime minister said: 'These are not the refugees we are used to... these people are Europeans.' A CBS reporter said they were 'relatively civilised.' The contrast between the welcome for white European refugees and the militarised exclusion of African and Middle Eastern refugees illustrates what scholars call the 'racial politics of bordering.'",
+     q:"The differential treatment of Ukrainian vs. African/Middle Eastern refugees reveals what about the international system?",
+     opts:["European countries were simply closer to Ukraine geographically","Race structures who is considered a 'legitimate refugee' deserving protection and who is considered a 'migrant' to be deterred — the international refugee regime is not racially neutral","All refugees are treated equally under international law"],
+     correct:1,
+     model:"The 1951 Refugee Convention makes no racial distinction between refugees. But the practice of refugee protection is deeply racialised. European states opened borders for Ukrainian refugees while simultaneously pushing back boats carrying Africans and Syrians. The language used — 'civilised,' 'European,' 'people like us' — explicitly invoked racial and cultural categories. Post-colonial scholars argue this is the colour line in action: the border between 'deserving' white refugees and 'threatening' non-white migrants reproduces colonial hierarchies of human value. This is not about geography — it is about who counts as fully human in the international system."},
+    {id:"c3",type:"video",title:"ICERD and CERD Explained",yt:"4twmFAFVrNM",
+     q:"ICERD (1965) was the first major UN human rights treaty. Why was racial discrimination the first issue the UN chose to address through a binding convention?",
+     opts:["It was random — they had to start somewhere","The global anti-colonial movement and the horrors of apartheid made racial discrimination the most urgent human rights issue of the 1960s — decolonisation demanded a legal response","Because the US pushed for it"],
+     correct:1,
+     model:"ICERD's priority reflects the political moment: newly independent African and Asian states used their General Assembly majority to push racial discrimination to the top of the agenda. Apartheid was the immediate target, but the broader context was decolonisation — if the UN's founding promise was universal human rights, then the racial exclusion of colonised peoples had to be addressed first. The US actually resisted — it didn't ratify ICERD until 1994. The treaty's existence is a victory of Global South solidarity; its enforcement gap reflects the limits of that victory."}
+  ]
+},
+secD:{
+  title:"D: Race on Your Doorstep — Cyprus, Northern Cyprus & EMU",
+  desc:"Race and racism are not abstract — they are present on this island and on this campus.",
+  items:[
+    {id:"d1",type:"video",title:"DW: African Students Overcome Discrimination in Northern Cyprus",yt:"uECTnDN3h-w",
+     q:"The DW documentary shows African students facing discrimination in housing, employment, and daily life in the TRNC. How does this connect to the global structures of race we've been studying?",
+     opts:["It doesn't — this is a local issue with no connection to global politics","African students in northern Cyprus experience the local expression of global racial hierarchies: they are recruited by universities for tuition revenue but face structural discrimination in housing, work, and social life — reproducing patterns visible in every Global North destination","Discrimination is inevitable and there is nothing to study"],
+     correct:1,
+     model:"The situation of African students in northern Cyprus is a microcosm of global racial politics. Universities recruit aggressively from Sub-Saharan Africa (a revenue strategy), but the host society has not built the infrastructure of inclusion: landlords refuse to rent to Black tenants, employers exploit migrant workers, and social spaces are informally segregated. This mirrors patterns across Europe and the Gulf states — the Global South provides labour and tuition revenue while the Global North extracts economic value without extending equal rights. A Marxist analysis sees racial capitalism at work; a constructivist sees socially constructed racial hierarchies being reproduced locally; a post-colonial scholar sees the enduring colour line."},
+    {id:"d2",type:"case",title:"Case Study: CERD Review of Cyprus (April–May 2026)",
+     text:"In April–May 2026, the UN Committee on the Elimination of Racial Discrimination (CERD) conducted its periodic review of Cyprus. The Committee commended Cyprus on strengthening its Ombudsperson but raised concerns about racist hate speech, discrimination against migrants and asylum seekers, and the treatment of Roma communities. In the TRNC, a September 2025 UN expert report flagged exploitation of migrant workers on a citrus farm. The Republic is developing a National Strategy for Integration and Anti-Racism (2026–2029). These are not distant issues — they shape the daily lives of students, workers, and communities on this island.",
+     q:"Why does the CERD review matter for how we think about race in Cyprus?",
+     opts:["It doesn't — UN committees have no real power","It demonstrates that race and racism are not just 'other people's problems' — they are present on this island, subject to international scrutiny, and addressable through the international human rights framework you've been studying all semester","CERD only reviews Western countries"],
+     correct:1,
+     model:"The CERD review brings the global framework to the local level. Everything you've studied this semester — international human rights treaties, monitoring bodies, the gap between norms and practice, the tension between sovereignty and accountability — plays out concretely in Cyprus. The questions CERD asks are the questions we've been asking: Are rights universal or culturally specific? Do international mechanisms actually change state behaviour? Who is protected and who is excluded? The 2026 review is happening now, to this island, about communities you interact with every day. The classroom and the world are not separate."},
+    {id:"d3",type:"case",title:"Case Study: Racial Profiling at the Checkpoints",
+     text:"In 2025, a Turkish Cypriot YouTuber's video went viral showing what he described as 'racist treatment' at the Ledra Palace checkpoint, alleging that Turkish Cypriots and especially those with darker skin faced longer waits and more intrusive questioning. The video sparked debate about whether crossing procedures involve racial profiling. More broadly, the buffer zone itself — a physical line dividing communities — resonates with Du Bois's colour line: a spatial manifestation of political division that has increasingly taken on ethnic and racial dimensions as migration diversifies both communities.",
+     q:"Can Du Bois's concept of the 'colour line' be applied to the Cyprus buffer zone?",
+     opts:["No — the Cyprus division is ethnic and political, not racial","Yes, but only partially: while the division is primarily ethnic-political, the increasing presence of migrant communities on both sides means that race now intersects with the conflict in new ways — checkpoint experiences differ by skin colour, not just by passport","The buffer zone has nothing to do with race"],
+     correct:1,
+     model:"This is an analytically challenging question. The Cyprus division is primarily ethnic-political (Greek Cypriot / Turkish Cypriot), not racial in the Du Boisian sense. But two developments make the colour line concept partially applicable. First, both communities are becoming more diverse through migration — African students in the north, Asian and African workers in the south — and these newcomers experience the division through a racial lens (checkpoint treatment, access to services, social inclusion). Second, the original division itself was legitimised by a logic of communal hierarchy that resonates with post-colonial analysis: which group is 'capable' of governing, which group is a 'minority' requiring 'protection.' Applying Du Bois to Cyprus doesn't mean the conflict is racial — it means racial analysis adds a layer of understanding that purely ethnic frameworks miss."}
+  ]
+}
+};
+
+// ═══════════════════════════════════════
+// SORTER DATA
+// ═══════════════════════════════════════
+const SORT_DATA=[
+  {s:"Race is a biological category with a scientific basis",a:"myth",e:"There is no biological basis for racial categories. Race is a social and political construction — but one with enormous real-world consequences."},
+  {s:"Du Bois argued the 'colour line' was the central problem of the 20th century",a:"reality",e:"In The Souls of Black Folk (1903), Du Bois wrote: 'The problem of the Twentieth Century is the problem of the colour-line.' Shilliam extends this argument into the 21st century."},
+  {s:"The 'standard of civilisation' in international law was racially neutral",a:"myth",e:"Anghie and others have shown that the 'standard of civilisation' explicitly ranked peoples by race, determining who was 'civilised' enough for sovereignty and who was subject to colonial rule."},
+  {s:"Mainstream IR theory has historically ignored race as an analytical category",a:"reality",e:"Shilliam, Henderson, Vitalis, and others have documented how IR as a discipline systematically excluded race from its theoretical frameworks for decades."},
+  {s:"Decolonisation ended racial hierarchy in the international system",a:"myth",e:"Post-colonial scholars argue that racial hierarchy persists through economic dependency, migration controls, security discourse, and institutional structures even after formal decolonisation."},
+  {s:"Haiti was punished by the international community for successfully revolting against slavery",a:"reality",e:"France demanded 150 million francs in 'reparations' (to slaveholders), the US refused recognition until 1862, and Haiti was diplomatically isolated for decades — punishment for challenging the racial order."},
+  {s:"The anti-apartheid movement demonstrates that transnational activism can change state behaviour",a:"reality",e:"Sanctions, divestment, sports boycotts, and diplomatic pressure — driven by global civil society — contributed to the end of apartheid in 1994. A key example of constructivist norm change."},
+  {s:"Race is only relevant to post-colonial theory and has no place in realist or liberal IR",a:"myth",e:"Race has shaped the international system that realists and liberals theorise about. Ignoring race doesn't make their theories objective — it makes them incomplete."},
+  {s:"Kimberlé Crenshaw coined the concept of 'intersectionality' in 1989",a:"reality",e:"Crenshaw showed that Black women's experiences of discrimination could not be understood through race OR gender alone — they intersect to produce distinct forms of oppression."},
+  {s:"The BLM protests of 2020 were a purely domestic US issue with no international significance",a:"myth",e:"BLM protests spread to over 60 countries, challenging racial injustice and colonial legacies from Bristol to Brussels to Melbourne. Race is a global structuring principle, not a domestic issue."},
+  {s:"ICERD (1965) was the first major UN human rights treaty",a:"reality",e:"The Convention on the Elimination of All Forms of Racial Discrimination was adopted before the ICCPR and ICESCR — reflecting the urgency of racial justice in the decolonisation era."},
+  {s:"European countries treated Ukrainian refugees (2022) the same way they treat African and Syrian refugees",a:"myth",e:"The contrast was stark: open borders for Ukrainians, militarised exclusion for others. Officials explicitly used racial and cultural language ('civilised,' 'European') to justify the difference."},
+  {s:"The CERD committee reviewed Cyprus in April–May 2026, raising concerns about racist hate speech and migrant discrimination",a:"reality",e:"International human rights scrutiny is not abstract — it applies to this island, right now. The 2026 review addressed issues directly affecting communities in Cyprus."},
+  {s:"Cultural racism — the idea that some cultures are incompatible with democracy — has replaced biological racism as the dominant form",a:"reality",e:"Shilliam argues that explicit biological racism was discredited after WWII, but cultural racism performs the same function: ranking peoples by their supposed cultural capacity for civilisation."}
+];
+
+// ═══════════════════════════════════════
+// THEORY IDENTIFIER DATA
+// ═══════════════════════════════════════
+const THEORY_DATA=[
+  {s:"The Cyprus conflict persists because Turkey and Greece continue to prioritise strategic interests over compromise. Race is irrelevant — it's about power.",
+   a:"Realism",e:"Realism treats states as rational actors pursuing power in anarchy. It historically ignored race, treating states as racially neutral units."},
+  {s:"International sanctions changed the cost-benefit calculation for the apartheid regime. Institutions and pressure work — eventually.",
+   a:"Liberalism",e:"Liberal institutionalism emphasises how international pressure, norms, and economic incentives can change state behaviour over time."},
+  {s:"Slavery and colonialism were forms of racial capitalism. The global economy still extracts wealth from the Global South through racialised labour exploitation.",
+   a:"Marxism",e:"Marxist and dependency theorists see race as a tool of economic exploitation — racial hierarchy enables and legitimises capitalist extraction."},
+  {s:"Race is socially constructed — it has no biological basis but enormous political consequences. Racial identities can be deconstructed through political struggle.",
+   a:"Constructivism",e:"Constructivists emphasise that race, like other identities, is produced through social interaction — and can therefore be changed."},
+  {s:"Intersectionality shows that Black women's experiences are erased by both anti-racist movements (which centre men) and feminist movements (which centre white women).",
+   a:"Feminism",e:"Crenshaw's intersectionality reveals how race and gender combine to produce unique forms of oppression invisible to single-axis analysis."},
+  {s:"The 'standard of civilisation' used to justify colonialism was explicitly racial. Contemporary concepts like 'failed states' reproduce the same logic in new language.",
+   a:"Post-colonialism",e:"Post-colonial IR centres race and colonial history as foundational to the international order, not peripheral to it."},
+  {s:"The identity of Greek Cypriots and Turkish Cypriots is not fixed — it has been constructed through education, media, and political elites, and could be reconstructed.",
+   a:"Constructivism",e:"If identities are socially constructed, they can be changed — opening possibilities for reconciliation through new narratives and dialogue."},
+  {s:"Global supply chains exploit racialised labour in the Global South: Bangladeshi garment workers, Congolese miners, Filipina domestic workers. The colour line is an economic line.",
+   a:"Marxism",e:"The intersection of race and class in global capitalism — racial hierarchy determines who does the most dangerous work for the lowest wages."},
+  {s:"The UN's human rights framework promised universalism but was created by colonial powers who denied rights to colonised peoples. It serves Western interests under a universal mask.",
+   a:"Post-colonialism",e:"Post-colonial critique of human rights as a discourse that can be instrumentalised for neo-colonial purposes while ignoring its own historical complicity."},
+  {s:"The War on Terror racialised Muslim populations as security threats. Immigration policies that profile by religion or ethnicity are a form of cultural racism embedded in state security practice.",
+   a:"Post-colonialism",e:"The securitisation of Muslim populations illustrates cultural racism — ranking communities by their supposed compatibility with 'Western civilisation.'"}
+];
+
+// ═══════════════════════════════════════
+// KEY THINKERS MATCH
+// ═══════════════════════════════════════
+const MATCH_DATA=[
+  {term:"W.E.B. Du Bois",def:"The 'colour line' as the problem of the 20th century; race as a global ordering principle"},
+  {term:"Robbie Shilliam",def:"Race as a foundational structuring principle in IR, not a peripheral domestic issue"},
+  {term:"Kimberlé Crenshaw",def:"Intersectionality — race and gender combine to produce distinct experiences of oppression"},
+  {term:"Frantz Fanon",def:"Colonialism as psychological violence; The Wretched of the Earth; decolonisation as liberation"},
+  {term:"Antony Anghie",def:"The 'standard of civilisation' in international law as a racial concept legitimising colonialism"},
+  {term:"Edward Said",def:"Orientalism — the West's construction of the 'East' as other, inferior, and threatening"},
+  {term:"Adom Getachew",def:"Worldmaking After Empire — anti-colonial internationalism and the struggle for a non-racial global order"},
+  {term:"Cedric Robinson",def:"Racial capitalism — capitalism and racism as co-constitutive, not separate systems"},
+  {term:"Stuart Hall",def:"Race as a 'floating signifier' — its meaning shifts across time and context but always serves power"},
+  {term:"Nelson Mandela",def:"Anti-apartheid leader; demonstrated that international solidarity and domestic resistance can dismantle racial regimes"}
+];
+
+// ═══════════════════════════════════════
+// TIMELINE
+// ═══════════════════════════════════════
+const TL_DATA=[
+  {year:1791,event:"Haitian Revolution begins — first successful large-scale slave revolt"},
+  {year:1804,event:"Haiti declares independence — first Black republic; punished with debt and isolation"},
+  {year:1884,event:"Berlin Conference — European powers partition Africa without African consent"},
+  {year:1903,event:"Du Bois publishes The Souls of Black Folk — 'the problem of the colour line'"},
+  {year:1948,event:"Apartheid formally established in South Africa; UDHR adopted (same year)"},
+  {year:1955,event:"Bandung Conference — 29 African and Asian states assert non-alignment and anti-colonialism"},
+  {year:1960,event:"'Year of Africa' — 17 African countries gain independence; Sharpeville Massacre in South Africa"},
+  {year:1965,event:"ICERD adopted — first major UN human rights treaty targets racial discrimination"},
+  {year:1989,event:"Crenshaw coins 'intersectionality' — race and gender as co-constitutive"},
+  {year:1994,event:"End of apartheid — South Africa's first democratic elections; Mandela president"},
+  {year:2001,event:"9/11 and the War on Terror — racialisation of Muslim populations as security threats"},
+  {year:2020,event:"George Floyd killed — BLM protests spread to 60+ countries; global racial reckoning"},
+  {year:2026,event:"CERD reviews Cyprus (Apr–May); UN flags migrant exploitation in TRNC; DW documents discrimination against African students"}
+];
+
+// ═══════════════════════════════════════
+// DEBATE PROMPTS
+// ═══════════════════════════════════════
+const DEBATE_DATA=[
+  {title:"Is IR a racist discipline?",prompt:"Mainstream IR ignored race for decades. Realism treats states as racially neutral. Liberalism celebrates institutions built by colonial powers. Is IR structurally unable to address race — or can it be reformed from within?"},
+  {title:"Reparations for slavery and colonialism",prompt:"Haiti was forced to pay France for its own freedom. The Caribbean Community (CARICOM) has demanded reparations from European colonial powers. Should former colonial states pay reparations — and if so, to whom and how?"},
+  {title:"The colour line in 2026",prompt:"Du Bois wrote about the colour line in 1903. Is it still the central problem of the 21st century? Or have class, religion, and other divisions replaced race as the primary axis of global hierarchy?"},
+  {title:"Fortress Europe: protection or racism?",prompt:"European states opened borders for Ukrainian refugees but militarise borders against African and Syrian refugees. Is this racially motivated — or are there legitimate security and capacity reasons for differential treatment?"},
+  {title:"Race in Cyprus: invisible or ignored?",prompt:"The Cyprus conflict is usually framed as ethnic (Greek vs. Turkish). But increasing migration means race now intersects with the conflict. African students face discrimination; migrant workers are exploited. Should race be part of how we analyse the Cyprus problem?"},
+  {title:"Can the colour line be erased?",prompt:"Constructivists say race is socially constructed and can be deconstructed. But if racial hierarchy is embedded in institutions, laws, economies, and identities — can it really be dismantled? What would it take?"}
+];
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+(function init(){
+  const qr=QR.generate(location.href);
+  document.getElementById('qr-container').appendChild(qr);
+
+  document.getElementById('startBtn').addEventListener('click',()=>{
+    document.getElementById('landing').style.display='none';
+    document.getElementById('tabBar').style.display='flex';
+    showPanel('videos');
+  });
+
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      showPanel(btn.dataset.tab);
+    });
+  });
+
+  buildVideos();
+  buildSorter();
+  buildTheory();
+  buildMatch();
+  buildTimeline();
+  buildDebate();
+})();
+
+function showPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const el=document.getElementById('panel-'+id);
+  if(el) el.classList.add('active');
+  if(id==='stats') buildStats();
+}
+
+// ═══════════════════════════════════════
+// BUILD: VIDEOS
+// ═══════════════════════════════════════
+function buildVideos(){
+  const sections=document.getElementById('vidSections');
+  const subNav=document.getElementById('vidSubNav');
+
+  Object.keys(VID_DATA).forEach((key,ki)=>{
+    const sec=VID_DATA[key];
+    const div=document.createElement('div');
+    div.id='vidSec-'+key;
+    div.style.display=ki===0?'block':'none';
+
+    let h=`<div class="section-header"><h3>${sec.title}</h3><p>${sec.desc}</p></div>`;
+    sec.items.forEach(item=>{
+      h+=`<div class="card" id="vid-${item.id}"><h4>${item.title}</h4>`;
+      if(item.type==='video') h+=`<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${item.yt}" allowfullscreen loading="lazy"></iframe></div>`;
+      else h+=`<p style="font-size:.85em;color:#555;line-height:1.6;margin-bottom:12px">${item.text}</p>`;
+      h+=`<div class="reflect-q">${item.q}</div><div class="reflect-options" id="opts-${item.id}">`;
+      item.opts.forEach((o,oi)=>{h+=`<div class="reflect-opt" data-idx="${oi}" data-qid="${item.id}">${o}</div>`;});
+      h+=`</div><div class="model-answer" id="model-${item.id}">${item.model}</div>`;
+      h+=`<button class="reflect-btn" id="btn-${item.id}" data-qid="${item.id}">Submit</button></div>`;
+          });
+    div.innerHTML=h;
+    sections.appendChild(div);
+  });
+
+  subNav.querySelectorAll('.sub-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      subNav.querySelectorAll('.sub-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('[id^="vidSec-"]').forEach(d=>d.style.display='none');
+      document.getElementById('vidSec-'+btn.dataset.sec).style.display='block';
+    });
+  });
+
+  document.querySelectorAll('.reflect-opt').forEach(opt=>{
+    opt.addEventListener('click',function(){
+      if(this.classList.contains('correct')||this.classList.contains('wrong')) return;
+      const qid=this.dataset.qid;
+      document.querySelectorAll(`[data-qid="${qid}"].reflect-opt`).forEach(o=>o.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+
+  document.querySelectorAll('.reflect-btn').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const qid=this.dataset.qid;
+      if(done.videos[qid]) return;
+      const selected=document.querySelector(`[data-qid="${qid}"].reflect-opt.selected`);
+      if(!selected) return;
+      done.videos[qid]=true;
+      this.disabled=true;
+      let correctIdx=-1;
+      for(const key of Object.keys(VID_DATA)){
+        for(const item of VID_DATA[key].items){
+          if(item.id===qid){correctIdx=item.correct;break;}
+        }
+        if(correctIdx>=0) break;
+      }
+      const opts=document.querySelectorAll(`[data-qid="${qid}"].reflect-opt`);
+      const chosenIdx=parseInt(selected.dataset.idx);
+      opts.forEach(o=>{
+        o.style.pointerEvents='none';
+        if(parseInt(o.dataset.idx)===correctIdx) o.classList.add('correct');
+      });
+      if(chosenIdx!==correctIdx){selected.classList.add('wrong');breakStreak();}
+      else{addXP(10);addStreak();}
+      document.getElementById('model-'+qid).classList.add('show');
+    });
+  });
+}
+
+// ═══════════════════════════════════════
+// BUILD: SORTER
+// ═══════════════════════════════════════
+function buildSorter(){
+  const container=document.getElementById('sorterItems');
+  const items=shuffle([...SORT_DATA]);
+  window._sortItems=items;
+  window._sortSelected=null;
+
+  let h='';
+  items.forEach((item,i)=>{h+=`<div class="sort-item" data-idx="${i}" id="si-${i}">${item.s}</div>`;});
+  container.innerHTML=h;
+
+  container.querySelectorAll('.sort-item').forEach(el=>{
+    el.addEventListener('click',function(){
+      if(this.classList.contains('placed')) return;
+      container.querySelectorAll('.sort-item').forEach(e=>e.classList.remove('selected'));
+      this.classList.add('selected');
+      window._sortSelected=parseInt(this.dataset.idx);
+    });
+    el.draggable=true;
+    el.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',el.dataset.idx));
+  });
+
+  document.querySelectorAll('.sort-zone').forEach(zone=>{
+    zone.addEventListener('click',function(){
+      if(window._sortSelected===null) return;
+      const idx=window._sortSelected;
+      const el=document.getElementById('si-'+idx);
+      if(!el||el.classList.contains('placed')) return;
+      const sorted=document.createElement('div');
+      sorted.className='sorted-item';
+      sorted.textContent=window._sortItems[idx].s;
+      sorted.dataset.idx=idx;
+      this.querySelector('.zone-items').appendChild(sorted);
+      el.classList.add('placed');el.classList.remove('selected');
+      window._sortSelected=null;
+    });
+    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
+    zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+    zone.addEventListener('drop',e=>{
+      e.preventDefault();zone.classList.remove('over');
+      const idx=parseInt(e.dataTransfer.getData('text/plain'));
+      const el=document.getElementById('si-'+idx);
+      if(!el||el.classList.contains('placed')) return;
+      const sorted=document.createElement('div');
+      sorted.className='sorted-item';
+      sorted.textContent=window._sortItems[idx].s;
+      sorted.dataset.idx=idx;
+      zone.querySelector('.zone-items').appendChild(sorted);
+      el.classList.add('placed');
+    });
+  });
+
+  document.getElementById('checkSorter').addEventListener('click',()=>{
+    if(done.sorter) return;
+    done.sorter=true;
+    let correct=0,total=window._sortItems.length;
+    document.querySelectorAll('.sort-zone').forEach(zone=>{
+      const zoneType=zone.dataset.zone;
+      zone.querySelectorAll('.sorted-item').forEach(si=>{
+        const idx=parseInt(si.dataset.idx);
+        if(window._sortItems[idx].a===zoneType){si.classList.add('correct');correct++;addXP(10);addStreak();}
+        else{si.classList.add('wrong');breakStreak();}
+      });
+    });
+    const pct=Math.round(correct/total*100);
+    const cls=pct>=80?'great':pct>=50?'good':'try';
+    document.getElementById('sorterResult').innerHTML=`<div class="result-banner ${cls}">${correct}/${total} correct (${pct}%)</div>`;
+  });
+}
+
+// ═══════════════════════════════════════
+// BUILD: THEORY IDENTIFIER
+// ═══════════════════════════════════════
+function buildTheory(){
+  const container=document.getElementById('theoryItems');
+  const items=shuffle([...THEORY_DATA]);
+  window._theoryItems=items;
+  const theories=["Realism","Liberalism","Marxism","Constructivism","Feminism","Post-colonialism"];
+
+  let h='';
+  items.forEach((item,i)=>{
+    h+=`<div class="dim-card" id="ti-${i}">`;
+    h+=`<div class="scenario" style="font-style:italic">"${item.s}"</div>`;
+    h+=`<div class="dim-options">`;
+    theories.forEach(t=>{h+=`<div class="dim-pill" data-qi="${i}" data-val="${t}">${t}</div>`;});
+    h+=`</div><div class="dim-explain" id="tex-${i}">${item.e}</div></div>`;
+  });
+  container.innerHTML=h;
+
+  container.querySelectorAll('.dim-pill').forEach(pill=>{
+    pill.addEventListener('click',function(){
+      const qi=this.dataset.qi;
+      container.querySelectorAll(`[data-qi="${qi}"].dim-pill`).forEach(p=>p.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+
+  document.getElementById('checkTheory').addEventListener('click',()=>{
+    if(done.theory) return;
+    done.theory=true;
+    let correct=0;
+    window._theoryItems.forEach((item,i)=>{
+      const selected=container.querySelector(`[data-qi="${i}"].dim-pill.selected`);
+      const pills=container.querySelectorAll(`[data-qi="${i}"].dim-pill`);
+      pills.forEach(p=>{
+        p.style.pointerEvents='none';
+        if(p.dataset.val===item.a) p.classList.add('correct');
+      });
+      if(selected){
+        if(selected.dataset.val===item.a){correct++;addXP(15);addStreak();}
+        else{selected.classList.add('wrong');breakStreak();}
+      }
+      document.getElementById('tex-'+i).classList.add('show');
+    });
+    const total=window._theoryItems.length;
+    const pct=Math.round(correct/total*100);
+    const cls=pct>=80?'great':pct>=50?'good':'try';
+    document.getElementById('theoryResult').innerHTML=`<div class="result-banner ${cls}">${correct}/${total} correct (${pct}%)</div>`;
+  });
+}
+
+// ═══════════════════════════════════════
+// BUILD: KEY THINKERS MATCH
+// ═══════════════════════════════════════
+function buildMatch(){
+  const grid=document.getElementById('matchGrid');
+  const terms=shuffle([...MATCH_DATA]);
+  const defs=shuffle([...MATCH_DATA]);
+  window._matchTerms=terms;
+  window._matchDefs=defs;
+  window._matchSel=null;
+  window._matchCount=0;
+
+  let h='<div style="margin-bottom:8px"><strong>Thinkers / Concepts</strong></div><div style="margin-bottom:8px"><strong>Key Contributions</strong></div>';
+  for(let i=0;i<Math.max(terms.length,defs.length);i++){
+    if(i<terms.length) h+=`<div class="match-item" data-type="term" data-idx="${i}" id="mt-${i}">${terms[i].term}</div>`;
+    else h+=`<div></div>`;
+    if(i<defs.length) h+=`<div class="match-item" data-type="def" data-idx="${i}" id="md-${i}">${defs[i].def}</div>`;
+    else h+=`<div></div>`;
+  }
+  grid.innerHTML=h;
+
+  grid.querySelectorAll('.match-item').forEach(item=>{
+    item.addEventListener('click',function(){
+      if(this.classList.contains('matched')) return;
+      if(!window._matchSel){
+        grid.querySelectorAll('.match-item').forEach(m=>m.classList.remove('sel'));
+        this.classList.add('sel');
+        window._matchSel=this;
+      } else {
+        const first=window._matchSel;
+        if(first===this){this.classList.remove('sel');window._matchSel=null;return;}
+        if(first.dataset.type===this.dataset.type){
+          first.classList.remove('sel');this.classList.add('sel');window._matchSel=this;return;
+        }
+        const termEl=first.dataset.type==='term'?first:this;
+        const defEl=first.dataset.type==='def'?first:this;
+        const termData=window._matchTerms[parseInt(termEl.dataset.idx)];
+        const defData=window._matchDefs[parseInt(defEl.dataset.idx)];
+        if(termData.term===defData.term){
+          termEl.classList.remove('sel');termEl.classList.add('matched');
+          defEl.classList.remove('sel');defEl.classList.add('matched');
+          addXP(15);addStreak();
+          window._matchCount++;
+          if(window._matchCount===MATCH_DATA.length){
+            document.getElementById('matchResult').innerHTML=`<div class="result-banner great">All ${MATCH_DATA.length} pairs matched!</div>`;
+            done.match=true;
+          }
+        } else {
+          termEl.classList.remove('sel');defEl.classList.remove('sel');
+          termEl.classList.add('wrong-flash');defEl.classList.add('wrong-flash');
+          breakStreak();
+          setTimeout(()=>{termEl.classList.remove('wrong-flash');defEl.classList.remove('wrong-flash');},500);
+        }
+        window._matchSel=null;
+      }
+    });
+  });
+}
+
+// ═══════════════════════════════════════
+// BUILD: TIMELINE SORT
+// ═══════════════════════════════════════
+function buildTimeline(){
+  const container=document.getElementById('tlItems');
+  const items=shuffle([...TL_DATA]);
+  window._tlItems=items;
+
+  let h='';
+  items.forEach((item,i)=>{
+    h+=`<div class="tl-item" draggable="true" data-idx="${i}" id="tli-${i}">`;
+    h+=`<span class="handle">☰</span><span>${item.event}</span></div>`;
+  });
+  container.innerHTML=h;
+
+  container.querySelectorAll('.tl-item').forEach(el=>{
+    el.addEventListener('dragstart',e=>{
+      el.classList.add('dragging');
+      e.dataTransfer.effectAllowed='move';
+    });
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('dragover',e=>{
+      e.preventDefault();
+      const dragging=container.querySelector('.dragging');
+      if(dragging&&dragging!==el){
+        const rect=el.getBoundingClientRect();
+        const mid=rect.top+rect.height/2;
+        if(e.clientY<mid) container.insertBefore(dragging,el);
+        else container.insertBefore(dragging,el.nextSibling);
+      }
+    });
+  });
+
+  // Touch reorder
+  let touchEl=null;
+  container.addEventListener('touchstart',e=>{
+    const item=e.target.closest('.tl-item');
+    if(item){touchEl=item;touchEl.style.opacity='.5';}
+  },{passive:true});
+  container.addEventListener('touchmove',e=>{
+    if(!touchEl) return;
+    const touch=e.touches[0];
+    const target=document.elementFromPoint(touch.clientX,touch.clientY);
+    const item=target?target.closest('.tl-item'):null;
+    if(item&&item!==touchEl){
+      const rect=item.getBoundingClientRect();
+      const mid=rect.top+rect.height/2;
+      if(touch.clientY<mid) container.insertBefore(touchEl,item);
+      else container.insertBefore(touchEl,item.nextSibling);
+    }
+  },{passive:true});
+  container.addEventListener('touchend',()=>{
+    if(touchEl) touchEl.style.opacity='1';
+    touchEl=null;
+  });
+
+  document.getElementById('checkTL').addEventListener('click',()=>{
+    if(done.timeline) return;
+    done.timeline=true;
+    const sorted=[...TL_DATA].sort((a,b)=>a.year-b.year);
+    let correct=0;
+    container.querySelectorAll('.tl-item').forEach((el,pos)=>{
+      const item=window._tlItems[parseInt(el.dataset.idx)];
+      if(item.year===sorted[pos].year){el.classList.add('correct');correct++;}
+      else el.classList.add('wrong');
+      el.draggable=false;
+      const yr=document.createElement('span');
+      yr.style.cssText='font-weight:700;color:var(--navy);margin-left:8px;';
+      yr.textContent='('+item.year+')';
+      el.appendChild(yr);
+    });
+    if(correct===TL_DATA.length){addXP(20);addStreak();}else breakStreak();
+    const pct=Math.round(correct/TL_DATA.length*100);
+    const cls=pct>=80?'great':pct>=50?'good':'try';
+    document.getElementById('tlResult').innerHTML=`<div class="result-banner ${cls}">${correct}/${TL_DATA.length} in correct position (${pct}%)${correct===TL_DATA.length?' — Perfect! +20 XP':''}</div>`;
+  });
+}
+
+// ═══════════════════════════════════════
+// BUILD: DEBATE ARENA
+// ═══════════════════════════════════════
+function buildDebate(){
+  const container=document.getElementById('debateItems');
+  let h='';
+  DEBATE_DATA.forEach(d=>{
+    h+=`<div class="card"><h4>${d.title}</h4>`;
+    h+=`<div class="debate-prompt"><strong>Discuss:</strong> ${d.prompt}</div></div>`;
+  });
+  container.innerHTML=h;
+}
+
+// ═══════════════════════════════════════
+// BUILD: STATS
+// ═══════════════════════════════════════
+function buildStats(){
+  const grid=document.getElementById('statGrid');
+  const totalVids=Object.keys(VID_DATA).reduce((sum,k)=>sum+VID_DATA[k].items.length,0);
+  const doneVids=Object.keys(done.videos).length;
+  const activities=[
+    {name:'Videos',done:doneVids,total:totalVids},
+    {name:'Sorter',done:done.sorter?1:0,total:1},
+    {name:'Theory ID',done:done.theory?1:0,total:1},
+    {name:'Match',done:done.match?1:0,total:1},
+    {name:'Timeline',done:done.timeline?1:0,total:1}
+  ];
+  const totalAct=activities.reduce((s,a)=>s+a.total,0);
+  const doneAct=activities.reduce((s,a)=>s+a.done,0);
+
+  grid.innerHTML=`
+    <div class="stat-card"><span class="num">${xp}</span><span class="lbl">Total XP</span></div>
+    <div class="stat-card"><span class="num">${streak}</span><span class="lbl">Current Streak</span></div>
+    <div class="stat-card"><span class="num">${maxStreak}</span><span class="lbl">Best Streak</span></div>
+    <div class="stat-card"><span class="num">${Math.round(doneAct/totalAct*100)}%</span><span class="lbl">Completion</span></div>
+  `;
+
+  const prog=document.getElementById('activityProgress');
+  let ph='<h3>Activity Completion</h3>';
+  activities.forEach(a=>{
+    const pct=Math.round(a.done/a.total*100);
+    ph+=`<div style="margin:10px 0"><div style="display:flex;justify-content:space-between;font-size:.85em;font-weight:600"><span>${a.name}</span><span>${a.done}/${a.total}</span></div><div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div></div>`;
+  });
+  prog.innerHTML=ph;
+
+  document.getElementById('resetBtn').onclick=()=>{
+    if(confirm('Reset all progress? This cannot be undone.')) location.reload();
+  };
+}
+</script>
+</body>
+</html>
