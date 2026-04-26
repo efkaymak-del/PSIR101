@@ -8,28 +8,34 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  :root{--r-main-font:'Segoe UI',system-ui,sans-serif;--r-heading-font:'Segoe UI',system-ui,sans-serif;--r-main-color:#1a1a2e;--r-heading-color:#0d47a1;--r-link-color:#1565c0;--r-background-color:#f8f9fa;}
-  .reveal h1,.reveal h2,.reveal h3{text-transform:none;letter-spacing:normal;}
-  .reveal h1{font-size:2.2em; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);}
-  .reveal h2{font-size:1.5em;border-bottom:3px solid #1565c0;padding-bottom:10px;display:inline-block;}
-  .reveal h3{font-size:1.15em;color:#1565c0;}
-  .reveal p,.reveal li{font-size:.78em;line-height:1.6;}
-  .reveal ul{margin-left:1.2em;}
-  .reveal blockquote{background:rgba(227,242,253,0.85);border-left:5px solid #1565c0;padding:15px 20px;font-style:italic;font-size:.82em;border-radius:6px;margin:20px 0;}
-  .reveal table{font-size:.72em;border-collapse:collapse;margin:15px auto;background:rgba(255,255,255,0.9);box-shadow:0 4px 6px rgba(0,0,0,0.05);}
-  .reveal th{background:#1565c0;color:#fff;padding:8px 14px;text-align:left;}
-  .reveal td{padding:8px 14px;border-bottom:1px solid #e0e0e0;}
-  .reveal .highlight-box{background:rgba(255,243,224,0.9);border:2px solid #ff9800;border-radius:10px;padding:18px;margin:15px 0;font-size:.78em;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
-  .reveal .debate-box{background:rgba(252,228,236,0.9);border:2px solid #e91e63;border-radius:10px;padding:18px;margin:15px 0;font-size:.78em;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
-  .reveal .reading-box{background:rgba(232,245,233,0.9);border:2px solid #4caf50;border-radius:10px;padding:18px;margin:15px 0;font-size:.78em;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
-  .reveal .case-box{background:rgba(227,242,253,0.9);border:2px solid #1565c0;border-radius:10px;padding:18px;margin:15px 0;font-size:.78em;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
-  .reveal .cyprus-box{background:rgba(255,248,225,0.9);border:2px solid #f9a825;border-radius:10px;padding:18px;margin:15px 0;font-size:.78em;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
-  .reveal .footer-bar{position:fixed;bottom:0;left:0;width:100%;background:#1565c0;color:#fff;font-size:.55em;padding:6px 16px;display:flex;justify-content:space-between;z-index:100;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;text-align:left;align-items:start;}
-  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;text-align:left;}
-  .small{font-size:.65em;color:#666;}
-  .icon-big{font-size:2.5em;color:#1565c0;margin-bottom:20px;}
-  .slide-image{border-radius:8px;box-shadow:0 6px 12px rgba(0,0,0,0.15);max-height:350px;object-fit:cover;width:100%;}
+:root{--r-main-font:'Segoe UI',system-ui,sans-serif;--r-heading-font:'Segoe UI',system-ui,sans-serif;--r-main-color:#1a1a2e;--r-heading-color:#0d47a1;--r-link-color:#1565c0;--r-background-color:#f8f9fa;}
+.reveal h1,.reveal h2,.reveal h3{text-transform:none;letter-spacing:normal;}
+.reveal h1{font-size:2.2em;text-shadow:2px 2px 4px rgba(0,0,0,0.1);}
+.reveal h2{font-size:1.5em;border-bottom:3px solid #1565c0;padding-bottom:10px;display:inline-block;}
+.reveal h3{font-size:1.15em;color:#1565c0;}
+.reveal p,.reveal li{font-size:.78em;line-height:1.6;}
+.reveal ul{margin-left:1.2em;}
+.reveal blockquote{background:rgba(227,242,253,0.85);border-left:5px solid #1565c0;padding:15px 20px;font-style:italic;font-size:.82em;border-radius:6px;margin:20px 0;}
+.reveal table{font-size:.72em;border-collapse:collapse;margin:15px auto;background:rgba(255,255,255,0.9);box-shadow:0 4px 6px rgba(0,0,0,0.05);}
+.reveal th{background:#1565c0;color:#fff;padding:8px 14px;text-align:left;}
+.reveal td{padding:8px 14px;border-bottom:1px solid #e0e0e0;}
+.reveal .highlight-box{background:rgba(255,243,224,0.9);border:2px solid #ff9800;border-radius:10px;padding:18px;margin:15px 0;font-size:.78em;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
+.reveal .debate-box{background:rgba(252,228,236,0.9);border:2px solid #e91e63;border-radius:10px;padding:18px;margin:15px 0;font-size:.78em;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
+.reveal .reading-box{background:rgba(232,245,233,0.9);border:2px solid #4caf50;border-radius:10px;padding:18px;margin:15px 0;font-size:.78em;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
+.reveal .case-box{background:rgba(227,242,253,0.9);border:2px solid #1565c0;border-radius:10px;padding:18px;margin:15px 0;font-size:.78em;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
+.reveal .cyprus-box{background:rgba(255,248,225,0.9);border:2px solid #f9a825;border-radius:10px;padding:18px;margin:15px 0;font-size:.78em;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
+.reveal .footer-bar{position:fixed;bottom:0;left:0;width:100%;background:#1565c0;color:#fff;font-size:.55em;padding:6px 16px;display:flex;justify-content:space-between;z-index:100;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;text-align:left;align-items:start;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;text-align:left;}
+.small{font-size:.65em;color:#666;}
+.icon-big{font-size:2.5em;color:#1565c0;margin-bottom:20px;}
+.slide-image{border-radius:8px;box-shadow:0 6px 12px rgba(0,0,0,0.15);max-height:350px;object-fit:cover;width:100%;}
+.org-emblem{height:60px;margin:0 10px;vertical-align:middle;filter:drop-shadow(1px 1px 2px rgba(0,0,0,0.15));}
+.case-timeline{border-left:4px solid #1565c0;padding-left:18px;margin-left:10px;}
+.case-timeline .event{margin-bottom:14px;position:relative;}
+.case-timeline .event::before{content:'';width:14px;height:14px;background:#1565c0;border-radius:50%;position:absolute;left:-25px;top:4px;border:3px solid #e3f2fd;}
+.case-timeline .event .year{font-weight:bold;color:#0d47a1;font-size:.82em;}
+.case-timeline .event .desc{font-size:.7em;color:#333;}
 </style>
 </head>
 <body>
@@ -38,639 +44,707 @@
 
 <!-- SLIDE 1: TITLE -->
 <section data-background-color="#e8eaf6">
-  <h1>Human Rights in World Politics</h1>
-  <h3>PSIR101 – Introduction to Global Politics</h3>
-  <p>Week 11 · Eastern Mediterranean University · Spring 2026</p>
-  <p class="small">Assoc. Prof. Dr. Umut Bozkurt · Prof. Dr. Erol Kaymak · Assoc. Prof. Dr. Berna Numan</p>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="UN emblem" style="height:80px;margin-bottom:10px;filter:drop-shadow(2px 2px 3px rgba(0,0,0,0.15));">
+<h1>Human Rights in World Politics</h1>
+<h3>PSIR101 – Introduction to Global Politics</h3>
+<p>Week 11 · Eastern Mediterranean University · Spring 2026</p>
+<p class="small">Assoc. Prof. Dr. Umut Bozkurt · Prof. Dr. Erol Kaymak · Assoc. Prof. Dr. Berna Numan</p>
 </section>
 
 <!-- SLIDE 2: ROADMAP -->
 <section>
-  <h2>Today's Roadmap</h2>
-  <ol>
-    <li class="fragment">What are human rights? Origins and foundations</li>
-    <li class="fragment">The international human rights regime</li>
-    <li class="fragment">Key debates: universalism vs. relativism</li>
-    <li class="fragment">Three generations of rights</li>
-    <li class="fragment">The Responsibility to Protect (R2P)</li>
-    <li class="fragment"><strong>Supplemental:</strong> R2P at 20 — the SG's 2025 report</li>
-    <li class="fragment"><strong>Supplemental:</strong> R2P and Palestine — the Global Centre's call</li>
-    <li class="fragment">R2P and the 2026 Iran war</li>
-    <li class="fragment">Enforcement, accountability & the ICC</li>
-    <li class="fragment"><strong>Human rights and Cyprus — where you sit</strong></li>
-    <li class="fragment">Discussion and key takeaways</li>
-  </ol>
+<h2>Today's Roadmap</h2>
+<ol>
+<li class="fragment">What are human rights? Origins and foundations</li>
+<li class="fragment">The international human rights regime</li>
+<li class="fragment">Key debates: universalism vs. relativism</li>
+<li class="fragment">Three generations of rights</li>
+<li class="fragment">The Responsibility to Protect (R2P)</li>
+<li class="fragment"><strong>Supplemental:</strong> R2P at 20 — the SG's 2025 report</li>
+<li class="fragment"><strong>Supplemental:</strong> R2P and Palestine — the Global Centre's call</li>
+<li class="fragment">R2P and the 2026 Iran war</li>
+<li class="fragment">Enforcement, accountability &amp; the ICC</li>
+<li class="fragment"><strong>Human rights and Cyprus — where you sit</strong></li>
+<li class="fragment">Discussion and key takeaways</li>
+</ol>
 </section>
 
-<!-- SLIDE 3: WHAT ARE HR - OPENER -->
+<!-- SLIDE 3: WHAT ARE HR -->
 <section data-background-color="#e3f2fd">
-  <h2>What Are Human Rights?</h2>
-  <div class="icon-big"><i class="fa-solid fa-scale-balanced"></i></div>
-  <p>Rights held by all human beings simply because they are human — regardless of nationality, ethnicity, gender, religion, or any other status.</p>
+<h2>What Are Human Rights?</h2>
+<div class="icon-big"><i class="fa-solid fa-scale-balanced"></i></div>
+<p>Rights held by all human beings simply because they are human — regardless of nationality, ethnicity, gender, religion, or any other status.</p>
 </section>
 
 <!-- SLIDE 4: CORE CHARACTERISTICS -->
 <section>
-  <h3>Core Characteristics</h3>
-  <div class="two-col">
-    <div class="fragment">
-      <p><strong>Universal</strong> — they apply to every person everywhere</p>
-      <p><strong>Inalienable</strong> — they cannot be taken away</p>
-      <p><strong>Indivisible</strong> — civil, political, economic, social, and cultural rights are all equally important</p>
-    </div>
-    <div class="fragment">
-      <p><strong>Interdependent</strong> — the fulfilment of one right depends on the fulfilment of others</p>
-      <p><strong>Non-discriminatory</strong> — they belong to all without distinction</p>
-      <p><strong>Both rights and obligations</strong> — states bear the duty to respect, protect, and fulfil</p>
-    </div>
-  </div>
+<h3>Core Characteristics</h3>
+<div class="two-col">
+<div class="fragment">
+<p><i class="fa-solid fa-globe" style="color:#1565c0;"></i> <strong>Universal</strong> — they apply to every person everywhere</p>
+<p><i class="fa-solid fa-lock" style="color:#1565c0;"></i> <strong>Inalienable</strong> — they cannot be taken away</p>
+<p><i class="fa-solid fa-link" style="color:#1565c0;"></i> <strong>Indivisible</strong> — civil, political, economic, social, and cultural rights are all equally important</p>
+</div>
+<div class="fragment">
+<p><i class="fa-solid fa-arrows-spin" style="color:#1565c0;"></i> <strong>Interdependent</strong> — the fulfilment of one right depends on the fulfilment of others</p>
+<p><i class="fa-solid fa-equals" style="color:#1565c0;"></i> <strong>Non-discriminatory</strong> — they belong to all without distinction</p>
+<p><i class="fa-solid fa-handshake-angle" style="color:#1565c0;"></i> <strong>Both rights and obligations</strong> — states bear the duty to respect, protect, and fulfil</p>
+</div>
+</div>
 </section>
 
 <!-- SLIDE 5: HISTORICAL FOUNDATIONS -->
 <section>
-  <h3>Historical Foundations</h3>
-  <table>
-    <tr><th>Date</th><th>Milestone</th></tr>
-    <tr class="fragment"><td>1215</td><td>Magna Carta — limits on sovereign power</td></tr>
-    <tr class="fragment"><td>1689</td><td>English Bill of Rights</td></tr>
-    <tr class="fragment"><td>1776</td><td>US Declaration of Independence — "unalienable rights"</td></tr>
-    <tr class="fragment"><td>1789</td><td>French Declaration of the Rights of Man and of the Citizen</td></tr>
-    <tr class="fragment"><td>1945</td><td>UN Charter — "faith in fundamental human rights"</td></tr>
-    <tr class="fragment"><td style="background:#e3f2fd"><strong>1948</strong></td><td style="background:#e3f2fd"><strong>Universal Declaration of Human Rights (UDHR)</strong></td></tr>
-  </table>
-  <p class="small">Baylis, Smith & Owens, pp. 498–503</p>
+<h3>Historical Foundations</h3>
+<table>
+<tr><th>Date</th><th>Milestone</th></tr>
+<tr class="fragment"><td>1215</td><td><i class="fa-solid fa-scroll" style="color:#8d6e63;"></i> Magna Carta — limits on sovereign power</td></tr>
+<tr class="fragment"><td>1689</td><td><i class="fa-solid fa-landmark-dome" style="color:#5d4037;"></i> English Bill of Rights</td></tr>
+<tr class="fragment"><td>1776</td><td><i class="fa-solid fa-flag-usa" style="color:#1565c0;"></i> US Declaration of Independence — "unalienable rights"</td></tr>
+<tr class="fragment"><td>1789</td><td><i class="fa-solid fa-monument" style="color:#1565c0;"></i> French Declaration of the Rights of Man and of the Citizen</td></tr>
+<tr class="fragment"><td>1945</td><td><i class="fa-solid fa-earth-americas" style="color:#1565c0;"></i> UN Charter — "faith in fundamental human rights"</td></tr>
+<tr class="fragment"><td style="background:#e3f2fd"><strong>1948</strong></td><td style="background:#e3f2fd"><i class="fa-solid fa-star" style="color:#ff9800;"></i> <strong>Universal Declaration of Human Rights (UDHR)</strong></td></tr>
+</table>
+<p class="small">Baylis, Smith &amp; Owens, pp. 498–503</p>
 </section>
 
 <!-- SLIDE 6: UDHR -->
 <section>
-  <h3>The UDHR: A Common Standard</h3>
-  <div class="two-col">
-    <div>
-      <blockquote>"All human beings are born free and equal in dignity and rights." — Article 1, UDHR (1948)</blockquote>
-      <p>30 articles covering civil, political, economic, social, and cultural rights. Non-binding — but incorporated into binding treaties and constitutions worldwide.</p>
-      <p>Drafted by Eleanor Roosevelt's committee, with Charles Malik (Lebanon), P.C. Chang (China), and Hansa Mehta (India).</p>
-    </div>
-    <div>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Eleanor_Roosevelt_UDHR.jpg/800px-Eleanor_Roosevelt_UDHR.jpg" alt="Eleanor Roosevelt holding the UDHR" class="slide-image">
-      <p class="small" style="text-align:center;margin-top:6px;">Eleanor Roosevelt with the UDHR, 1949</p>
-    </div>
-  </div>
+<h3>The UDHR: A Common Standard</h3>
+<div class="two-col">
+<div>
+<blockquote>"All human beings are born free and equal in dignity and rights." — Article 1, UDHR (1948)</blockquote>
+<p>30 articles covering civil, political, economic, social, and cultural rights. Non-binding — but incorporated into binding treaties and constitutions worldwide.</p>
+<p>Drafted by Eleanor Roosevelt's committee, with Charles Malik (Lebanon), P.C. Chang (China), and Hansa Mehta (India).</p>
+</div>
+<div>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Eleanor_Roosevelt_UDHR.jpg/800px-Eleanor_Roosevelt_UDHR.jpg" alt="Eleanor Roosevelt holding the UDHR" class="slide-image">
+<p class="small" style="text-align:center;margin-top:6px;">Eleanor Roosevelt with the UDHR, 1949</p>
+</div>
+</div>
 </section>
 
 <!-- SLIDE 7: REGIME OPENER -->
 <section data-background-color="#e8f5e9">
-  <h2>The International Human Rights Regime</h2>
-  <div class="icon-big"><i class="fa-solid fa-earth-americas"></i></div>
+<h2>The International Human Rights Regime</h2>
+<div class="icon-big"><i class="fa-solid fa-earth-americas"></i></div>
 </section>
 
 <!-- SLIDE 8: BILL OF RIGHTS -->
 <section>
-  <h3>Key Treaties: The International Bill of Rights</h3>
-  <div class="two-col">
-    <div class="fragment" style="background:#f8f9fa;padding:15px;border-radius:8px;border-top:4px solid #1565c0;">
-      <p><strong>ICCPR</strong> (1966)<br>Civil and Political Rights</p>
-      <ul>
-        <li>Right to life, liberty, fair trial</li>
-        <li>Freedom of expression, religion, assembly</li>
-        <li>Protection from torture and arbitrary detention</li>
-      </ul>
-    </div>
-    <div class="fragment" style="background:#f8f9fa;padding:15px;border-radius:8px;border-top:4px solid #2e7d32;">
-      <p><strong>ICESCR</strong> (1966)<br>Economic, Social and Cultural Rights</p>
-      <ul>
-        <li>Right to work, education, health</li>
-        <li>Right to an adequate standard of living</li>
-        <li>Right to participate in cultural life</li>
-      </ul>
-    </div>
-  </div>
-  <p class="small fragment" style="margin-top:20px;">Together with the UDHR, these form the "International Bill of Rights"</p>
+<h3>Key Treaties: The International Bill of Rights</h3>
+<div class="two-col">
+<div class="fragment" style="background:#f8f9fa;padding:15px;border-radius:8px;border-top:4px solid #1565c0;">
+<p><i class="fa-solid fa-gavel" style="color:#1565c0;"></i> <strong>ICCPR</strong> (1966)<br>Civil and Political Rights</p>
+<ul>
+<li>Right to life, liberty, fair trial</li>
+<li>Freedom of expression, religion, assembly</li>
+<li>Protection from torture and arbitrary detention</li>
+</ul>
+</div>
+<div class="fragment" style="background:#f8f9fa;padding:15px;border-radius:8px;border-top:4px solid #2e7d32;">
+<p><i class="fa-solid fa-hospital" style="color:#2e7d32;"></i> <strong>ICESCR</strong> (1966)<br>Economic, Social and Cultural Rights</p>
+<ul>
+<li>Right to work, education, health</li>
+<li>Right to an adequate standard of living</li>
+<li>Right to participate in cultural life</li>
+</ul>
+</div>
+</div>
+<p class="small fragment" style="margin-top:20px;">Together with the UDHR, these form the "International Bill of Rights"</p>
 </section>
 
 <!-- SLIDE 9: SPECIALISED CONVENTIONS -->
 <section>
-  <h3>Specialised Conventions</h3>
-  <table>
-    <tr><th>Convention</th><th>Year</th><th>Focus</th></tr>
-    <tr class="fragment"><td>CERD</td><td>1965</td><td>Elimination of Racial Discrimination</td></tr>
-    <tr class="fragment"><td>CEDAW</td><td>1979</td><td>Elimination of Discrimination Against Women</td></tr>
-    <tr class="fragment"><td>CAT</td><td>1984</td><td>Convention Against Torture</td></tr>
-    <tr class="fragment"><td>CRC</td><td>1989</td><td>Rights of the Child</td></tr>
-    <tr class="fragment"><td>CRPD</td><td>2006</td><td>Rights of Persons with Disabilities</td></tr>
-    <tr class="fragment"><td>ICPPED</td><td>2006</td><td>Protection from Enforced Disappearance</td></tr>
-  </table>
+<h3>Specialised Conventions</h3>
+<table>
+<tr><th>Convention</th><th>Year</th><th>Focus</th></tr>
+<tr class="fragment"><td><i class="fa-solid fa-people-group" style="color:#1565c0;"></i> CERD</td><td>1965</td><td>Elimination of Racial Discrimination</td></tr>
+<tr class="fragment"><td><i class="fa-solid fa-venus" style="color:#e91e63;"></i> CEDAW</td><td>1979</td><td>Elimination of Discrimination Against Women</td></tr>
+<tr class="fragment"><td><i class="fa-solid fa-ban" style="color:#d32f2f;"></i> CAT</td><td>1984</td><td>Convention Against Torture</td></tr>
+<tr class="fragment"><td><i class="fa-solid fa-child" style="color:#ff9800;"></i> CRC</td><td>1989</td><td>Rights of the Child</td></tr>
+<tr class="fragment"><td><i class="fa-solid fa-wheelchair" style="color:#1565c0;"></i> CRPD</td><td>2006</td><td>Rights of Persons with Disabilities</td></tr>
+<tr class="fragment"><td><i class="fa-solid fa-person-circle-question" style="color:#6a1b9a;"></i> ICPPED</td><td>2006</td><td>Protection from Enforced Disappearance</td></tr>
+</table>
 </section>
 
 <!-- SLIDE 10: MONITORING -->
 <section>
-  <h3>Monitoring & Enforcement Mechanisms</h3>
-  <ul>
-    <li class="fragment"><strong>UN Human Rights Council</strong> — 47 elected members; Universal Periodic Review (UPR) of all states</li>
-    <li class="fragment"><strong>Treaty Bodies</strong> — committees of experts monitoring compliance</li>
-    <li class="fragment"><strong>Special Procedures</strong> — independent experts (Special Rapporteurs)</li>
-    <li class="fragment"><strong>OHCHR</strong> — led by Volker Türk</li>
-    <li class="fragment"><strong>International Criminal Court (ICC)</strong> — prosecutes individuals for genocide, war crimes, crimes against humanity</li>
-  </ul>
+<h3>Monitoring &amp; Enforcement Mechanisms</h3>
+<ul>
+<li class="fragment"><i class="fa-solid fa-users" style="color:#1565c0;"></i> <strong>UN Human Rights Council</strong> — 47 elected members; Universal Periodic Review (UPR) of all states</li>
+<li class="fragment"><i class="fa-solid fa-clipboard-check" style="color:#2e7d32;"></i> <strong>Treaty Bodies</strong> — committees of experts monitoring compliance</li>
+<li class="fragment"><i class="fa-solid fa-magnifying-glass" style="color:#e65100;"></i> <strong>Special Procedures</strong> — independent experts (Special Rapporteurs)</li>
+<li class="fragment"><i class="fa-solid fa-building-columns" style="color:#6a1b9a;"></i> <strong>OHCHR</strong> — led by Volker Türk</li>
+<li class="fragment"><i class="fa-solid fa-scale-balanced" style="color:#d32f2f;"></i> <strong>International Criminal Court (ICC)</strong> — prosecutes individuals for genocide, war crimes, crimes against humanity</li>
+</ul>
 </section>
 
 <!-- SLIDE 11: DEBATE OPENER -->
 <section data-background-color="#fce4ec">
-  <h2>The Great Debate: Universalism vs. Relativism</h2>
-  <div class="icon-big"><i class="fa-solid fa-people-arrows"></i></div>
+<h2>The Great Debate: Universalism vs. Relativism</h2>
+<div class="icon-big"><i class="fa-solid fa-people-arrows"></i></div>
 </section>
 
 <!-- SLIDE 12: UNIVERSALISM -->
 <section>
-  <h3>Universalism</h3>
-  <div class="highlight-box">
-    <p><strong>Core claim:</strong> Human rights apply to all people in all cultures at all times, because they derive from our common humanity.</p>
-    <p><strong>Key argument:</strong> The UDHR was adopted with no dissenting votes. Its principles reflect shared moral intuitions across civilisations.</p>
-    <p><strong>Proponents:</strong> Most Western governments, Amnesty International, HRW, the UN human rights system.</p>
-  </div>
+<h3>Universalism</h3>
+<div class="highlight-box">
+<p><i class="fa-solid fa-earth-americas" style="color:#ff9800;"></i> <strong>Core claim:</strong> Human rights apply to all people in all cultures at all times, because they derive from our common humanity.</p>
+<p><strong>Key argument:</strong> The UDHR was adopted with no dissenting votes. Its principles reflect shared moral intuitions across civilisations.</p>
+<p><strong>Proponents:</strong> Most Western governments, Amnesty International, HRW, the UN human rights system.</p>
+</div>
 </section>
 
 <!-- SLIDE 13: RELATIVISM -->
 <section>
-  <h3>Cultural Relativism</h3>
-  <div class="debate-box">
-    <p><strong>Core claim:</strong> Rights are culturally constructed. Imposing Western-defined rights on non-Western cultures is itself a form of imperialism.</p>
-    <p><strong>Key argument:</strong> The UDHR was drafted primarily by Western states. Many Global South nations were still colonised in 1948. The "Asian values" debate (Lee Kuan Yew, Mahathir) challenged the priority given to individual rights over collective development.</p>
-    <p><strong>Critical question:</strong> Who defines "universal" — and who benefits from that definition?</p>
-  </div>
+<h3>Cultural Relativism</h3>
+<div class="debate-box">
+<p><i class="fa-solid fa-masks-theater" style="color:#e91e63;"></i> <strong>Core claim:</strong> Rights are culturally constructed. Imposing Western-defined rights on non-Western cultures is itself a form of imperialism.</p>
+<p><strong>Key argument:</strong> The UDHR was drafted primarily by Western states. Many Global South nations were still colonised in 1948. The "Asian values" debate (Lee Kuan Yew, Mahathir) challenged the priority given to individual rights over collective development.</p>
+<p><strong>Critical question:</strong> Who defines "universal" — and who benefits from that definition?</p>
+</div>
 </section>
 
 <!-- SLIDE 14: BEYOND THE BINARY -->
 <section>
-  <h3>Beyond the Binary</h3>
-  <p>Most scholars reject a simple either/or:</p>
-  <ul>
-    <li class="fragment"><strong>Overlapping consensus</strong> — different cultures arrive at similar norms through different routes (Rawls, Sen)</li>
-    <li class="fragment"><strong>"Thin" universalism</strong> — agreement on a minimal core (right to life, freedom from torture) with cultural variation on the margins</li>
-    <li class="fragment"><strong>Postcolonial critique</strong> — accepting universality while demanding decolonised interpretation and implementation</li>
-  </ul>
-  <p class="small">Baylis, Smith & Owens, pp. 504–509</p>
+<h3>Beyond the Binary</h3>
+<p>Most scholars reject a simple either/or:</p>
+<ul>
+<li class="fragment"><i class="fa-solid fa-circle-nodes" style="color:#1565c0;"></i> <strong>Overlapping consensus</strong> — different cultures arrive at similar norms through different routes (Rawls, Sen)</li>
+<li class="fragment"><i class="fa-solid fa-minimize" style="color:#1565c0;"></i> <strong>"Thin" universalism</strong> — agreement on a minimal core (right to life, freedom from torture) with cultural variation on the margins</li>
+<li class="fragment"><i class="fa-solid fa-rotate" style="color:#1565c0;"></i> <strong>Postcolonial critique</strong> — accepting universality while demanding decolonised interpretation and implementation</li>
+</ul>
+<p class="small">Baylis, Smith &amp; Owens, pp. 504–509</p>
 </section>
 
 <!-- SLIDE 15: DISCUSSION PROMPT -->
 <section>
-  <h3>Discussion Prompt</h3>
-  <div class="case-box">
-    <p><strong>Case:</strong> In 2026, the US described its rules of engagement as "stupid" and Trump stated "I don't need international law." Secretary of Defence Hegseth declared "no quarter, no mercy." Over 100 international law professors condemned this rhetoric.</p>
-    <p><strong>Question:</strong> When a major Western democracy — historically the loudest proponent of universal human rights — publicly dismisses international law during a war, what does this do to the universalism argument?</p>
-  </div>
+<h3><i class="fa-solid fa-comments" style="color:#1565c0;"></i> Discussion Prompt</h3>
+<div class="case-box">
+<p><strong>Case:</strong> In 2026, the US described its rules of engagement as "stupid" and Trump stated "I don't need international law." Secretary of Defence Hegseth declared "no quarter, no mercy." Over 100 international law professors condemned this rhetoric.</p>
+<p><strong>Question:</strong> When a major Western democracy — historically the loudest proponent of universal human rights — publicly dismisses international law during a war, what does this do to the universalism argument?</p>
+</div>
 </section>
 
 <!-- SLIDE 16: THREE GENERATIONS OPENER -->
 <section>
-  <h2>Three Generations of Rights</h2>
-  <div style="font-size:2.5em;color:#1565c0;margin-bottom:20px;">
-    <i class="fa-solid fa-landmark"></i> &nbsp;<i class="fa-solid fa-arrow-right" style="font-size:.5em;color:#999;"></i>&nbsp;
-    <i class="fa-solid fa-hospital"></i> &nbsp;<i class="fa-solid fa-arrow-right" style="font-size:.5em;color:#999;"></i>&nbsp;
-    <i class="fa-solid fa-earth-europe"></i>
-  </div>
+<h2>Three Generations of Rights</h2>
+<div style="font-size:2.5em;color:#1565c0;margin-bottom:20px;">
+<i class="fa-solid fa-landmark"></i> &nbsp;<i class="fa-solid fa-arrow-right" style="font-size:.5em;color:#999;"></i>&nbsp;
+<i class="fa-solid fa-hospital"></i> &nbsp;<i class="fa-solid fa-arrow-right" style="font-size:.5em;color:#999;"></i>&nbsp;
+<i class="fa-solid fa-earth-europe"></i>
+</div>
 </section>
 
-<!-- SLIDE 17: THREE GENERATIONS -->
+<!-- SLIDE 17: THREE GENERATIONS DETAIL -->
 <section>
-  <h3>The Three Generations (Karel Vasak, 1977)</h3>
-  <div class="three-col">
-    <div class="fragment" style="background:#e3f2fd;padding:14px;border-radius:10px;">
-      <p><strong>1st Generation</strong><br>Civil & Political</p>
-      <p style="font-size:.7em">Liberty, fair trial, free speech, vote, freedom from torture</p>
-      <p style="font-size:.65em;color:#1565c0">ICCPR · "Freedom from"</p>
-    </div>
-    <div class="fragment" style="background:#e8f5e9;padding:14px;border-radius:10px;">
-      <p><strong>2nd Generation</strong><br>Economic, Social, Cultural</p>
-      <p style="font-size:.7em">Work, education, health, housing, food, social security</p>
-      <p style="font-size:.65em;color:#2e7d32">ICESCR · "Freedom to"</p>
-    </div>
-    <div class="fragment" style="background:#fff3e0;padding:14px;border-radius:10px;">
-      <p><strong>3rd Generation</strong><br>Solidarity / Collective</p>
-      <p style="font-size:.7em">Self-determination, development, environment, peace</p>
-      <p style="font-size:.65em;color:#e65100">Emerging norms · "Freedom through"</p>
-    </div>
-  </div>
+<h3>The Three Generations (Karel Vasak, 1977)</h3>
+<div class="three-col">
+<div class="fragment" style="background:#e3f2fd;padding:14px;border-radius:10px;">
+<p><i class="fa-solid fa-landmark" style="color:#1565c0;"></i> <strong>1st Generation</strong><br>Civil &amp; Political</p>
+<p style="font-size:.7em">Liberty, fair trial, free speech, vote, freedom from torture</p>
+<p style="font-size:.65em;color:#1565c0">ICCPR · "Freedom from"</p>
+</div>
+<div class="fragment" style="background:#e8f5e9;padding:14px;border-radius:10px;">
+<p><i class="fa-solid fa-hospital" style="color:#2e7d32;"></i> <strong>2nd Generation</strong><br>Economic, Social, Cultural</p>
+<p style="font-size:.7em">Work, education, health, housing, food, social security</p>
+<p style="font-size:.65em;color:#2e7d32">ICESCR · "Freedom to"</p>
+</div>
+<div class="fragment" style="background:#fff3e0;padding:14px;border-radius:10px;">
+<p><i class="fa-solid fa-earth-europe" style="color:#e65100;"></i> <strong>3rd Generation</strong><br>Solidarity / Collective</p>
+<p style="font-size:.7em">Self-determination, development, environment, peace</p>
+<p style="font-size:.65em;color:#e65100">Emerging norms · "Freedom through"</p>
+</div>
+</div>
 </section>
 
 <!-- SLIDE 18: WHY IT MATTERS -->
 <section>
-  <h3>Why Does This Framework Matter?</h3>
-  <ul>
-    <li class="fragment">Cold War: the <strong>West</strong> prioritised 1st-generation rights; the <strong>Soviet bloc</strong> prioritised 2nd-generation rights</li>
-    <li class="fragment">The <strong>Global South</strong> has championed 3rd-generation rights — self-determination, development</li>
-    <li class="fragment">The <strong>indivisibility principle</strong> insists all three are equally important — but states choose which to emphasise</li>
-    <li class="fragment"><strong>2026:</strong> Iran's civilians suffer violations of all three simultaneously — political repression (1st), economic devastation (2nd), destruction of self-determination (3rd)</li>
-  </ul>
+<h3>Why Does This Framework Matter?</h3>
+<ul>
+<li class="fragment">Cold War: the <strong>West</strong> prioritised 1st-generation rights; the <strong>Soviet bloc</strong> prioritised 2nd-generation rights</li>
+<li class="fragment">The <strong>Global South</strong> has championed 3rd-generation rights — self-determination, development</li>
+<li class="fragment">The <strong>indivisibility principle</strong> insists all three are equally important — but states choose which to emphasise</li>
+<li class="fragment"><strong>2026:</strong> Iran's civilians suffer violations of all three simultaneously — political repression (1st), economic devastation (2nd), destruction of self-determination (3rd)</li>
+</ul>
 </section>
 
 <!-- SLIDE 19: R2P OPENER -->
 <section data-background-color="#e8eaf6">
-  <h2>The Responsibility to Protect (R2P)</h2>
-  <div class="icon-big"><i class="fa-solid fa-shield-halved"></i></div>
-  <p>From sovereignty as a privilege to sovereignty as a responsibility</p>
+<h2>The Responsibility to Protect (R2P)</h2>
+<div class="icon-big"><i class="fa-solid fa-shield-halved"></i></div>
+<p>From sovereignty as a privilege to sovereignty as a responsibility</p>
 </section>
 
 <!-- SLIDE 20: R2P ORIGINS -->
 <section>
-  <h3>Origins</h3>
-  <ul>
-    <li class="fragment"><strong>1994 Rwanda:</strong> 800,000 Tutsis killed in ~100 days. The world did nothing.</li>
-    <li class="fragment"><strong>1999 Kosovo:</strong> NATO intervened without SC authorisation. Legal? Legitimate?</li>
-    <li class="fragment"><strong>2001:</strong> ICISS coins "Responsibility to Protect"</li>
-    <li class="fragment"><strong>2005 World Summit:</strong> 170+ heads of state unanimously adopt R2P</li>
-  </ul>
+<h3>Origins</h3>
+<ul>
+<li class="fragment"><i class="fa-solid fa-skull-crossbones" style="color:#d32f2f;"></i> <strong>1994 Rwanda:</strong> 800,000 Tutsis killed in ~100 days. The world did nothing.</li>
+<li class="fragment"><i class="fa-solid fa-jet-fighter" style="color:#1565c0;"></i> <strong>1999 Kosovo:</strong> NATO intervened without SC authorisation. Legal? Legitimate?</li>
+<li class="fragment"><i class="fa-solid fa-file-lines" style="color:#2e7d32;"></i> <strong>2001:</strong> ICISS coins "Responsibility to Protect"</li>
+<li class="fragment"><i class="fa-solid fa-handshake" style="color:#ff9800;"></i> <strong>2005 World Summit:</strong> 170+ heads of state unanimously adopt R2P</li>
+</ul>
 </section>
 
 <!-- SLIDE 21: THREE PILLARS -->
 <section>
-  <h3>The Three Pillars of R2P</h3>
-  <div class="three-col">
-    <div class="fragment" style="background:#e3f2fd;padding:14px;border-radius:10px;">
-      <p><strong>Pillar I</strong></p>
-      <p style="font-size:.75em">Each state must protect its population from genocide, war crimes, ethnic cleansing, and crimes against humanity.</p>
-    </div>
-    <div class="fragment" style="background:#e8f5e9;padding:14px;border-radius:10px;">
-      <p><strong>Pillar II</strong></p>
-      <p style="font-size:.75em">The international community should assist states in building protection capacity.</p>
-    </div>
-    <div class="fragment" style="background:#fff3e0;padding:14px;border-radius:10px;">
-      <p><strong>Pillar III</strong></p>
-      <p style="font-size:.75em">When a state manifestly fails, the international community must take collective action — through the Security Council.</p>
-    </div>
-  </div>
-  <p class="small fragment" style="margin-top:20px;font-weight:bold;">R2P applies ONLY to four crimes: genocide, war crimes, ethnic cleansing, crimes against humanity.</p>
+<h3>The Three Pillars of R2P</h3>
+<div class="three-col">
+<div class="fragment" style="background:#e3f2fd;padding:14px;border-radius:10px;">
+<p><strong>Pillar I</strong></p>
+<p style="font-size:.75em">Each state must protect its population from genocide, war crimes, ethnic cleansing, and crimes against humanity.</p>
+</div>
+<div class="fragment" style="background:#e8f5e9;padding:14px;border-radius:10px;">
+<p><strong>Pillar II</strong></p>
+<p style="font-size:.75em">The international community should assist states in building protection capacity.</p>
+</div>
+<div class="fragment" style="background:#fff3e0;padding:14px;border-radius:10px;">
+<p><strong>Pillar III</strong></p>
+<p style="font-size:.75em">When a state manifestly fails, the international community must take collective action — through the Security Council.</p>
+</div>
+</div>
+<p class="small fragment" style="margin-top:20px;font-weight:bold;">R2P applies ONLY to four crimes: genocide, war crimes, ethnic cleansing, crimes against humanity.</p>
 </section>
 
 <!-- SLIDE 22: R2P IN PRACTICE -->
 <section>
-  <h3>R2P in Practice: Successes and Failures</h3>
-  <table>
-    <tr><th>Case</th><th>Outcome</th><th>Lesson</th></tr>
-    <tr class="fragment"><td>Kenya 2007–08</td><td>Annan's mediation averted violence</td><td>Pillar II works</td></tr>
-    <tr class="fragment"><td>Libya 2011</td><td>SC authorised; regime change followed</td><td>Pillar III abused?</td></tr>
-    <tr class="fragment"><td>Syria 2011–</td><td>Russia vetoed 17+ resolutions</td><td>Veto paralysis</td></tr>
-    <tr class="fragment"><td>Myanmar 2017</td><td>No SC action; 700K+ fled</td><td>Selective application</td></tr>
-    <tr class="fragment"><td>Gaza 2023–</td><td>US vetoed ceasefires; ICJ case</td><td>P5 ally blocks R2P</td></tr>
-  </table>
+<h3>R2P in Practice: Successes and Failures</h3>
+<table>
+<tr><th>Case</th><th>Outcome</th><th>Lesson</th></tr>
+<tr class="fragment"><td>Kenya 2007–08</td><td>Annan's mediation averted violence</td><td>Pillar II works</td></tr>
+<tr class="fragment"><td>Libya 2011</td><td>SC authorised; regime change followed</td><td>Pillar III abused?</td></tr>
+<tr class="fragment"><td>Syria 2011–</td><td>Russia vetoed 17+ resolutions</td><td>Veto paralysis</td></tr>
+<tr class="fragment"><td>Myanmar 2017</td><td>No SC action; 700K+ fled</td><td>Selective application</td></tr>
+<tr class="fragment"><td>Gaza 2023–</td><td>US vetoed ceasefires; ICJ case</td><td>P5 ally blocks R2P</td></tr>
+</table>
 </section>
 
 <!-- SLIDE 23: SG REPORT OPENER -->
 <section>
-  <h2><i class="fa-solid fa-book-open" style="color:#1565c0;"></i> Supplemental Reading #1</h2>
-  <h3>UN Secretary-General (May 2025)</h3>
-  <h3>"R2P: 20 Years of Commitment"</h3>
-  <p class="small">17th SG report · A/79/875</p>
+<h2><i class="fa-solid fa-book-open" style="color:#1565c0;"></i> Supplemental Reading #1</h2>
+<h3>UN Secretary-General (May 2025)</h3>
+<h3>"R2P: 20 Years of Commitment"</h3>
+<p class="small">17th SG report · A/79/875</p>
 </section>
 
 <!-- SLIDE 24: GROWING GAP -->
 <section>
-  <h3>Key Finding: A Growing Gap</h3>
-  <blockquote>"Despite the unanimous commitment to end atrocity crimes, such crimes have increased around the world, exposing a persistent gap between promises and meaningful action."<br>— Secretary-General, 2025</blockquote>
-  <ul>
-    <li class="fragment">Violence against civilians at highest level since 2015</li>
-    <li class="fragment">Displaced people: 37 million (2005) → 123 million (2024)</li>
-    <li class="fragment">More conflicts characterised by atrocity crimes than at any time since WWII</li>
-  </ul>
+<h3>Key Finding: A Growing Gap</h3>
+<blockquote>"Despite the unanimous commitment to end atrocity crimes, such crimes have increased around the world, exposing a persistent gap between promises and meaningful action."<br>— Secretary-General, 2025</blockquote>
+<ul>
+<li class="fragment"><i class="fa-solid fa-chart-line" style="color:#d32f2f;"></i> Violence against civilians at highest level since 2015</li>
+<li class="fragment"><i class="fa-solid fa-person-walking-dashed-line-arrow-right" style="color:#e65100;"></i> Displaced people: 37 million (2005) → 123 million (2024)</li>
+<li class="fragment"><i class="fa-solid fa-triangle-exclamation" style="color:#ff9800;"></i> More conflicts characterised by atrocity crimes than at any time since WWII</li>
+</ul>
 </section>
 
 <!-- SLIDE 25: WHAT WORKED -->
 <section>
-  <h3>What Has Worked (Pillars I & II)</h3>
-  <ul>
-    <li class="fragment">12+ countries created national atrocity-prevention mechanisms</li>
-    <li class="fragment">118 countries have national human rights institutions</li>
-    <li class="fragment">Regional organisations (AU, OAS, OSCE) using mediation and early warning</li>
-    <li class="fragment">Transitional justice in Colombia, Nepal, Philippines, Timor-Leste</li>
-    <li class="fragment">Group of Friends of R2P promotes the norm at the UN</li>
-  </ul>
+<h3>What Has Worked (Pillars I &amp; II)</h3>
+<ul>
+<li class="fragment">12+ countries created national atrocity-prevention mechanisms</li>
+<li class="fragment">118 countries have national human rights institutions</li>
+<li class="fragment">Regional organisations (AU, OAS, OSCE) using mediation and early warning</li>
+<li class="fragment">Transitional justice in Colombia, Nepal, Philippines, Timor-Leste</li>
+<li class="fragment">Group of Friends of R2P promotes the norm at the UN</li>
+</ul>
 </section>
 
 <!-- SLIDE 26: WHAT FAILED -->
 <section>
-  <h3>What Has Failed (Pillar III)</h3>
-  <ul>
-    <li class="fragment"><strong>SC paralysis:</strong> Vetoes block action on Syria, Gaza, Sudan, Myanmar, Iran</li>
-    <li class="fragment"><strong>Double standards:</strong> R2P seen as a tool of Western intervention</li>
-    <li class="fragment"><strong>Counter-terrorism weaponised:</strong> States use it to justify abuses</li>
-    <li class="fragment"><strong>Attacks on aid workers:</strong> 67,414 civilian sites struck in Iran (Feb–Mar 2026)</li>
-  </ul>
-  <div class="highlight-box fragment">
-    <p><strong>Discussion:</strong> The SG's recommendations focus on Pillars I and II. Is this an implicit admission that Pillar III is politically dead?</p>
-  </div>
+<h3>What Has Failed (Pillar III)</h3>
+<ul>
+<li class="fragment"><strong>SC paralysis:</strong> Vetoes block action on Syria, Gaza, Sudan, Myanmar, Iran</li>
+<li class="fragment"><strong>Double standards:</strong> R2P seen as a tool of Western intervention</li>
+<li class="fragment"><strong>Counter-terrorism weaponised:</strong> States use it to justify abuses</li>
+<li class="fragment"><strong>Attacks on aid workers:</strong> 67,414 civilian sites struck in Iran (Feb–Mar 2026)</li>
+</ul>
+<div class="highlight-box fragment">
+<p><i class="fa-solid fa-comments" style="color:#ff9800;"></i> <strong>Discussion:</strong> The SG's recommendations focus on Pillars I and II. Is this an implicit admission that Pillar III is politically dead?</p>
+</div>
 </section>
 
 <!-- SLIDE 27: PALESTINE OPENER -->
 <section>
-  <h2><i class="fa-solid fa-book-open" style="color:#1565c0;"></i> Supplemental Reading #2</h2>
-  <h3>Global Centre for R2P (Sept 2025)</h3>
-  <h3>"Urgent Call to Action: R2P and the Palestinian People"</h3>
+<h2><i class="fa-solid fa-book-open" style="color:#1565c0;"></i> Supplemental Reading #2</h2>
+<h3>Global Centre for R2P (Sept 2025)</h3>
+<h3>"Urgent Call to Action: R2P and the Palestinian People"</h3>
 </section>
 
 <!-- SLIDE 28: PALESTINE ARGUMENT -->
 <section>
-  <h3>The Argument</h3>
-  <blockquote>"The genocide in Gaza lays bare the consequences of inaction and double standards — consequences R2P was explicitly designed to prevent."<br>— Global Centre for R2P, Sept 2025</blockquote>
-  <ul>
-    <li class="fragment">Nearly two years of "unrelenting atrocity crimes"</li>
-    <li class="fragment">90% of Gaza under military zones or forced displacement orders</li>
-    <li class="fragment">Israel's Pillar I obligation manifestly failed</li>
-    <li class="fragment">Pillar III obligation triggered for the international community</li>
-  </ul>
+<h3>The Argument</h3>
+<blockquote>"The genocide in Gaza lays bare the consequences of inaction and double standards — consequences R2P was explicitly designed to prevent."<br>— Global Centre for R2P, Sept 2025</blockquote>
+<ul>
+<li class="fragment">Nearly two years of "unrelenting atrocity crimes"</li>
+<li class="fragment">90% of Gaza under military zones or forced displacement orders</li>
+<li class="fragment">Israel's Pillar I obligation manifestly failed</li>
+<li class="fragment">Pillar III obligation triggered for the international community</li>
+</ul>
 </section>
 
 <!-- SLIDE 29: STATES ACTING -->
 <section>
-  <h3>States That Have Acted Under R2P</h3>
-  <table>
-    <tr><th>State/Group</th><th>Action</th></tr>
-    <tr class="fragment"><td>South Africa</td><td>ICJ genocide case (Dec 2023)</td></tr>
-    <tr class="fragment"><td>Hague Group (9 states)</td><td>Coordinated pressure measures</td></tr>
-    <tr class="fragment"><td>Slovenia</td><td>Arms embargo; persona non grata</td></tr>
-    <tr class="fragment"><td>Ireland</td><td>Ban trade with illegal settlements</td></tr>
-    <tr class="fragment"><td>Colombia</td><td>Cut diplomatic ties</td></tr>
-    <tr class="fragment"><td>Norway Wealth Fund</td><td>Divested on ethical grounds</td></tr>
-  </table>
+<h3>States That Have Acted Under R2P</h3>
+<table>
+<tr><th>State/Group</th><th>Action</th></tr>
+<tr class="fragment"><td>South Africa</td><td>ICJ genocide case (Dec 2023)</td></tr>
+<tr class="fragment"><td>Hague Group (9 states)</td><td>Coordinated pressure measures</td></tr>
+<tr class="fragment"><td>Slovenia</td><td>Arms embargo; persona non grata</td></tr>
+<tr class="fragment"><td>Ireland</td><td>Ban trade with illegal settlements</td></tr>
+<tr class="fragment"><td>Colombia</td><td>Cut diplomatic ties</td></tr>
+<tr class="fragment"><td>Norway Wealth Fund</td><td>Divested on ethical grounds</td></tr>
+</table>
 </section>
 
 <!-- SLIDE 30: 14-1 DEADLOCK -->
 <section>
-  <h3>The SC Deadlock: 14–1</h3>
-  <ul>
-    <li class="fragment"><strong>14 in favour, 1 veto (US)</strong> — a recurring pattern</li>
-    <li class="fragment">The GA, regional bodies, and individual states must also act</li>
-    <li class="fragment">Calls for "Uniting for Peace" (GA Res 377) to establish a protection force</li>
-  </ul>
-  <div class="debate-box fragment">
-    <p><strong>Key debate:</strong> If the SC is permanently blocked by a P5 veto, does R2P have any meaning — or is it a "paper norm"?</p>
-  </div>
+<h3>The SC Deadlock: 14–1</h3>
+<ul>
+<li class="fragment"><strong>14 in favour, 1 veto (US)</strong> — a recurring pattern</li>
+<li class="fragment">The GA, regional bodies, and individual states must also act</li>
+<li class="fragment">Calls for "Uniting for Peace" (GA Res 377) to establish a protection force</li>
+</ul>
+<div class="debate-box fragment">
+<p><strong>Key debate:</strong> If the SC is permanently blocked by a P5 veto, does R2P have any meaning — or is it a "paper norm"?</p>
+</div>
 </section>
 
 <!-- SLIDE 31: IRAN WAR OPENER -->
 <section data-background-color="#ffebee">
-  <h2>R2P and the 2026 Iran War</h2>
-  <div class="icon-big"><i class="fa-solid fa-burst" style="color:#d32f2f;"></i></div>
-  <p>A live test of the norm</p>
+<h2>R2P and the 2026 Iran War</h2>
+<div class="icon-big"><i class="fa-solid fa-burst" style="color:#d32f2f;"></i></div>
+<p>A live test of the norm</p>
 </section>
 
 <!-- SLIDE 32: IRAN TIMELINE -->
 <section>
-  <h3>Timeline Recap</h3>
-  <table>
-    <tr><th>Date</th><th>Event</th></tr>
-    <tr class="fragment"><td>Jan 8</td><td>Iran kills 30,000+ protesters; Trump threatens intervention</td></tr>
-    <tr class="fragment"><td>Feb 28</td><td>US & Israel launch Operation Epic Fury; Khamenei killed</td></tr>
-    <tr class="fragment"><td>Feb 28</td><td>Minab school struck — ~175 civilians killed, many children</td></tr>
-    <tr class="fragment"><td>Mar 2</td><td>Hezbollah drone strikes RAF Akrotiri, Cyprus</td></tr>
-    <tr class="fragment"><td>Mar 11</td><td>SC Res 2817 condemns Iran's retaliation (Russia/China abstain)</td></tr>
-    <tr class="fragment"><td>Apr 2</td><td>100+ law professors: strikes violate UN Charter</td></tr>
-    <tr class="fragment"><td>Apr 7–8</td><td>Pakistan-brokered two-week ceasefire</td></tr>
-  </table>
+<h3>Timeline Recap</h3>
+<table>
+<tr><th>Date</th><th>Event</th></tr>
+<tr class="fragment"><td>Jan 8</td><td>Iran kills 30,000+ protesters; Trump threatens intervention</td></tr>
+<tr class="fragment"><td>Feb 28</td><td>US &amp; Israel launch Operation Epic Fury; Khamenei killed</td></tr>
+<tr class="fragment"><td>Feb 28</td><td>Minab school struck — ~175 civilians killed, many children</td></tr>
+<tr class="fragment"><td>Mar 2</td><td>Hezbollah drone strikes RAF Akrotiri, Cyprus</td></tr>
+<tr class="fragment"><td>Mar 11</td><td>SC Res 2817 condemns Iran's retaliation (Russia/China abstain)</td></tr>
+<tr class="fragment"><td>Apr 2</td><td>100+ law professors: strikes violate UN Charter</td></tr>
+<tr class="fragment"><td>Apr 7–8</td><td>Pakistan-brokered two-week ceasefire</td></tr>
+</table>
 </section>
 
 <!-- SLIDE 33: WAS R2P INVOKED -->
 <section>
-  <h3>Was R2P Invoked?</h3>
-  <div class="case-box">
-    <p><strong>Short answer: No.</strong> The US justified strikes under Article 51 (self-defence), not R2P. Goals were strategic — nuclear programme, military leadership — not civilian protection.</p>
-    <p class="fragment">However, Iran's January massacre of 30,000+ protesters <em>should</em> have triggered R2P. No R2P resolution was tabled because no P5 member would support it.</p>
-  </div>
+<h3>Was R2P Invoked?</h3>
+<div class="case-box">
+<p><strong>Short answer: No.</strong> The US justified strikes under Article 51 (self-defence), not R2P. Goals were strategic — nuclear programme, military leadership — not civilian protection.</p>
+<p class="fragment">However, Iran's January massacre of 30,000+ protesters <em>should</em> have triggered R2P. No R2P resolution was tabled because no P5 member would support it.</p>
+</div>
 </section>
 
 <!-- SLIDE 34: MISUSE DEBATE -->
 <section>
-  <h3>The Misuse Debate</h3>
-  <blockquote>"R2P did not create a loophole in international law. It was designed to ensure restraint, legitimacy, and accountability."<br>— Global Centre for R2P, March 2026</blockquote>
-  <ul>
-    <li class="fragment">A <em>NYT</em> essay linked R2P to the Iran war. The Global Centre rejected this</li>
-    <li class="fragment">R2P covers only four crimes; it does not authorise unilateral strikes</li>
-    <li class="fragment">The real problem: R2P is being <em>ignored</em>, not abused</li>
-  </ul>
+<h3>The Misuse Debate</h3>
+<blockquote>"R2P did not create a loophole in international law. It was designed to ensure restraint, legitimacy, and accountability."<br>— Global Centre for R2P, March 2026</blockquote>
+<ul>
+<li class="fragment">A <em>NYT</em> essay linked R2P to the Iran war. The Global Centre rejected this</li>
+<li class="fragment">R2P covers only four crimes; it does not authorise unilateral strikes</li>
+<li class="fragment">The real problem: R2P is being <em>ignored</em>, not abused</li>
+</ul>
 </section>
 
-<!-- SLIDE 35: HR VIOLATIONS IN IRAN WAR -->
+<!-- SLIDE 35: HR VIOLATIONS -->
 <section>
-  <h3>Human Rights Violations in the Iran War</h3>
-  <ul>
-    <li class="fragment"><strong>US/Israel:</strong> 498 schools, 236 health facilities struck; Minab school (~175 dead); threats to energy, water, nuclear infrastructure</li>
-    <li class="fragment"><strong>Hegseth's "no quarter":</strong> A war crime under the Hague Convention and US law (18 USC §2441)</li>
-    <li class="fragment"><strong>Civilian protection dismantled:</strong> DoD removed protection teams, replaced JAGs, omitted international law from defence strategy</li>
-    <li class="fragment"><strong>Iran:</strong> Strikes on civilian infrastructure across Gulf states — cities, hotels, airports</li>
-  </ul>
-  <p class="small">Sources: Just Security (Apr 2, 2026); OHCHR (Mar 4, 2026)</p>
+<h3>Human Rights Violations in the Iran War</h3>
+<ul>
+<li class="fragment"><i class="fa-solid fa-school-circle-xmark" style="color:#d32f2f;"></i> <strong>US/Israel:</strong> 498 schools, 236 health facilities struck; Minab school (~175 dead); threats to energy, water, nuclear infrastructure</li>
+<li class="fragment"><i class="fa-solid fa-triangle-exclamation" style="color:#ff9800;"></i> <strong>Hegseth's "no quarter":</strong> A war crime under the Hague Convention and US law (18 USC §2441)</li>
+<li class="fragment"><i class="fa-solid fa-shield-virus" style="color:#6a1b9a;"></i> <strong>Civilian protection dismantled:</strong> DoD removed protection teams, replaced JAGs, omitted international law from defence strategy</li>
+<li class="fragment"><i class="fa-solid fa-explosion" style="color:#d32f2f;"></i> <strong>Iran:</strong> Strikes on civilian infrastructure across Gulf states — cities, hotels, airports</li>
+</ul>
+<p class="small">Sources: Just Security (Apr 2, 2026); OHCHR (Mar 4, 2026)</p>
 </section>
 
 <!-- SLIDE 36: IRAN DISCUSSION -->
 <section>
-  <h3>Discussion</h3>
-  <div class="debate-box">
-    <p><strong>Q1:</strong> The Minab school strike: Trump blamed Iran; the DoD found the US did it. What does this do to US credibility on human rights?</p>
-    <p class="fragment"><strong>Q2:</strong> Should R2P have been invoked for Iran's massacre of 30,000+ protesters — <em>before</em> the war?</p>
-    <p class="fragment"><strong>Q3:</strong> If R2P can't be applied to Palestine or Iran because the perpetrator (or ally) holds a veto, what reforms would work?</p>
-  </div>
+<h3><i class="fa-solid fa-comments" style="color:#1565c0;"></i> Discussion</h3>
+<div class="debate-box">
+<p><strong>Q1:</strong> The Minab school strike: Trump blamed Iran; the DoD found the US did it. What does this do to US credibility on human rights?</p>
+<p class="fragment"><strong>Q2:</strong> Should R2P have been invoked for Iran's massacre of 30,000+ protesters — <em>before</em> the war?</p>
+<p class="fragment"><strong>Q3:</strong> If R2P can't be applied to Palestine or Iran because the perpetrator (or ally) holds a veto, what reforms would work?</p>
+</div>
 </section>
-
 <!-- SLIDE 37: ENFORCEMENT OPENER -->
 <section data-background-color="#e8eaf6">
-  <h2>Enforcement & Accountability</h2>
-  <div class="icon-big"><i class="fa-solid fa-gavel"></i></div>
+<h2>Enforcement &amp; Accountability</h2>
+<div class="icon-big"><i class="fa-solid fa-gavel"></i></div>
 </section>
 
 <!-- SLIDE 38: ICC -->
 <section>
-  <h3>The International Criminal Court</h3>
-  <ul>
-    <li class="fragment">Rome Statute (2002); 124 member states</li>
-    <li class="fragment">Jurisdiction: genocide, war crimes, crimes against humanity, aggression</li>
-    <li class="fragment">Key limitation: <strong>US, Russia, China, India, Israel, Iran</strong> are NOT members</li>
-    <li class="fragment">2024: ICC arrest warrant for Netanyahu — landmark</li>
-    <li class="fragment">2026: Calls for Iran to accept ICC jurisdiction over US strikes</li>
-    <li class="fragment">2026: US sanctions on ICC intensified</li>
-  </ul>
+<h3>The International Criminal Court</h3>
+<div class="two-col">
+<div>
+<ul>
+<li class="fragment">Rome Statute (2002); 124 member states</li>
+<li class="fragment">Jurisdiction: genocide, war crimes, crimes against humanity, aggression</li>
+<li class="fragment">Key limitation: <strong>US, Russia, China, India, Israel, Iran</strong> are NOT members</li>
+<li class="fragment">2024: ICC arrest warrant for Netanyahu — landmark</li>
+<li class="fragment">2026: Calls for Iran to accept ICC jurisdiction over US strikes</li>
+<li class="fragment">2026: US sanctions on ICC intensified</li>
+</ul>
+</div>
+<div class="fragment" style="text-align:center;">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Building_of_the_International_Criminal_Court_in_The_Hague.jpg/800px-Building_of_the_International_Criminal_Court_in_The_Hague.jpg" alt="ICC building, The Hague" class="slide-image">
+<p class="small">ICC headquarters, The Hague</p>
+</div>
+</div>
 </section>
 
 <!-- SLIDE 39: OTHER MECHANISMS -->
 <section>
-  <h3>Beyond the ICC</h3>
-  <ul>
-    <li class="fragment"><strong>ICJ:</strong> South Africa's genocide case against Israel (ongoing)</li>
-    <li class="fragment"><strong>Universal Jurisdiction:</strong> Germany, Spain prosecute regardless of location</li>
-    <li class="fragment"><strong>Commissions of Inquiry:</strong> UN fact-finding on Syria, Gaza, Sudan</li>
-    <li class="fragment"><strong>Sanctions:</strong> Travel bans, asset freezes on individuals</li>
-    <li class="fragment"><strong>Civil society:</strong> DAWN, Al-Haq, Amnesty, HRW preserve evidence</li>
-  </ul>
+<h3>Beyond the ICC</h3>
+<ul>
+<li class="fragment"><i class="fa-solid fa-landmark-dome" style="color:#1565c0;"></i> <strong>ICJ:</strong> South Africa's genocide case against Israel (ongoing)</li>
+<li class="fragment"><i class="fa-solid fa-globe" style="color:#2e7d32;"></i> <strong>Universal Jurisdiction:</strong> Germany, Spain prosecute regardless of location</li>
+<li class="fragment"><i class="fa-solid fa-clipboard-list" style="color:#e65100;"></i> <strong>Commissions of Inquiry:</strong> UN fact-finding on Syria, Gaza, Sudan</li>
+<li class="fragment"><i class="fa-solid fa-ban" style="color:#d32f2f;"></i> <strong>Sanctions:</strong> Travel bans, asset freezes on individuals</li>
+<li class="fragment"><i class="fa-solid fa-hand-fist" style="color:#6a1b9a;"></i> <strong>Civil society:</strong> DAWN, Al-Haq, Amnesty, HRW preserve evidence</li>
+</ul>
 </section>
 
 <!-- SLIDE 40: ACCOUNTABILITY GAP -->
 <section>
-  <h3>The Accountability Gap</h3>
-  <div class="highlight-box">
-    <p><strong>Core problem:</strong> The most powerful states evade accountability. The US is not an ICC member, uses its veto to shield allies, and sanctions ICC officials.</p>
-    <p><strong>Result:</strong> The ICC has overwhelmingly prosecuted African leaders — fuelling charges of selective justice and neo-colonialism.</p>
-  </div>
+<h3>The Accountability Gap</h3>
+<div class="highlight-box">
+<p><strong>Core problem:</strong> The most powerful states evade accountability. The US is not an ICC member, uses its veto to shield allies, and sanctions ICC officials.</p>
+<p><strong>Result:</strong> The ICC has overwhelmingly prosecuted African leaders — fuelling charges of selective justice and neo-colonialism.</p>
+</div>
 </section>
 
 <!-- SLIDE 41: THEORIES -->
 <section>
-  <h3>IR Theories on Human Rights</h3>
-  <table>
-    <tr><th>Theory</th><th>View of Human Rights</th></tr>
-    <tr class="fragment"><td><strong>Realism</strong></td><td>Rhetoric used instrumentally. Power determines outcomes.</td></tr>
-    <tr class="fragment"><td><strong>Liberalism</strong></td><td>Institutions and norms can constrain states — but need political will.</td></tr>
-    <tr class="fragment"><td><strong>Constructivism</strong></td><td>Norms reshape identity over time ("norm cascade") — but can erode.</td></tr>
-    <tr class="fragment"><td><strong>Marxism</strong></td><td>Political rights mask economic exploitation.</td></tr>
-    <tr class="fragment"><td><strong>Postcolonialism</strong></td><td>Selective enforcement reproduces colonial hierarchies.</td></tr>
-    <tr class="fragment"><td><strong>Feminism</strong></td><td>Public-sphere bias ignores private-sphere violations.</td></tr>
-  </table>
+<h3>IR Theories on Human Rights</h3>
+<table>
+<tr><th>Theory</th><th>View of Human Rights</th></tr>
+<tr class="fragment"><td><strong>Realism</strong></td><td>Rhetoric used instrumentally. Power determines outcomes.</td></tr>
+<tr class="fragment"><td><strong>Liberalism</strong></td><td>Institutions and norms can constrain states — but need political will.</td></tr>
+<tr class="fragment"><td><strong>Constructivism</strong></td><td>Norms reshape identity over time ("norm cascade") — but can erode.</td></tr>
+<tr class="fragment"><td><strong>Marxism</strong></td><td>Political rights mask economic exploitation.</td></tr>
+<tr class="fragment"><td><strong>Postcolonialism</strong></td><td>Selective enforcement reproduces colonial hierarchies.</td></tr>
+<tr class="fragment"><td><strong>Feminism</strong></td><td>Public-sphere bias ignores private-sphere violations.</td></tr>
+</table>
 </section>
 
 <!-- SLIDE 42: CYPRUS OPENER -->
 <section data-background-color="#fff8e1">
-  <h2>Human Rights and Cyprus</h2>
-  <div class="icon-big"><i class="fa-solid fa-location-dot" style="color:#f9a825;"></i></div>
-  <p>Where you sit matters — these concepts are not abstract here</p>
+<h2>Human Rights and Cyprus</h2>
+<div class="icon-big"><i class="fa-solid fa-location-dot" style="color:#f9a825;"></i></div>
+<p>Where you sit matters — these concepts are not abstract here</p>
 </section>
 
 <!-- SLIDE 43: MISSING PERSONS -->
 <section>
-  <h3>The Missing Persons: A 50-Year Wound</h3>
-  <div class="two-col">
-    <div>
-      <p>The <strong>Committee on Missing Persons (CMP)</strong> works to recover 2,002 people who disappeared in 1963–64 and 1974.</p>
-      <ul>
-        <li class="fragment">Excavations ongoing as of March 2026</li>
-        <li class="fragment">Families have waited 50+ years</li>
-        <li class="fragment">SC Res 2815 (2026) calls for continued support</li>
-        <li class="fragment">This is a <strong>right to truth</strong> issue</li>
-      </ul>
-    </div>
-    <div class="fragment">
-      <div class="cyprus-box">
-        <p><strong>Discussion:</strong> The right to know the fate of a missing relative is increasingly recognised as a human right. How does this connect to the Convention on Enforced Disappearance (2006)?</p>
-      </div>
-    </div>
-  </div>
+<h3><i class="fa-solid fa-person-circle-question" style="color:#6a1b9a;"></i> The Missing Persons: A 50-Year Wound</h3>
+<div class="two-col">
+<div>
+<p>The <strong>Committee on Missing Persons (CMP)</strong> works to recover 2,002 people who disappeared in 1963–64 and 1974.</p>
+<ul>
+<li class="fragment">Excavations intensified — €30 million funding secured (2026)</li>
+<li class="fragment">Half of the 2,002 missing identified so far</li>
+<li class="fragment">Families have waited 50+ years</li>
+<li class="fragment">SC Res 2815 (2026) calls for continued support</li>
+<li class="fragment">This is a <strong>right to truth</strong> issue</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="cyprus-box">
+<p><strong>Discussion:</strong> The right to know the fate of a missing relative is increasingly recognised as a human right. How does this connect to the Convention on Enforced Disappearance (2006)?</p>
+</div>
+</div>
+</div>
 </section>
 
-<!-- SLIDE 44: PRESS FREEDOM -->
+<!-- SLIDE 44: ECHR & PROPERTY — REPLACES PRESS FREEDOM SLIDE -->
 <section>
-  <h3>Press Freedom and Civic Space in the North</h3>
-  <div class="cyprus-box">
-    <p>The 2025 OHCHR report (<em>A/HRC/58/21</em>) documented:</p>
-    <ul>
-      <li class="fragment"><strong>Şener Levent</strong> — convicted in absentia by Ankara for criticising Turkey. 6-month sentence.</li>
-      <li class="fragment"><strong>Ali Kişmir</strong> — facing "insulting security forces" charges. Potential 10-year sentence. Postponed 9 times.</li>
-      <li class="fragment"><strong>Plainclothes police</strong> monitored civil society events — "chilling effect."</li>
-    </ul>
-  </div>
-  <p class="small fragment">These are 1st-generation rights violations happening within kilometres of this classroom.</p>
+<h3><i class="fa-solid fa-building-columns" style="color:#0d47a1;"></i> The ECHR and Property Rights in Cyprus</h3>
+<div class="case-box" style="margin-bottom:12px;">
+<p>The European Court of Human Rights has shaped the Cyprus conflict through landmark property rulings:</p>
+</div>
+<div class="case-timeline">
+<div class="event fragment"><span class="year">1996 — Loizidou v. Turkey</span><br><span class="desc">ECHR held Turkey responsible for violations of property rights (Art. 1, Protocol 1) in the north. Established Turkey's jurisdiction over the TRNC.</span></div>
+<div class="event fragment"><span class="year">2001 — Cyprus v. Turkey (Grand Chamber)</span><br><span class="desc">Found multiple violations: property rights of Greek Cypriot IDPs, right to home, missing persons, education, freedom of religion.</span></div>
+<div class="event fragment"><span class="year">2005 — IPC created (Law 67/2005)</span><br><span class="desc">Turkey established the Immovable Property Commission in the TRNC — offering restitution, compensation, or exchange to Greek Cypriot displaced owners.</span></div>
+<div class="event fragment"><span class="year">2010 — Demopoulos v. Turkey (Grand Chamber)</span><br><span class="desc">Declared the IPC an "effective remedy" — applicants must exhaust it before coming to Strasbourg. ~1,400 pending cases redirected.</span></div>
+</div>
 </section>
 
-<!-- SLIDE 45: MIGRANT WORKERS -->
+<!-- SLIDE 45: IPC EFFECTIVENESS DEBATE -->
 <section>
-  <h3>Migrant Workers and Exploitation</h3>
-  <ul>
-    <li class="fragment">Sept 2025: UN experts condemned exploitation at a citrus farm in the north — threats, coercion, violence</li>
-    <li class="fragment">2026 Refugee Law criticised for allowing child detention</li>
-    <li class="fragment">National Migrant Integration Strategy 2026–2029 adopted — implementation contested</li>
-    <li class="fragment">CERD reviewing Cyprus's record, April–May 2026</li>
-  </ul>
-  <div class="highlight-box fragment">
-    <p><strong>Question:</strong> How do 2nd-generation rights (work, fair conditions) intersect with 1st-generation rights (freedom from forced labour) in migrant workers' lives on this island?</p>
-  </div>
+<h3><i class="fa-solid fa-scale-unbalanced" style="color:#e65100;"></i> The IPC: Effective Remedy or Legal Fiction?</h3>
+<div class="two-col">
+<div>
+<div class="highlight-box">
+<p><strong>The ECHR's view:</strong></p>
+<p>In <em>K.V. Mediterranean Tours v. Türkiye</em> (June 2025), the Court found a violation due to <strong>protracted delays</strong> — the applicant's case languished for over a decade — but <strong>refused to declare the IPC ineffective.</strong></p>
+<p>The EVKAF (Muslim religious foundation) was allowed as a third party — potentially blocking restitution of the applicant's Famagusta property.</p>
+</div>
+</div>
+<div class="fragment">
+<div class="debate-box">
+<p><strong>Critics argue:</strong></p>
+<ul>
+<li>The IPC turns <em>owners</em> into "claimants" who must re-prove ownership under TRNC law</li>
+<li>Restitution is rarely granted — the mechanism is "essentially compensatory"</li>
+<li>Court's deference to TRNC courts elevates an internationally unrecognised entity</li>
+<li>200,000+ Greek Cypriot IDPs face a dilemma: accept the IPC or wait for a political settlement</li>
+</ul>
+<p class="small">See: Paraskeva &amp; Meleagrou, <em>Strasbourg Observers</em> (Sept 2025)</p>
+</div>
+</div>
+</div>
 </section>
 
-<!-- SLIDE 46: IRAN WAR COMES TO CYPRUS -->
+<!-- SLIDE 46: EREL & DAMDELEN + ISOLATION -->
 <section>
-  <h3>The 2026 Iran War Comes to Cyprus</h3>
-  <ul>
-    <li class="fragment"><strong>1 March:</strong> Hezbollah drone struck RAF Akrotiri — first attack since 1974</li>
-    <li class="fragment">European navies mobilised (Greece, France, Italy, Germany, Netherlands, Spain)</li>
-    <li class="fragment">Turkey sent F-16s to Northern Cyprus — Greek-Turkish tensions spiked</li>
-    <li class="fragment">Christodoulides called British bases "colonial"; status talks began 25 March</li>
-    <li class="fragment">Tourism down 15–30%; EU mutual defence clause (Art 42(7)) debated</li>
-  </ul>
-  <div class="debate-box fragment">
-    <p><strong>Q:</strong> Iran's IRGC general threatened to "launch missiles at Cyprus." How does this relate to 3rd-generation rights — the right to peace?</p>
-  </div>
+<h3><i class="fa-solid fa-user-xmark" style="color:#d32f2f;"></i> Turkish Cypriot Isolation and Human Rights</h3>
+<div class="case-box">
+<p><strong>Erel &amp; Damdelen v. Cyprus (ECHR, 2010)</strong></p>
+<p>Two Turkish Cypriots living in the TRNC applied to vote and stand for election in Republic of Cyprus parliamentary elections. They argued that the 24 Turkish Cypriot seats in the House of Representatives had remained vacant since 1963.</p>
+<p class="fragment"><strong>Result: Declared inadmissible.</strong> The ECHR ruled that habitual-residence requirements are legitimate restrictions under Article 3 of Protocol No. 1. Because the applicants lived in the TRNC — outside the effective control of the Republic — their "link" to the Cypriot legislature was severed by <em>de facto</em> partition.</p>
+</div>
+<div class="highlight-box fragment">
+<p><i class="fa-solid fa-comments" style="color:#ff9800;"></i> <strong>Discussion:</strong> Turkish Cypriots in the TRNC cannot vote in RoC elections, cannot participate directly in EU institutions, and live under an internationally unrecognised entity. Is this isolation itself a human rights problem — or a political consequence of unresolved conflict? Who bears responsibility?</p>
+</div>
 </section>
 
-<!-- SLIDE 47: BUFFER ZONE INCIDENT -->
+<!-- SLIDE 47: MIGRANT WORKERS -->
 <section>
-  <h3>The Buffer Zone Incident — April 2026</h3>
-  <div class="case-box">
-    <p>On <strong>1 April 2026</strong>, rocks and fireworks were thrown from the buffer zone on Markos Dracos Street toward civilians in the north.</p>
-    <p class="fragment">UNFICYP condemned the act: <em>"Acts of violence of this nature are unacceptable and risk undermining public safety and stability."</em></p>
-    <p class="fragment"><strong>Discussion:</strong> How do local intercommunal tensions connect to the human rights themes of this lecture — the right to security, the role of peacekeeping, and protecting rights in divided societies?</p>
-  </div>
+<h3><i class="fa-solid fa-people-carry-box" style="color:#e65100;"></i> Migrant Workers and Exploitation</h3>
+<ul>
+<li class="fragment">Sept 2025: UN experts condemned exploitation at a citrus farm in the north — threats, coercion, violence</li>
+<li class="fragment">2026 Refugee Law criticised for allowing child detention</li>
+<li class="fragment">National Migrant Integration Strategy 2026–2029 adopted — implementation contested</li>
+<li class="fragment">CERD reviewing Cyprus's record, April–May 2026 (117th session)</li>
+</ul>
+<div class="highlight-box fragment">
+<p><strong>Question:</strong> How do 2nd-generation rights (work, fair conditions) intersect with 1st-generation rights (freedom from forced labour) in migrant workers' lives on this island?</p>
+</div>
 </section>
 
-<!-- SLIDE 48: TAKEAWAYS OPENER -->
+<!-- SLIDE 48: IRAN WAR COMES TO CYPRUS -->
 <section>
-  <h2>Key Takeaways</h2>
-  <div class="icon-big"><i class="fa-solid fa-list-check"></i></div>
+<h3><i class="fa-solid fa-crosshairs" style="color:#d32f2f;"></i> The 2026 Iran War Comes to Cyprus</h3>
+<div class="two-col">
+<div>
+<ul>
+<li class="fragment"><strong>1 March:</strong> Hezbollah drone struck RAF Akrotiri — first attack since 1974</li>
+<li class="fragment">European navies mobilised (Greece, France, Italy, Germany, Netherlands, Spain)</li>
+<li class="fragment">Turkey sent F-16s to the TRNC — Greek-Turkish tensions spiked</li>
+<li class="fragment">Christodoulides called British bases "colonial"; status talks began 25 March</li>
+<li class="fragment">Tourism down 15–30%; EU mutual defence clause (Art 42(7)) debated</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="debate-box" style="margin-top:15px;">
+<p><strong>Q:</strong> Iran's IRGC general threatened to "launch missiles at Cyprus." How does this relate to 3rd-generation rights — the right to peace?</p>
+</div>
+</div>
+</div>
 </section>
 
-<!-- SLIDE 49: WHAT TO REMEMBER -->
+<!-- SLIDE 49: BUFFER ZONE INCIDENT -->
 <section>
-  <h3>What to Remember</h3>
-  <ol>
-    <li class="fragment">Human rights are <strong>universal, indivisible, interdependent</strong> — in theory. In practice, enforcement is selective.</li>
-    <li class="fragment">The regime (UDHR → ICCPR/ICESCR → ICC) created norms that <strong>matter</strong> — but lack enforcement against major states.</li>
-    <li class="fragment">R2P: 20 years later, a <strong>"persistent gap between promises and action."</strong></li>
-    <li class="fragment">The <strong>P5 veto</strong> is the single biggest structural obstacle.</li>
-    <li class="fragment">The 2026 Iran war is a <strong>live laboratory</strong> for every concept in this lecture.</li>
-    <li class="fragment">Human rights are not abstract — <strong>you are sitting in a divided capital</strong>, metres from a buffer zone, in a country hit by a drone from a war 2,000 km away.</li>
-  </ol>
+<h3><i class="fa-solid fa-shield" style="color:#f9a825;"></i> The Buffer Zone Incident — April 2026</h3>
+<div class="two-col">
+<div>
+<div class="case-box">
+<p>On <strong>1 April 2026</strong>, rocks and fireworks were thrown from the buffer zone on Markos Dracos Street toward civilians in the north.</p>
+<p class="fragment">UNFICYP condemned the act: <em>"Acts of violence of this nature are unacceptable and risk undermining public safety and stability."</em></p>
+<p class="fragment">UN stepped up patrols near Ledra Palace following the incident.</p>
+<p class="fragment"><strong>Discussion:</strong> How do local intercommunal tensions connect to the human rights themes of this lecture — the right to security, the role of peacekeeping, and protecting rights in divided societies?</p>
+</div>
+</div>
+<div class="fragment" style="text-align:center;">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Nicosia_UN_buffer_zone01.jpg/800px-Nicosia_UN_buffer_zone01.jpg" alt="UN buffer zone in Nicosia" class="slide-image">
+<p class="small">UN buffer zone, Nicosia</p>
+</div>
+</div>
 </section>
 
-<!-- SLIDE 50: READINGS -->
+<!-- SLIDE 50: TAKEAWAYS OPENER -->
 <section>
-  <h3>Required & Supplemental Readings</h3>
-  <div class="reading-box">
-    <p><strong>Required:</strong> Baylis, Smith & Owens, Chapter 31 (pp. 498–513)</p>
-    <p style="margin-top:12px"><strong>Supplemental:</strong></p>
-    <p>1. SG (May 2025), <em>"R2P: 20 Years of Commitment"</em> — <a href="https://www.globalr2p.org/publications/summary-2025-report/" target="_blank">globalr2p.org summary</a></p>
-    <p>2. Global Centre (Sept 2025), <em>"Urgent Call: R2P and Palestine"</em> — <a href="https://www.globalr2p.org/publications/urgent-call-to-action-international-community-must-uphold-the-responsibility-to-protect-the-palestinian-people/" target="_blank">full text</a></p>
-    <p style="margin-top:8px"><strong>Recommended:</strong></p>
-    <p>3. Global Centre (Mar 2026), <em>"R2P and the War Against Iran"</em> — <a href="https://www.globalr2p.org/publications/the-responsibility-to-protect-and-the-war-against-iran/" target="_blank">globalr2p.org</a></p>
-    <p>4. Just Security (Apr 2026), <em>"100+ Experts: Strikes Violate Charter"</em> — <a href="https://www.justsecurity.org/135423/professors-letter-international-law-iran-war/" target="_blank">justsecurity.org</a></p>
-  </div>
+<h2>Key Takeaways</h2>
+<div class="icon-big"><i class="fa-solid fa-list-check"></i></div>
 </section>
 
-<!-- SLIDE 51: NEXT WEEK -->
-<section data-background-color="#e8f5e9">
-  <h3>Next Week: Environmental Issues (Week 12)</h3>
-  <p>Baylis, Smith & Owens, pp. 387–404</p>
-  <p style="margin-top:15px"><strong>Interactive Lab:</strong></p>
-  <p><a href="human-rights-lab.html" target="_blank">→ Human Rights Interactive Lab</a> (coming soon)</p>
-  <p style="margin-top:30px;font-size:.7em;color:#999">PSIR101 · Eastern Mediterranean University · Spring 2026<br>Built with Reveal.js · Hosted on GitHub Pages</p>
+<!-- SLIDE 51: WHAT TO REMEMBER -->
+<section>
+<h3>What to Remember</h3>
+<ol>
+<li class="fragment">Human rights are <strong>universal, indivisible, interdependent</strong> — in theory. In practice, enforcement is selective.</li>
+<li class="fragment">The regime (UDHR → ICCPR/ICESCR → ICC) created norms that <strong>matter</strong> — but lack enforcement against major states.</li>
+<li class="fragment">R2P: 20 years later, a <strong>"persistent gap between promises and action."</strong></li>
+<li class="fragment">The <strong>P5 veto</strong> is the single biggest structural obstacle.</li>
+<li class="fragment">The 2026 Iran war is a <strong>live laboratory</strong> for every concept in this lecture.</li>
+<li class="fragment">The ECHR cases on Cyprus show that human rights <strong>adjudication shapes political realities</strong> — from property rights to political representation.</li>
+<li class="fragment">Human rights are not abstract — <strong>you are sitting in a divided capital</strong>, metres from a buffer zone, in a country hit by a drone from a war 2,000 km away.</li>
+</ol>
 </section>
 
-</div><!-- /slides -->
+<!-- SLIDE 52: READINGS -->
+<section>
+<h3><i class="fa-solid fa-book" style="color:#1565c0;"></i> Required &amp; Supplemental Readings</h3>
+<div class="reading-box">
+<p><strong>Required:</strong> Baylis, Smith &amp; Owens, Chapter 31 (pp. 498–513)</p>
+</div>
+<p><strong>Supplemental:</strong></p>
+<ol style="font-size:.72em;">
+<li class="fragment">SG (May 2025), <em>"R2P: 20 Years of Commitment"</em> — <a href="https://www.globalr2p.org/publications/summary-2025-report/" target="_blank">globalr2p.org summary</a></li>
+<li class="fragment">Global Centre (Sept 2025), <em>"Urgent Call: R2P and Palestine"</em> — <a href="https://www.globalr2p.org/publications/urgent-call-to-action-international-community-must-uphold-the-responsibility-to-protect-the-palestinian-people/" target="_blank">full text</a></li>
+<li class="fragment">Global Centre (Mar 2026), <em>"R2P and the War Against Iran"</em> — <a href="https://www.globalr2p.org/publications/the-responsibility-to-protect-and-the-war-against-iran/" target="_blank">globalr2p.org</a></li>
+<li class="fragment">Just Security (Apr 2026), <em>"100+ Experts: Strikes Violate Charter"</em> — <a href="https://www.justsecurity.org/135423/professors-letter-international-law-iran-war/" target="_blank">justsecurity.org</a></li>
+</ol>
+</section>
 
+<!-- SLIDE 53: NEXT WEEK -->
+<section data-background-color="#e8eaf6">
+<h3>Next Week: Environmental Issues (Week 12)</h3>
+<p>Baylis, Smith &amp; Owens, pp. 387–404</p>
+<div style="margin:20px 0;">
+<i class="fa-solid fa-seedling" style="font-size:3em;color:#2e7d32;"></i>
+</div>
+<p><strong>Interactive Lab:</strong></p>
+<p><a href="https://efkaymak-del.github.io/PSIR101/human-rights-lab.html" target="_blank">→ Human Rights Interactive Lab</a> (coming soon)</p>
+</section>
+
+</div><!-- end slides -->
+
+<!-- FOOTER -->
 <div class="footer-bar">
-  <span>PSIR101 – Introduction to Global Politics · EMU Spring 2026</span>
-  <span>Week 11: Human Rights</span>
+<span>PSIR101 · Eastern Mediterranean University · Spring 2026</span>
+<span>Week 11: Human Rights in World Politics</span>
 </div>
 
-</div><!-- /reveal -->
+</div><!-- end reveal -->
 
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
 <script>
 Reveal.initialize({
-  hash: true,
-  slideNumber: 'c/t',
-  transition: 'slide',
-  controlsTutorial: false,
-  progress: true,
-  center: true,
-  width: 1100,
-  height: 700,
-  margin: 0.08
+  hash:true,
+  slideNumber:'c/t',
+  showSlideNumber:'all',
+  transition:'slide',
+  transitionSpeed:'default',
+  backgroundTransition:'fade',
+  width:1200,
+  height:700,
+  margin:0.04,
+  center:true,
+  controlsTutorial:false
 });
 </script>
 </body>
 </html>
 
-</body>
-</html>
