@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PSIR101 Environment Lab</title>
+<title>PSIR101 Environment, Pandemics &amp; AI Lab</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -12,21 +12,16 @@
 --purple:#6a1b9a;--orange:#e67e22;--blue:#2980b9;
 }
 body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);color:var(--dark);min-height:100vh}
-
 .topbar{background:var(--navy);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
 .topbar h1{font-size:1.1em;letter-spacing:1px}
 .xp-badge{background:var(--gold);color:#fff;padding:4px 14px;border-radius:20px;font-weight:700;font-size:.85em}
 .streak-badge{background:var(--green);color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;font-size:.8em;margin-left:6px}
-
 .tabs{display:flex;background:#fff;border-bottom:2px solid var(--mid);overflow-x:auto;padding:0 10px}
 .tab-btn{padding:12px 18px;border:none;background:none;cursor:pointer;font-size:.82em;font-weight:600;color:#888;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s}
 .tab-btn:hover{color:var(--navy)}
 .tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
-
 .container{max-width:900px;margin:0 auto;padding:20px}
-.panel{display:none}
-.panel.active{display:block}
-
+.panel{display:none}.panel.active{display:block}
 #landing{text-align:center;padding:40px 20px}
 #landing h2{color:var(--navy);font-size:1.8em;margin-bottom:10px}
 #landing p{color:#666;margin-bottom:25px;font-size:.95em}
@@ -34,17 +29,14 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
 #qr-container canvas{display:block}
 .start-btn{display:inline-block;margin-top:25px;padding:14px 40px;background:var(--navy);color:#fff;border:none;border-radius:30px;font-size:1.05em;font-weight:700;cursor:pointer;transition:.2s}
 .start-btn:hover{background:var(--gold)}
-
 .card{background:#fff;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .card h3{color:var(--navy);margin-bottom:10px;font-size:1.05em}
 .card h4{color:var(--gold);font-size:.9em;margin-bottom:8px}
 .section-header{background:linear-gradient(135deg,var(--navy),#2e7d32);color:#fff;border-radius:14px;padding:20px 24px;margin-bottom:16px}
 .section-header h3{color:#fff;font-size:1.1em}
 .section-header p{color:rgba(255,255,255,.8);font-size:.82em;margin-top:4px}
-
 .video-wrap{position:relative;padding-bottom:56.25%;height:0;margin:12px 0;border-radius:10px;overflow:hidden}
 .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
-
 .reflect-q{background:var(--light);border-left:4px solid var(--gold);padding:14px 18px;margin:12px 0;border-radius:0 10px 10px 0;font-size:.88em}
 .reflect-options{display:flex;flex-direction:column;gap:8px;margin:10px 0}
 .reflect-opt{padding:10px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.85em;transition:.2s}
@@ -58,7 +50,6 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
 .reflect-btn:hover{background:var(--gold)}
 .reflect-btn:disabled{opacity:.5;cursor:default}
 .completed-badge{display:inline-block;background:var(--green);color:#fff;padding:3px 12px;border-radius:12px;font-size:.75em;font-weight:600}
-
 .sort-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:8px 0;cursor:pointer;font-size:.88em;transition:.2s;user-select:none}
 .sort-item:hover{border-color:var(--blue)}
 .sort-item.placed{opacity:.4;cursor:default}
@@ -70,7 +61,6 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
 .sorted-item{padding:8px 14px;background:var(--light);border-radius:8px;margin:4px 0;font-size:.82em;display:inline-block}
 .sorted-item.correct{background:#eafaf1;border:1px solid var(--green)}
 .sorted-item.wrong{background:#fdedec;border:1px solid var(--accent)}
-
 .dim-card{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
 .dim-card .scenario{font-size:.9em;margin-bottom:12px;line-height:1.5}
 .dim-options{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
@@ -81,7 +71,6 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
 .dim-pill.wrong{background:var(--accent);color:#fff;border-color:var(--accent)}
 .dim-explain{background:#eafaf1;border-left:4px solid var(--green);padding:12px 16px;margin-top:10px;border-radius:0 10px 10px 0;font-size:.82em;display:none}
 .dim-explain.show{display:block}
-
 .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .match-item{padding:12px 16px;background:#fff;border:2px solid var(--mid);border-radius:10px;cursor:pointer;font-size:.84em;text-align:center;transition:.2s;min-height:60px;display:flex;align-items:center;justify-content:center}
 .match-item:hover{border-color:var(--blue)}
@@ -89,37 +78,30 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
 .match-item.matched{border-color:var(--green);background:#eafaf1;cursor:default}
 .match-item.wrong-flash{animation:wrongFlash .5s}
 @keyframes wrongFlash{0%,100%{background:#fff}50%{background:#fdedec}}
-
 .tl-item{padding:12px 18px;background:#fff;border:2px solid var(--mid);border-radius:10px;margin:6px 0;cursor:grab;font-size:.85em;display:flex;align-items:center;gap:10px;user-select:none}
 .tl-item .handle{color:var(--navy);font-weight:700;font-size:1.1em}
 .tl-item.dragging{opacity:.5}
 .tl-item.correct{border-color:var(--green);background:#eafaf1}
 .tl-item.wrong{border-color:var(--accent);background:#fdedec}
-
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:16px 0}
 .stat-card{background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.06)}
 .stat-card .num{font-size:2em;font-weight:800;color:var(--navy);display:block}
 .stat-card .lbl{font-size:.75em;color:#888;margin-top:2px}
 .progress-bar{height:10px;background:var(--mid);border-radius:5px;overflow:hidden;margin:6px 0}
 .progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--gold));border-radius:5px;transition:width .4s}
-
 .result-banner{padding:16px 20px;border-radius:12px;text-align:center;margin:16px 0;font-weight:700;font-size:.95em}
 .result-banner.great{background:#eafaf1;color:var(--green)}
 .result-banner.good{background:#fef9e7;color:var(--gold)}
 .result-banner.try{background:#fdedec;color:var(--accent)}
-
 .reset-btn{padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.85em;margin-top:12px}
 .check-btn{padding:10px 28px;background:var(--navy);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:.95em;font-weight:700;margin-top:14px}
 .check-btn:hover{background:var(--gold)}
-
 .sub-nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
 .sub-btn{padding:8px 16px;border:2px solid var(--mid);background:#fff;border-radius:20px;cursor:pointer;font-size:.8em;font-weight:600;color:#666;transition:.2s}
 .sub-btn:hover{border-color:var(--navy);color:var(--navy)}
 .sub-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-
 .debate-prompt{background:#e8f5e9;border:2px solid #1b5e20;border-radius:12px;padding:18px;margin-top:14px;font-size:.88em;line-height:1.55}
 .debate-prompt strong{color:#1b5e20}
-
 @media(max-width:600px){
 .sort-zones{grid-template-columns:1fr}
 .match-grid{grid-template-columns:1fr}
@@ -130,15 +112,13 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
 </style>
 </head>
 <body>
-
 <div class="topbar">
-  <h1>PSIR101 Environment Lab</h1>
+  <h1>PSIR101 Environment, Pandemics &amp; AI Lab</h1>
   <div>
     <span class="xp-badge" id="xpDisplay">0 XP</span>
     <span class="streak-badge" id="streakDisplay">0 Streak</span>
   </div>
 </div>
-
 <div class="tabs" id="tabBar" style="display:none">
   <button class="tab-btn active" data-tab="videos">Video &amp; Case Reflections</button>
   <button class="tab-btn" data-tab="sorter">Myth, Reality, or Complicated?</button>
@@ -148,13 +128,12 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
   <button class="tab-btn" data-tab="debate">Debate Arena</button>
   <button class="tab-btn" data-tab="stats">My Stats</button>
 </div>
-
 <div class="container">
 
 <!-- LANDING -->
 <div id="landing">
-  <h2>PSIR101 Environment Lab</h2>
-  <p>Environmental Issues in Global Politics &mdash; Interactive Study App<br>Spring 2026 | Eastern Mediterranean University</p>
+  <h2>PSIR101 Environment, Pandemics &amp; AI Lab</h2>
+  <p>Environmental Issues, Pandemic Preparedness &amp; Artificial Intelligence in Global Politics<br>Spring 2026 | Eastern Mediterranean University</p>
   <div id="qr-container"></div>
   <p style="font-size:.75em;color:#999;margin-top:10px">Scan to open on your phone</p>
   <br>
@@ -167,7 +146,9 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
     <button class="sub-btn active" data-sec="secA">A: The Anthropocene</button>
     <button class="sub-btn" data-sec="secB">B: Climate Governance</button>
     <button class="sub-btn" data-sec="secC">C: Climate Justice</button>
-    <button class="sub-btn" data-sec="secD">D: On Your Doorstep &mdash; Cyprus</button>
+    <button class="sub-btn" data-sec="secD">D: Pandemic Preparedness</button>
+    <button class="sub-btn" data-sec="secE">E: AI &amp; Global Politics</button>
+    <button class="sub-btn" data-sec="secF">F: On Your Doorstep</button>
   </div>
   <div id="vidSections"></div>
 </div>
@@ -176,7 +157,7 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
 <div class="panel" id="panel-sorter">
   <div class="card">
     <h3>Concept Sorter: Myth, Reality, or It's Complicated?</h3>
-    <p style="font-size:.85em;color:#666">Sort each statement about environmental politics. 10 XP per correct answer.</p>
+    <p style="font-size:.85em;color:#666">Sort each statement about environment, pandemics, and AI in global politics. 10 XP per correct answer.</p>
   </div>
   <div id="sorterItems"></div>
   <div class="sort-zones">
@@ -212,7 +193,7 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
 <!-- TIMELINE -->
 <div class="panel" id="panel-timeline">
   <div class="card">
-    <h3>Timeline Sort: Environmental Milestones</h3>
+    <h3>Timeline Sort: Environment, Health &amp; Technology Milestones</h3>
     <p style="font-size:.85em;color:#666">Drag events into chronological order (earliest at top). 20 XP for perfect order.</p>
   </div>
   <div id="tlItems"></div>
@@ -224,7 +205,7 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
 <div class="panel" id="panel-debate">
   <div class="card">
     <h3>Debate Arena</h3>
-    <p style="font-size:.85em;color:#666">No right answers &mdash; just hard questions. Use these for tutorial discussion or essay brainstorming.</p>
+    <p style="font-size:.85em;color:#666">No right answers \u2014 just hard questions. Use these for tutorial discussion or essay brainstorming.</p>
   </div>
   <div id="debateItems"></div>
 </div>
@@ -240,10 +221,8 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
 </div>
 
 <script>
-// ═══════════════════════════════════════
-// QR
-// ═══════════════════════════════════════
-const QR=(function(){function g(d){
+// ═══════ QR ═══════
+const QR=(function(){function g(){
 const c=document.createElement('canvas');const sz=200;c.width=sz;c.height=sz;const x=c.getContext('2d');
 x.fillStyle='#fff';x.fillRect(0,0,sz,sz);x.fillStyle='#1b5e20';
 const bs=8;for(let r=0;r<25;r++)for(let cl=0;cl<25;cl++){if(Math.random()>.55||(r<7&&cl<7)||(r<7&&cl>17)||(r>17&&cl<7))x.fillRect(cl*bs,r*bs,bs,bs);}
@@ -251,9 +230,7 @@ function fp(ox,oy){x.fillStyle='#1b5e20';x.fillRect(ox,oy,7*bs,7*bs);x.fillStyle
 fp(0,0);fp(18*bs,0);fp(0,18*bs);return c;}
 return{generate:g};})();
 
-// ═══════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════
+// ═══════ STATE ═══════
 let xp=0,streak=0,maxStreak=0;
 const done={sorter:false,theory:false,match:false,timeline:false,videos:{}};
 function addXP(n){xp+=n;document.getElementById('xpDisplay').textContent=xp+' XP';}
@@ -261,200 +238,240 @@ function addStreak(){streak++;if(streak>maxStreak)maxStreak=streak;document.getE
 function breakStreak(){streak=0;document.getElementById('streakDisplay').textContent='0 Streak';}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-// ═══════════════════════════════════════
-// VIDEO DATA
-// ═══════════════════════════════════════
+// ═══════ VIDEO DATA ═══════
 const VID_DATA={
 secA:{
   title:"A: The Anthropocene \u2014 Humans as a Geological Force",
-  desc:"We have entered a new epoch: one defined not by tectonic plates or asteroid impacts, but by human activity. What does this mean for global politics?",
+  desc:"We have entered a new epoch defined not by tectonic plates but by human activity. What does this mean for global politics? (Baylis, Smith & Owens, pp. 387\u2013404)",
   items:[
-    {id:"a1",type:"video",title:"The Anthropocene: Where on Earth Are We Going? (University of Cambridge)",yt:"HvD0TgE34HA",
-     q:"The video describes humanity as a geological force reshaping the planet. The Baylis, Smith & Owens chapter by Owen Greene frames environmental issues as a challenge to the state-centric international system. Why?",
-     opts:["Because the environment is not politically important","Because environmental problems \u2014 climate change, biodiversity loss, ocean acidification \u2014 cross borders, operate on timescales longer than election cycles, and cannot be solved by any single state acting alone","Because only scientists should deal with environmental issues, not states"],
+    {id:"a1",type:"video",title:"Global Environmental Problems and the Anthropocene (RIHN)",yt:"pB8Y-TthFFA",
+     q:"This video outlines the scale of human impact on the Earth system. Greene (in Baylis, Smith & Owens) frames environmental issues as a challenge to the state-centric international system. Why?",
+     opts:["Because the environment is not politically important","Because environmental problems \u2014 climate change, biodiversity loss, ocean acidification \u2014 cross borders, operate on timescales longer than election cycles, and cannot be solved by any single state acting alone","Because only scientists should deal with environmental issues"],
      correct:1,
      model:"Greene's core argument is that environmental issues expose the limits of the Westphalian system. The atmosphere does not respect borders. A factory in China affects rainfall in the Sahel. Deforestation in Brazil changes the global carbon cycle. These problems are collective action challenges that require governance beyond the state \u2014 but the international system is built on state sovereignty and national interest. This tension \u2014 between the borderless nature of environmental problems and the bordered nature of political authority \u2014 is the central puzzle of environmental politics in IR."},
     {id:"a2",type:"video",title:"What Is the Tragedy of the Commons? (TED-Ed)",yt:"CxC161GvMPc",
-     q:"Hardin's 'Tragedy of the Commons' (1968) argues that rational individual actors will inevitably overexploit shared resources. Elinor Ostrom won the Nobel Prize for showing this isn't always true. What did she find?",
+     q:"Hardin\u2019s \u2018Tragedy of the Commons\u2019 (1968) argues that rational individual actors will inevitably overexploit shared resources. Elinor Ostrom won the Nobel Prize for showing this isn\u2019t always true. What did she find?",
      opts:["That governments should privatise all resources","That communities can and do develop their own governance rules to manage shared resources sustainably \u2014 without either privatisation or top-down state control","That the tragedy of the commons is inevitable and cannot be prevented"],
      correct:1,
-     model:"Ostrom studied real-world cases \u2014 fisheries, irrigation systems, forests \u2014 where communities developed institutional rules to prevent overexploitation. Her key insight was that the choice is not just 'privatise or nationalise.' There is a third option: collective self-governance through norms, monitoring, and graduated sanctions. For IR scholars, this matters because it suggests global environmental governance doesn't have to follow the top-down model of a world government. It can emerge from networked, overlapping institutions \u2014 what some scholars call 'polycentric governance.' The Paris Agreement, with its bottom-up nationally determined contributions, reflects this Ostromian logic."},
+     model:"Ostrom studied real-world cases \u2014 fisheries, irrigation systems, forests \u2014 where communities developed institutional rules to prevent overexploitation. Her key insight was that the choice is not just \u2018privatise or nationalise.\u2019 There is a third option: collective self-governance through norms, monitoring, and graduated sanctions. For IR scholars, this matters because it suggests global environmental governance doesn\u2019t have to follow the top-down model of a world government. It can emerge from networked, overlapping institutions \u2014 what some scholars call \u2018polycentric governance.\u2019 The Paris Agreement, with its bottom-up nationally determined contributions, reflects this Ostromian logic."},
     {id:"a3",type:"case",title:"Case Study: The Aral Sea \u2014 A Man-Made Environmental Catastrophe",
-     text:"The Aral Sea, once the world's fourth-largest lake (shared by Kazakhstan and Uzbekistan), lost 90% of its volume between 1960 and 2010. Soviet central planners diverted the rivers feeding it to irrigate cotton fields. The result: a toxic dust bowl , collapsed fisheries, respiratory disease epidemics, and economic devastation for millions of people. It is one of the most dramatic examples of how political decisions about resource use can destroy an ecosystem \u2014 and the communities that depend on it. Today, Kazakhstan's North Aral Sea has partially recovered thanks to a World Bank-funded dam project, but the South Aral Sea (Uzbekistan) remains largely dead.",
-     q:"The Aral Sea disaster was caused by Soviet central planning, not by the 'tragedy of the commons.' What does this tell us about the relationship between political systems and environmental outcomes?",
+     text:"The Aral Sea, once the world\u2019s fourth-largest lake (shared by Kazakhstan and Uzbekistan), lost 90% of its volume between 1960 and 2010. Soviet central planners diverted the rivers feeding it to irrigate cotton fields. The result: a toxic dust bowl, collapsed fisheries, respiratory disease epidemics, and economic devastation for millions. Today, Kazakhstan\u2019s North Aral Sea has partially recovered thanks to a World Bank-funded dam project, but the South Aral Sea remains largely dead.",
+     q:"The Aral Sea disaster was caused by Soviet central planning, not by the \u2018tragedy of the commons.\u2019 What does this tell us about the relationship between political systems and environmental outcomes?",
      opts:["That democracies never cause environmental damage","That environmental destruction is not just about individual greed \u2014 it can be caused by state policy itself, especially when decision-makers are insulated from the consequences of their choices","That the Soviet Union was uniquely bad and no other political system causes environmental harm"],
      correct:1,
-     model:"The Aral Sea case complicates simple narratives. Hardin blamed individual rational actors; the Aral Sea was destroyed by a centralised state making top-down decisions. The lesson is structural: environmental destruction occurs when decision-makers do not bear the costs of their decisions. Soviet planners in Moscow gained cotton production; Uzbek and Kazakh communities lost their lake, their health, and their livelihoods. This pattern \u2014 costs externalised onto vulnerable communities \u2014 recurs globally: from oil extraction in the Niger Delta to air pollution in Delhi to water contamination in Flint, Michigan. Environmental politics is always also a question of power and justice."}
+     model:"The Aral Sea case complicates simple narratives. Hardin blamed individual rational actors; the Aral Sea was destroyed by a centralised state making top-down decisions. The lesson is structural: environmental destruction occurs when decision-makers do not bear the costs of their decisions. Soviet planners in Moscow gained cotton production; Uzbek and Kazakh communities lost their lake, their health, and their livelihoods. This pattern \u2014 costs externalised onto vulnerable communities \u2014 recurs globally."}
   ]
 },
 secB:{
-  title:"B: Climate Governance \u2014 From Rio to COP29 (and Beyond)",
-  desc:"Three decades of climate negotiations. What has been achieved? What has failed? And what does the US withdrawal mean?",
+  title:"B: Climate Governance \u2014 From Rio to COP30",
+  desc:"Three decades of climate negotiations. What has been achieved? What has failed? And where does COP30 in Bel\u00e9m leave us?",
   items:[
     {id:"b1",type:"video",title:"The Paris Agreement Explained (UNFCCC)",yt:"WiGD0OgK2ug",
-     q:"The Paris Agreement (2015) uses nationally determined contributions (NDCs) \u2014 each country sets its own targets. A realist would see this as a fatal weakness; a liberal institutionalist might see it as a pragmatic strength. Who is right?",
-     opts:["The realist \u2014 without enforcement, states will free-ride and the agreement is meaningless","The liberal \u2014 bottom-up commitments generate broader participation and create a ratchet mechanism for increasing ambition over time","Neither \u2014 climate change cannot be addressed through international agreements at all"],
+     q:"The Paris Agreement uses nationally determined contributions (NDCs). A realist sees fatal weakness; a liberal institutionalist sees pragmatic strength. Who is more persuasive?",
+     opts:["The realist \u2014 without enforcement, states will free-ride","The liberal \u2014 bottom-up commitments generate broader participation and create a ratchet mechanism for increasing ambition over time","Neither \u2014 climate change cannot be addressed through international agreements"],
      correct:1,
-     model:"Both perspectives have merit, but the liberal argument is analytically stronger here. The Kyoto Protocol (1997) used top-down, binding targets \u2014 and the US never ratified it, Canada withdrew, and developing countries had no obligations. Paris learned from Kyoto's failure: by letting each state set its own NDC, it achieved near-universal participation (196 parties). The ratchet mechanism (a 'Global Stocktake' every 5 years) creates pressure to increase ambition. The realist critique is valid \u2014 there is no enforcement \u2014 but the alternative (a binding treaty that major emitters refuse to join) is worse. Paris is imperfect, but it reflects an Ostromian insight: participation matters more than perfection."},
-    {id:"b2",type:"case",title:"Case Study: The US Withdrawal from the Paris Agreement (Again)",
-     text:"On 20 January 2025, President Trump signed an executive order withdrawing the United States from the Paris Agreement for the second time (he also withdrew in 2017; Biden rejoined in 2021). The US is the world's largest historical emitter of greenhouse gases and the second-largest current emitter. Its withdrawal removes approximately 14% of global emissions from the agreement's framework and sends a powerful political signal: the world's most powerful state does not consider climate change a priority. The withdrawal does not exit the US from the UNFCCC itself, but it removes the US from the Paris Agreement's review and accountability mechanisms.",
-     q:"What does the repeated US withdrawal from Paris tell us about the relationship between domestic politics and international environmental governance?",
-     opts:["Nothing \u2014 the US is just one country","International environmental agreements are only as durable as the domestic political coalitions that support them \u2014 when governments change, commitments can be reversed, exposing the fragility of treaty-based governance","The Paris Agreement doesn't matter anyway"],
+     model:"Both perspectives have merit, but the liberal argument is analytically stronger here. Kyoto (1997) used top-down binding targets \u2014 and the US never ratified, Canada withdrew, and developing countries had no obligations. Paris learned from Kyoto\u2019s failure: by letting each state set its own NDC, it achieved near-universal participation. The ratchet mechanism (Global Stocktake every 5 years) creates pressure to increase ambition. Paris is imperfect, but it reflects an Ostromian insight: participation matters more than perfection."},
+    {id:"b2",type:"case",title:"Case Study: COP30 in Bel\u00e9m (November 2025) \u2014 The \u2018Global Mutir\u00e3o\u2019",
+     text:"COP30 in Bel\u00e9m, Brazil (November 2025) was billed as the \u2018COP of truth and implementation\u2019 \u2014 marking 10 years since Paris. The outcome was the \u2018Global Mutir\u00e3o\u2019 (a Tupi-Guarani word meaning collective effort). Key results: a voluntary plan to curb fossil fuels (but no binding roadmap to phase them out); a goal to triple adaptation finance by 2035; a new \u2018Bel\u00e9m Mission to 1.5\u00b0C\u2019; and AI was included in the COP Action Agenda for the first time as a strategic theme. The leaders of the US, China, and India were notably absent from the summit. A fire broke out in the Blue Zone, forcing evacuations. Many developing countries criticised the outcomes as insufficiently ambitious.",
+     q:"COP30 included AI in its agenda for the first time. PBS NewsHour reported that AI was \u2018both praised and criticised\u2019 at the talks. Why might AI be both an opportunity and a threat for climate action?",
+     opts:["AI is purely beneficial for climate \u2014 there are no downsides","AI can optimise energy grids, improve climate modelling, and accelerate clean technology \u2014 but it also consumes enormous energy (data centres), increases emissions, and raises questions about corporate power and accountability","AI has nothing to do with climate change"],
      correct:1,
-     model:"The US oscillation (in-out-in-out) illustrates a fundamental tension in environmental governance: international commitments require domestic political sustainability. Climate policy in the US is deeply partisan \u2014 Democratic administrations join agreements, Republican administrations withdraw. This makes the US an unreliable partner and undermines the entire cooperative framework. For other states, it raises the question: why should we sacrifice economic growth to meet climate targets if the world's largest historical emitter won't participate? A constructivist would note that the norm of climate responsibility has still spread \u2014 US states, cities, and corporations maintain their own climate commitments regardless of federal policy. But the structural damage of repeated withdrawal is real."},
-    {id:"b3",type:"video",title:"COP29 Baku: What Was Agreed? (Chatham House)",yt:"uZe20yZFGoA",
-     q:"COP29 in Baku (November 2024) agreed on a new climate finance goal of $300 billion per year by 2035 for developing countries. Many Global South delegates called this 'a betrayal.' Why?",
-     opts:["Because $300 billion is more than enough","Because developing countries had demanded $1.3 trillion per year based on their actual adaptation and mitigation needs \u2014 the agreed figure covers less than a quarter of what's needed and relies heavily on private finance rather than guaranteed public funds","Because the Global South doesn't want climate finance"],
+     model:"COP30\u2019s AI debate captured a genuine paradox. On the opportunity side: AI can optimise renewable energy grids, improve weather and climate modelling, accelerate materials science for batteries and solar cells, and help monitor deforestation in real time. On the threat side: training a single large language model can emit as much CO2 as five cars over their lifetimes; global data centre energy demand is projected to double by 2030; and the tech companies promoting \u2018AI for climate\u2019 are also the ones building massive, energy-hungry infrastructure. As one COP30 expert put it, AI is \u2018a completely unregulated beast.\u2019 The question is whether AI\u2019s climate benefits will outweigh its climate costs \u2014 and who controls that calculation."},
+    {id:"b3",type:"case",title:"Reading: The US Withdrawal from the Paris Agreement (Again, January 2025)",
+     text:"On 20 January 2025, President Trump signed an executive order withdrawing the US from the Paris Agreement for the second time. The US is the world\u2019s largest historical emitter and second-largest current emitter. Its withdrawal removes ~14% of global emissions from the framework and sends a powerful signal: the world\u2019s most powerful state does not consider climate change a priority. The withdrawal does not exit the US from the UNFCCC itself.",
+     q:"What does the repeated US withdrawal tell us about the relationship between domestic politics and international environmental governance?",
+     opts:["Nothing \u2014 the US is just one country","International environmental agreements are only as durable as the domestic political coalitions that support them \u2014 when governments change, commitments can be reversed, exposing the fragility of treaty-based governance","The Paris Agreement doesn\u2019t matter anyway"],
      correct:1,
-     model:"The Baku outcome exposed the deep North-South divide in climate politics. Developing countries face the highest costs of climate change (floods, droughts, sea-level rise, crop failure) despite contributing least to the problem historically. They needed $1.3 trillion per year; they got a promise of $300 billion, much of it in loans rather than grants, and much of it contingent on mobilising private finance (which may never materialise). The African Group, AOSIS (small island states), and LDCs all expressed anger. This is the climate justice gap in numbers: the countries most vulnerable to climate change have the least power in negotiations, and the countries most responsible have the most power to set the terms."}
+     model:"The US oscillation (in-out-in-out) illustrates a fundamental tension: international commitments require domestic political sustainability. Climate policy in the US is deeply partisan. This makes the US an unreliable partner and undermines the entire cooperative framework. A constructivist would note that climate norms have still spread \u2014 US states, cities, and corporations maintain commitments regardless. But the structural damage of repeated withdrawal is real."}
   ]
 },
 secC:{
   title:"C: Climate Justice \u2014 Who Pays for the Crisis?",
   desc:"Climate change is not experienced equally. Who caused it? Who suffers most? And who should pay?",
   items:[
-    {id:"c1",type:"video",title:"Climate Justice Explained (Mary Robinson Foundation)",yt:"EpzN6QngayM",
-     q:"The concept of 'common but differentiated responsibilities' (CBDR) is central to the UNFCCC. What does it mean, and why is it so politically contentious?",
-     opts:["All countries share equal responsibility for climate change","All countries share the responsibility to act on climate change, but developed countries bear a greater responsibility because they caused the problem historically and have greater capacity to act \u2014 this is contentious because it implies different obligations for different states","Developing countries are solely responsible for reducing emissions"],
+    {id:"c1",type:"video",title:"Inside AI\u2019s Complicated Climate Impact (The Weather Channel, Nov 2025)",yt:"HDmgFkg3QeI",
+     q:"This report explores AI\u2019s dual role in climate \u2014 both as a tool for solutions and as a source of massive energy consumption. How does this connect to the concept of \u2018common but differentiated responsibilities\u2019 (CBDR)?",
+     opts:["It doesn\u2019t \u2014 AI is a separate issue from climate justice","The AI industry is concentrated in wealthy countries (US, China) whose data centres consume vast energy, contributing disproportionately to emissions \u2014 while the climate costs (droughts, floods, heat) fall disproportionately on the Global South. This mirrors the CBDR logic: those who benefit most from the system bear the greatest responsibility","Developing countries should build their own data centres to solve the problem"],
      correct:1,
-     model:"CBDR is the foundational principle of climate justice in international law. It acknowledges a historical fact: the UK, US, and Europe industrialised by burning fossil fuels for 200 years, accumulating atmospheric CO2 that causes today's warming. Developing countries did not cause the problem but suffer its worst effects. CBDR says: everyone must act, but the rich countries must act first and must provide financial and technical support to developing countries. This is contentious because developed countries (especially the US) resist differentiated obligations, arguing that major developing-country emitters like China and India must also reduce emissions. China responds: you emitted for 200 years to get rich; we've emitted for 30 years to lift a billion people out of poverty. The argument is both moral and structural."},
+     model:"CBDR is the foundational principle of climate justice: everyone must act, but rich countries bear greater responsibility because they caused the problem and have greater capacity. The AI boom intensifies this dynamic. US tech companies are building massive data centres that could add the equivalent of a mid-sized country\u2019s emissions to the global total by 2030. The profits flow to Silicon Valley; the climate consequences flow to Bangladesh, the Sahel, and small island states. This is the climate justice argument applied to the digital economy: who benefits from AI, and who pays the environmental cost?"},
     {id:"c2",type:"case",title:"Case Study: Small Island Developing States (SIDS) and the 1.5\u00b0C Target",
-     text:"For small island developing states like Tuvalu, the Marshall Islands, Kiribati, and the Maldives, climate change is not a future threat \u2014 it is an existential present reality. Rising sea levels threaten to make these nations literally uninhabitable within decades. At COP21 (Paris, 2015), SIDS led the campaign for the 1.5\u00b0C target (rather than the 2\u00b0C target preferred by larger states), arguing that 2\u00b0C of warming would be a death sentence for their nations. Their slogan: '1.5 to Stay Alive.' The target was included in the Paris Agreement, but current national pledges put the world on track for 2.5\u20133\u00b0C of warming. In 2024, Vanuatu led a campaign to request an advisory opinion from the International Court of Justice on states' obligations regarding climate change \u2014 using international law to hold major emitters accountable.",
+     text:"For SIDS like Tuvalu, the Marshall Islands, and the Maldives, climate change is an existential present reality. At COP21 (Paris, 2015), SIDS led the campaign for the 1.5\u00b0C target: \u20181.5 to Stay Alive.\u2019 Current NDCs put the world on track for 2.5\u20133\u00b0C. In 2024, Vanuatu led a campaign to request an ICJ advisory opinion on states\u2019 climate obligations.",
      q:"SIDS contribute almost nothing to global emissions but face the most severe consequences. What concept from IR theory best captures this structural injustice?",
-     opts:["Balance of power \u2014 SIDS need to build military alliances","Structural violence \u2014 the international system produces harm to vulnerable communities through its normal functioning, not through direct military force","Deterrence \u2014 SIDS should threaten retaliation"],
+     opts:["Balance of power","Structural violence \u2014 the international system produces harm through its normal functioning, not through direct military force","Deterrence"],
      correct:1,
-     model:"Johan Galtung's concept of structural violence is directly applicable: harm is produced not by a specific actor attacking SIDS, but by the normal functioning of the global economic system (fossil fuel extraction, industrial production, consumption patterns in wealthy countries). No one declared war on Tuvalu, but Tuvalu may disappear because of emissions produced overwhelmingly by countries thousands of miles away. This is violence without a gun \u2014 and it is the central injustice of the climate crisis. The ICJ advisory opinion campaign represents SIDS' attempt to use international law (a liberal tool) to address a problem created by structural power asymmetry (a critical/Marxist insight). Whether the law can overcome power is the question."},
-    {id:"c3",type:"video",title:"Loss and Damage: Climate Finance's Missing Piece (Al Jazeera)",yt:"kcs0MK3EDN0",
-     q:"'Loss and damage' refers to the harms caused by climate change that go beyond what communities can adapt to. Why did it take until COP27 (2022) to establish a Loss and Damage Fund, and why is it still controversial?",
-     opts:["Because loss and damage is not a real concept","Because developed countries resisted for decades, fearing that a Loss and Damage Fund would imply legal liability and open the door to climate reparations \u2014 they eventually agreed to a fund but insisted it was based on 'solidarity,' not liability","Because developing countries did not want a fund"],
+     model:"Galtung\u2019s structural violence is directly applicable: harm is produced not by a specific actor attacking SIDS, but by the normal functioning of the global economic system. No one declared war on Tuvalu, but Tuvalu may disappear because of emissions produced overwhelmingly by distant countries. The ICJ campaign represents SIDS\u2019 attempt to use international law (a liberal tool) to address a problem created by structural power asymmetry (a critical insight). Whether law can overcome power is the question."},
+    {id:"c3",type:"case",title:"Reading: Loss and Damage \u2014 From COP27 to COP30",
+     text:"At COP27 (2022), developing countries forced the creation of a Loss and Damage Fund. At COP28 (2023), $700 million was pledged \u2014 against trillions in estimated losses. At COP29 (Baku, 2024), $300 billion/year was agreed for climate finance \u2014 but developing countries had demanded $1.3 trillion. At COP30 (Bel\u00e9m, 2025), adaptation finance was set to triple by 2035, but no binding fossil-fuel roadmap emerged. The pattern: incremental progress, massive gaps.",
+     q:"Why did it take until 2022 to establish a Loss and Damage Fund?",
+     opts:["Because loss and damage is not a real concept","Because developed countries resisted for decades, fearing that a fund would imply legal liability and open the door to climate reparations","Because developing countries did not want a fund"],
      correct:1,
-     model:"Loss and damage is the most politically charged concept in climate negotiations because it points directly at responsibility. If Bangladesh loses coastline to sea-level rise caused by emissions from the US and EU, who pays? Developed countries blocked the concept for 30 years because acknowledging loss and damage could create legal liability \u2014 essentially, climate debt. At COP27 in Sharm el-Sheikh, the dam broke: developing countries, led by Pakistan (which had just experienced catastrophic flooding), forced the creation of a Loss and Damage Fund. But the fund's capitalisation is tiny ($700 million pledged at COP28, against trillions in estimated losses), and the language carefully avoids 'liability' or 'compensation.' It is framed as 'solidarity.' The gap between the language and the reality is the gap between what justice demands and what power permits."}
+     model:"Loss and damage is the most politically charged concept in climate negotiations because it points directly at responsibility. Developed countries blocked it for 30 years because acknowledging it could create legal liability \u2014 climate debt. The fund\u2019s creation was a victory; its underfunding reveals the limits of that victory. The gap between the language (\u2018solidarity\u2019) and the reality (\u2018liability avoided\u2019) is the gap between what justice demands and what power permits."}
   ]
 },
 secD:{
-  title:"D: On Your Doorstep \u2014 Cyprus and the Eastern Mediterranean",
+  title:"D: Pandemic Preparedness \u2014 The World Is Not Ready",
+  desc:"Required reading: Osterholm & Olshaker (2024), \u2018The World Is Not Ready for the Next Pandemic,\u2019 Foreign Affairs. Why does this matter for IR?",
+  items:[
+    {id:"d1",type:"case",title:"Reading: Osterholm & Olshaker (2024), \u2018The World Is Not Ready for the Next Pandemic\u2019 \u2014 Foreign Affairs",
+     text:"Less than five years after COVID-19, the world remains dangerously unprepared. H5N1 avian influenza is mutating and infecting mammals, including dairy cattle. Governments have failed to invest in better vaccines, global manufacturing capacity, or distribution networks. The US stockpile of H5N1 vaccine covers only 0.7% of the population. Global production capacity could vaccinate at most 25% of the world\u2019s population in a pandemic\u2019s first year. Osterholm and Olshaker argue for a \u2018military model\u2019 of pandemic preparedness: massive, sustained investment in vaccines, antivirals, and infrastructure \u2014 because a pandemic \u2018could prove far more deadly than any military conflict since WWII.\u2019",
+     q:"Osterholm and Olshaker argue pandemic preparedness should follow a \u2018military model\u2019 of investment. Why is this framing significant for IR?",
+     opts:["It isn\u2019t \u2014 pandemics are a domestic health issue, not an IR issue","It reframes health as a security issue: if a pandemic can kill more people than a war, then biological security deserves the same investment as military security \u2014 this is securitisation of health","It means we should use the military to fight pandemics"],
+     correct:1,
+     model:"This is a textbook case of securitisation (Copenhagen School): by framing pandemics as security threats comparable to military conflict, Osterholm and Olshaker argue for extraordinary measures \u2014 massive public investment, stockpiling, infrastructure. The IR implications are profound: pandemic preparedness is a global collective action problem (like climate) that requires international cooperation (vaccine distribution, surveillance networks, supply chains). COVID showed what happens when cooperation fails: vaccine nationalism, supply chain collapse, and massive inequality in access. The reading connects directly to this week\u2019s overarching theme: global governance challenges that cross borders and resist state-centric solutions."},
+    {id:"d2",type:"case",title:"Case Study: COVID-19 and Vaccine Nationalism",
+     text:"During COVID-19, wealthy countries secured the vast majority of early vaccine doses through advance purchase agreements. By mid-2021, high-income countries had vaccinated over 50% of their populations while many African countries had vaccinated less than 2%. COVAX, the global initiative to ensure equitable distribution, was chronically underfunded and outbid by rich nations. The result: a two-track pandemic where wealth determined survival. South Africa and India proposed a TRIPS waiver at the WTO to allow generic vaccine production; it was blocked for over a year by the US and EU.",
+     q:"Vaccine nationalism during COVID-19 illustrates which fundamental tension in global governance?",
+     opts:["There is no tension \u2014 every country has the right to protect its own citizens first","The tension between national self-interest (securing vaccines for your own population) and global collective action (a pandemic cannot be ended anywhere until it is ended everywhere \u2014 variants evolve in unvaccinated populations and spread back to vaccinated ones)","Vaccines should not be shared internationally"],
+     correct:1,
+     model:"Vaccine nationalism is the pandemic equivalent of free-riding in climate politics. A realist says: of course states prioritise their own citizens. A liberal says: but the virus doesn\u2019t respect borders \u2014 unvaccinated populations become breeding grounds for new variants that undermine everyone\u2019s protection. A Marxist says: the patent system allowed pharmaceutical companies to profit from publicly funded research while billions went unvaccinated. The TRIPS waiver debate is the pandemic version of climate\u2019s loss and damage argument: who has the right to produce the tools of survival, and who controls access?"},
+    {id:"d3",type:"case",title:"Connecting the Dots: Pandemics, Climate, and AI",
+     text:"The three themes of this week are not separate \u2014 they are deeply interconnected. Climate change increases pandemic risk by disrupting ecosystems, pushing wildlife into closer contact with humans (zoonotic spillover), and weakening health infrastructure through extreme weather. AI can accelerate vaccine development and disease surveillance but also consumes enormous energy, worsening the climate crisis. Pandemic preparedness requires the same global governance architecture (international cooperation, equitable resource distribution, institutional trust) that climate action requires \u2014 and faces the same obstacles (sovereignty, inequality, free-riding).",
+     q:"How are climate change, AI, and pandemic preparedness linked? (This is one of your discussion questions.)",
+     opts:["They are not linked \u2014 these are separate policy areas","Climate change increases pandemic risk (zoonotic spillover, weakened health systems); AI can help address both but also worsens climate change (energy consumption); and all three require the same global governance solutions that states have repeatedly failed to deliver","AI will solve both climate change and pandemics automatically"],
+     correct:1,
+     model:"The connection is structural: all three are transnational collective action problems that the state-centric international system struggles to address. Climate disrupts ecosystems, creating conditions for new pathogens (the next pandemic may come from a melting permafrost or a displaced bat colony). AI could model disease outbreaks or optimise vaccine distribution \u2014 but the same AI infrastructure accelerates emissions. And the governance gaps are identical: sovereignty blocks cooperation, inequality distorts outcomes, and short-term national interest overrides long-term collective survival. Greene\u2019s chapter makes exactly this point: environmental issues reveal the limits of the Westphalian system. Pandemics and AI extend the same argument."}
+  ]
+},
+secE:{
+  title:"E: AI & Global Politics \u2014 The New Frontier of Great-Power Competition",
+  desc:"Is AI the new arms race? Who\u2019s winning? And what are the risks?",
+  items:[
+    {id:"e1",type:"video",title:"Cold War 2.0: America\u2019s AI War with China (Battle Lines, Jan 2025)",yt:"qE8qBQlcU6A",
+     q:"This documentary frames US-China AI competition as a new Cold War. Colin Kahl (Foreign Affairs, Jan 2026) argues that \u2018the myth of the AI race\u2019 is that there will be a single winner. Who is more persuasive?",
+     opts:["The \u2018Cold War 2.0\u2019 framing \u2014 one side will win decisively","Kahl\u2019s argument: the AI race is fragmenting across multiple dimensions (models, compute, diffusion, embodied AI) and neither the US nor China is likely to dominate all of them \u2014 the result is \u2018AI bipolarity,\u2019 not a single winner","AI competition is irrelevant to global politics"],
+     correct:1,
+     model:"Kahl\u2019s Foreign Affairs essay makes a sophisticated argument: the AI race is not a single sprint but a \u2018decathlon.\u2019 The US leads in frontier models and compute (chips, data centres). China leads in deployment and embodied AI (robots, factories, infrastructure). Chinese firms embrace open-weight models that spread globally; US firms use proprietary closed systems. The result is not victory for one side but an asymmetric bipolarity where each dominates different parts of the AI ecosystem. This matters for IR because it means the AI competition will not produce a clear winner \u2014 and managing the shared risks (autonomous weapons, deepfakes, cyber attacks) requires dialogue between rivals, not just competition."},
+    {id:"e2",type:"video",title:"Artificial Intelligence in 2025 (60 Minutes)",yt:"KpOcUrPdx-4",
+     q:"The 60 Minutes report covers AI\u2019s rapid advancement and the warnings from industry leaders about safety risks. The Stimson Center (Jan 2026) argues \u2018America is running the wrong AI race.\u2019 What do they mean?",
+     opts:["America should stop developing AI entirely","The US is focused on building the most powerful frontier models, but the real race is about deployment at scale and public trust \u2014 China is ahead on both because it embeds AI into factories, infrastructure, and public services while 72% of Chinese citizens trust AI vs. only 32% in Western democracies","America is winning the AI race and should not change strategy"],
+     correct:1,
+     model:"The Stimson Center\u2019s argument (Burrows, Klaassen, McDonald, Jan 2026) is that the US is fighting the wrong war. While Washington obsesses over building the most powerful large language model, China is deploying AI across its entire economy: factory robots (China installs more industrial robots than the rest of the world combined), autonomous ports, AI-powered healthcare, and renewable energy grid management. The key insight: \u2018The most powerful engine in the world is of little value if it cannot be integrated into a functioning vehicle.\u2019 And on public trust \u2014 essential for adoption \u2014 China leads dramatically (72% trust AI vs. 32% in the West). The lesson for IR: great-power competition in AI is not just about technological superiority but about societal capacity to deploy and accept the technology."},
+    {id:"e3",type:"case",title:"Reading: Kahl (2026), \u2018The Myth of the AI Race\u2019 \u2014 Foreign Affairs",
+     text:"Colin Kahl argues that framing AI as a winner-takes-all race between the US and China is misleading. The competition is fragmenting across multiple dimensions: frontier models (US leads), compute infrastructure (US leads but China closing gap), global diffusion (China\u2019s open-weight models spreading faster), and embodied/industrial AI (China dominates \u2014 300,000 new industrial robots installed in 2024 vs. 34,000 in the US). Trump\u2019s decision to allow Nvidia H200 chip exports to China may further erode US advantages. The most likely outcome is \u2018AI bipolarity\u2019 \u2014 each side dominating different parts of the ecosystem. Kahl argues this makes superpower dialogue on AI risks more important, not less.",
+     q:"Kahl argues the AI competition will produce \u2018AI bipolarity\u2019 rather than a clear winner. Why does this matter for global governance?",
+     opts:["It doesn\u2019t \u2014 bipolarity is just a Cold War concept","If neither side can dominate, both face shared risks from advanced AI (autonomous weapons, deepfakes, cyber attacks) that require cooperation to manage \u2014 bipolarity creates both incentive and need for superpower dialogue, even amid rivalry","Bipolarity means the US has already lost"],
+     correct:1,
+     model:"AI bipolarity matters for IR because it creates a security dilemma: each side\u2019s advances threaten the other, driving further competition. But the shared risks \u2014 autonomous weapons that could escalate conflicts, AI-powered cyber attacks, deepfakes that undermine democratic processes \u2014 cannot be managed by one side alone. Kahl\u2019s policy conclusion is that the US must simultaneously compete and cooperate: compete on deployment and compute, cooperate on safety standards and risk management. This mirrors the nuclear analogy: the US and USSR competed fiercely but eventually developed arms control agreements because the alternative was mutually assured destruction. AI may require similar frameworks."}
+  ]
+},
+secF:{
+  title:"F: On Your Doorstep \u2014 Cyprus and the Eastern Mediterranean",
   desc:"Climate change is not abstract. It is reshaping the island you live on right now.",
   items:[
-    {id:"d1",type:"case",title:"Case Study: Cyprus \u2014 A Mediterranean Climate Hotspot",
-     text:"Cyprus is located in one of the fastest-warming regions on Earth. The Eastern Mediterranean is heating nearly twice as fast as the global average. Scientific projections show Cyprus facing over 4\u00b0C of annual temperature increase and a 20\u201330% reduction in rainfall by end-of-century under high-emission scenarios. In 2021, the worst wildfires in the island's history killed four people and burned 55 km\u00b2 in the Larnaca-Limassol region. Water scarcity is already severe: Cyprus relies heavily on desalination plants, and reservoir levels regularly drop to critical levels during summer droughts. The island's agriculture, tourism, and public health systems are all directly vulnerable. In 2025, Cyprus assumed the EU Council presidency and has sought to position itself as a climate leader for the Eastern Mediterranean and Middle East region.",
-     q:"Cyprus is a small island state in one of the world's most climate-vulnerable regions. How does this connect to the SIDS arguments we studied?",
-     opts:["It doesn't \u2014 Cyprus is not a developing country","While Cyprus is wealthier than most SIDS, it shares key vulnerabilities: water scarcity, wildfire risk, heat extremes, and dependence on a climate-sensitive economy (tourism, agriculture). Its experience shows that climate vulnerability is determined by geography and exposure, not just GDP","Cyprus has no climate problems"],
+    {id:"f1",type:"case",title:"Case Study: Cyprus \u2014 A Mediterranean Climate Hotspot",
+     text:"Cyprus is in one of the fastest-warming regions on Earth. The Eastern Mediterranean is heating nearly twice as fast as the global average. Projections show Cyprus facing 4\u00b0C+ temperature increase and 20\u201330% rainfall reduction by end-of-century. In 2021, the worst wildfires in the island\u2019s history killed four people and burned 55 km\u00b2. Water scarcity is already severe. In 2025, Cyprus assumed the EU Council presidency and positioned itself as a climate leader for the region.",
+     q:"Cyprus is wealthy compared to most SIDS but shares key climate vulnerabilities. What does this tell us about climate justice frameworks?",
+     opts:["It doesn\u2019t \u2014 Cyprus is an EU member and has no climate problems","Climate vulnerability is determined by geography and exposure, not just GDP \u2014 Cyprus\u2019s experience shows that the simple North-South framing of climate justice needs nuance","Cyprus should not be part of climate discussions"],
      correct:1,
-     model:"Cyprus occupies an interesting analytical position: it is an EU member state with a relatively high GDP, but its geography places it in one of the most climate-vulnerable regions on Earth. This complicates the simple North-South framing of climate justice. Cyprus is not Tuvalu, but it faces genuinely existential risks from heat, drought, fire, and water scarcity. Its EU presidency role in 2025 gave it a platform to advocate for Mediterranean climate cooperation \u2014 bridging the North-South divide rather than sitting neatly on one side. For students at EMU, this is the point: climate change is not something happening to distant island nations. It is happening here, now, to the water you drink and the air you breathe."},
-    {id:"d2",type:"video",title:"Climate Change & Environmental Security in the Mediterranean (SIPRI)",yt:"EkNWJm1Qmfg",
-     q:"Environmental security scholars argue that climate change is a 'threat multiplier' that exacerbates existing conflicts. How might this apply to the Eastern Mediterranean?",
-     opts:["Climate change has no security implications","Water scarcity, drought-driven migration, competition for energy resources, and wildfire disasters can all intensify existing political tensions in a region already marked by the Cyprus conflict, the Syrian refugee crisis, and Turkey-Greece-Egypt maritime disputes","The Eastern Mediterranean is too stable for climate to cause problems"],
+     model:"Cyprus occupies an interesting analytical position: an EU member with relatively high GDP, but geographically in one of the most climate-vulnerable regions on Earth. This complicates simple North-South framing. Cyprus faces genuinely existential risks from heat, drought, fire, and water scarcity. Its EU presidency role gave it a platform to bridge the divide rather than sit neatly on one side. For students at EMU: climate change is not happening to distant island nations. It is happening here, now."},
+    {id:"f2",type:"video",title:"Climate Change & Environmental Security in the Mediterranean (SIPRI)",yt:"EkNWJm1Qmfg",
+     q:"Environmental security scholars argue climate change is a \u2018threat multiplier.\u2019 How does this apply to the Eastern Mediterranean?",
+     opts:["Climate change has no security implications in this region","Water scarcity, drought-driven migration, energy competition, and wildfire disasters can all intensify existing tensions in a region already marked by the Cyprus conflict, the Syrian refugee crisis, and maritime disputes","The Eastern Mediterranean is too stable for climate to matter"],
      correct:1,
-     model:"The Eastern Mediterranean is a textbook case of climate as a threat multiplier. Water scarcity intensifies competition between Turkey, Syria, Iraq, and Israel-Palestine over shared rivers. Drought contributes to rural displacement (some scholars link the Syrian civil war partly to a historic 2006\u20132010 drought that displaced 1.5 million farmers). Maritime boundary disputes (Turkey-Greece-Cyprus-Egypt) are partly about gas and oil resources \u2014 fossil fuels whose extraction worsens the climate crisis. The Cyprus conflict itself intersects with environmental issues: the buffer zone is an unintended biodiversity corridor, water infrastructure is divided between the two communities, and wildfire response requires cross-boundary coordination that the political division makes difficult. Climate does not cause conflict by itself \u2014 but it makes existing conflicts harder to manage."},
-    {id:"d3",type:"case",title:"Case Study: The Buffer Zone as Biodiversity Corridor",
-     text:"One of the most unexpected environmental stories in Cyprus is the UN buffer zone itself. The 180 km strip of land, emptied of most human activity since 1974, has become an unintended wildlife sanctuary. Rare species, including mouflon sheep and endemic orchids, thrive in the zone precisely because it is free from development. In 2024, the UN launched a biodiversity assessment of the buffer zone in partnership with the Cyprus Institute. The paradox is striking: a zone created by political conflict has become one of the island's most ecologically valuable areas. This raises questions about 'rewilding,' post-conflict ecology, and whether peace could ironically threaten the biodiversity that division accidentally protected.",
-     q:"The buffer zone paradox \u2014 conflict creating conservation \u2014 appears in other divided landscapes too (the Korean DMZ is another example). What does this tell us about the relationship between politics and ecology?",
-     opts:["That conflict is good for the environment","That human absence allows ecosystems to recover, but this is an accidental byproduct of political violence, not a conservation strategy \u2014 it reveals how much damage normal human activity does and raises difficult questions about what happens when peace returns and development resumes","That we should create more conflict zones for conservation"],
+     model:"The Eastern Mediterranean is a textbook case of climate as threat multiplier. Water scarcity intensifies competition between Turkey, Syria, Iraq, and Israel-Palestine. Drought contributed to displacement feeding into the Syrian civil war. Maritime disputes (Turkey-Greece-Cyprus-Egypt) are partly about fossil fuel resources. The Cyprus conflict intersects with environmental issues: the buffer zone is an unintended biodiversity corridor, water infrastructure is divided, and wildfire response requires cross-boundary coordination that political division makes difficult."},
+    {id:"f3",type:"case",title:"Case Study: The Buffer Zone as Biodiversity Corridor",
+     text:"The UN buffer zone in Cyprus \u2014 180 km of land emptied since 1974 \u2014 has become an unintended wildlife sanctuary. Rare species thrive precisely because human activity is absent. In 2024, the UN launched a biodiversity assessment in partnership with the Cyprus Institute. The paradox: conflict created conservation. Similar patterns exist in the Korean DMZ and Chernobyl\u2019s exclusion zone.",
+     q:"What does the buffer zone paradox tell us about the relationship between politics and ecology?",
+     opts:["That conflict is good for the environment","That human absence allows ecosystems to recover, but this is an accidental byproduct of political violence \u2014 it raises difficult questions about what happens when peace returns and development resumes","That we should create more conflict zones"],
      correct:1,
-     model:"The buffer zone as biodiversity corridor is analytically fascinating. It shows that ecosystems can recover remarkably quickly when human pressure is removed (Chernobyl's exclusion zone is another example). But celebrating this would be perverse \u2014 the zone exists because of a military invasion that displaced hundreds of thousands of people. The harder question is forward-looking: if and when reunification occurs, will development destroy what division accidentally preserved? This connects to broader debates about whether environmental protection can be integrated into peace processes. The UN's biodiversity assessment suggests an emerging awareness that the zone's ecological value should be preserved regardless of the political outcome \u2014 a rare intersection of conflict resolution and conservation."}
+     model:"The buffer zone as biodiversity corridor shows ecosystems can recover remarkably quickly when human pressure is removed. But celebrating this would be perverse \u2014 the zone exists because of a military invasion that displaced hundreds of thousands. The harder question is forward-looking: if reunification occurs, will development destroy what division accidentally preserved? The UN\u2019s biodiversity assessment suggests emerging awareness  that the zone\u2019s ecological value should be preserved regardless of the political outcome."}
   ]
 }
 };
 
-// ═══════════════════════════════════════
-// SORTER DATA (3 zones: myth / complex / reality)
-// ═══════════════════════════════════════
+// ═══════ SORTER DATA ═══════
 const SORT_DATA=[
-  {s:"Climate change is a natural cycle unrelated to human activity",a:"myth",e:"The scientific consensus (IPCC AR6, 2021) is unequivocal: human activity \u2014 primarily fossil fuel combustion \u2014 is the dominant cause of observed warming since the mid-20th century."},
-  {s:"The Anthropocene is a proposed geological epoch defined by human impact on the Earth system",a:"reality",e:"The term was popularised by Paul Crutzen in 2000. While not yet formally ratified by geologists, it captures the scientific reality that human activity has become the dominant force shaping the planet."},
-  {s:"The Paris Agreement has solved the climate crisis",a:"myth",e:"The Paris Agreement is a framework for action, not a solution. Current NDCs put the world on track for 2.5\u20133\u00b0C of warming \u2014 far above the 1.5\u00b0C target. Implementation, not ambition, is the bottleneck."},
-  {s:"Small island developing states face existential threats from sea-level rise within this century",a:"reality",e:"SIDS like Tuvalu, the Marshall Islands, and Kiribati face inundation, saltwater intrusion, and loss of habitable land. For them, the 1.5\u00b0C target is not aspirational \u2014 it is a survival threshold."},
-  {s:"Nuclear energy is the obvious solution to climate change",a:"complex",e:"Nuclear produces very low carbon emissions and provides reliable baseload power, making it attractive for decarbonisation. But it involves high costs, long construction times, nuclear waste storage challenges, proliferation risks, and public opposition (especially after Fukushima). Some environmentalists support it; others oppose it. The debate is genuinely complicated."},
-  {s:"Developing countries should reduce emissions at the same rate as developed countries",a:"myth",e:"The principle of 'common but differentiated responsibilities' (CBDR) recognises that developed countries caused most historical emissions and have greater capacity to act. Demanding equal reductions ignores historical responsibility and current inequality."},
-  {s:"Climate change is a 'threat multiplier' that exacerbates existing conflicts",a:"reality",e:"Environmental security scholars show that drought, water scarcity, and resource competition intensify political tensions. The Syrian drought (2006\u20132010) contributed to displacement that fed into the civil war. Climate doesn't cause conflict alone, but it worsens existing vulnerabilities."},
-  {s:"The tragedy of the commons is inevitable and cannot be overcome",a:"myth",e:"Elinor Ostrom won the Nobel Prize for showing that communities can and do develop governance rules to manage shared resources sustainably. The commons can be governed \u2014 it just requires institutional design."},
-  {s:"The US has withdrawn from the Paris Agreement twice (2017 and 2025)",a:"reality",e:"Trump withdrew in both his first and second terms. Biden rejoined in 2021. This oscillation exposes the fragility of international environmental commitments when they depend on domestic political coalitions."},
-  {s:"Carbon markets are a straightforward and uncontroversial solution to emissions reduction",a:"complex",e:"Carbon markets (cap-and-trade, offsets) use market mechanisms to reduce emissions. They have reduced some industrial emissions (the EU ETS). But critics argue they commodify nature, allow wealthy polluters to buy their way out, enable greenwashing through dubious offsets, and shift the burden to the Global South. The EU's Carbon Border Adjustment Mechanism (CBAM) adds another layer of controversy."},
-  {s:"The Eastern Mediterranean is warming nearly twice as fast as the global average",a:"reality",e:"Multiple studies confirm the Eastern Mediterranean is a climate hotspot. Cyprus faces 4\u00b0C+ temperature increases and 20\u201330% rainfall reduction under high-emission scenarios."},
-  {s:"Environmental protection and economic growth are always incompatible",a:"complex",e:"The degrowth movement argues that infinite growth on a finite planet is impossible. Green growth advocates argue that decoupling emissions from GDP growth is possible through technology and policy. The evidence is mixed: some countries have reduced emissions while growing (relative decoupling), but absolute global emissions continue to rise. The debate is unresolved."},
-  {s:"The COP29 climate finance agreement of $300 billion/year was widely welcomed by developing countries",a:"myth",e:"Developing countries had demanded $1.3 trillion/year. The $300 billion agreement was called a 'betrayal' by many Global South delegates. Much of the promised finance is in loans, not grants, and depends on mobilising private capital."},
-  {s:"The UN buffer zone in Cyprus has accidentally become a biodiversity corridor",a:"reality",e:"The 180 km strip, emptied of most human activity since 1974, hosts rare species and functions as an unintended wildlife sanctuary \u2014 a paradox where political conflict produced conservation."}
+  {s:"Climate change is a natural cycle unrelated to human activity",a:"myth",e:"IPCC AR6 (2021) is unequivocal: human activity is the dominant cause of observed warming since the mid-20th century."},
+  {s:"The Anthropocene is a proposed geological epoch defined by human impact on the Earth system",a:"reality",e:"Popularised by Paul Crutzen in 2000. Captures the scientific reality that human activity has become the dominant force shaping the planet."},
+  {s:"The Paris Agreement has solved the climate crisis",a:"myth",e:"Current NDCs put the world on track for 2.5\u20133\u00b0C of warming \u2014 far above the 1.5\u00b0C target. Implementation is the bottleneck."},
+  {s:"Small island developing states face existential threats from sea-level rise within this century",a:"reality",e:"SIDS like Tuvalu and the Maldives face inundation and loss of habitable land. The 1.5\u00b0C target is a survival threshold for them."},
+  {s:"Nuclear energy is the obvious solution to climate change",a:"complex",e:"Very low carbon, reliable baseload power. But high costs, waste storage, proliferation risks, and public opposition. Genuinely complicated."},
+  {s:"AI will automatically solve climate change",a:"myth",e:"AI can help (grid optimisation, climate modelling) but also worsens emissions (data centre energy demand projected to double by 2030). It is a tool, not a solution."},
+  {s:"Climate change is a \u2018threat multiplier\u2019 that exacerbates existing conflicts",a:"reality",e:"Drought, water scarcity, and resource competition intensify political tensions. The Syrian drought (2006\u20132010) contributed to displacement feeding civil war."},
+  {s:"The tragedy of the commons is inevitable and cannot be overcome",a:"myth",e:"Elinor Ostrom won the Nobel Prize showing communities can and do govern shared resources sustainably. The commons can be governed."},
+  {s:"The US has withdrawn from the Paris Agreement twice (2017 and 2025)",a:"reality",e:"Trump withdrew in both terms. Biden rejoined in 2021. This oscillation exposes the fragility of treaty-based governance."},
+  {s:"The US-China AI race will produce a single, decisive winner",a:"complex",e:"Kahl (Foreign Affairs, 2026) argues the race is fragmenting into a \u2018decathlon\u2019 \u2014 the US leads in frontier models and compute, China leads in deployment and embodied AI. The likely outcome is AI bipolarity, not victory for one side."},
+  {s:"The world is well-prepared for the next pandemic",a:"myth",e:"Osterholm & Olshaker (Foreign Affairs, 2024) show the opposite: vaccine stockpiles are tiny, manufacturing capacity is inadequate, and governments have not invested in preparedness."},
+  {s:"COP30 in Bel\u00e9m (2025) included AI as a strategic theme for the first time",a:"reality",e:"AI was systematically included in the COP Action Agenda. Tech companies promoted AI climate tools while critics flagged data centre energy consumption."},
+  {s:"China is ahead of the US in deploying AI across its economy",a:"reality",e:"China installs more industrial robots than the rest of the world combined, operates 18 fully automated ports, and has embedded AI in healthcare, energy, and manufacturing at scale (Stimson Center, 2026)."},
+  {s:"Pandemic preparedness is purely a domestic health issue, not an IR issue",a:"myth",e:"COVID showed pandemics are transnational collective action problems: vaccine nationalism, supply chain collapse, variant evolution in unvaccinated populations, and TRIPS waiver disputes are all IR issues."},
+  {s:"Environmental protection and economic growth are always incompatible",a:"complex",e:"Degrowth vs. green growth is unresolved. Some countries have achieved relative decoupling, but absolute global emissions keep rising."},
+  {s:"The Eastern Mediterranean is warming nearly twice as fast as the global average",a:"reality",e:"Multiple studies confirm it. Cyprus faces 4\u00b0C+ temperature increases and 20\u201330% rainfall reduction under high-emission scenarios."}
 ];
 
-// ═══════════════════════════════════════
-// THEORY IDENTIFIER
-// ═══════════════════════════════════════
+// ═══════ THEORY IDENTIFIER ═══════
 const THEORY_DATA=[
   {s:"States will only cooperate on climate change when it serves their national interest. The US withdraws from Paris because the costs outweigh the benefits for American industry.",
-   a:"Realism",e:"Realism sees states as rational, self-interested actors in anarchy. Climate cooperation occurs only when it aligns with national interest \u2014 and fails when it doesn't."},
-  {s:"The UNFCCC, the Paris Agreement, and the COP process create frameworks that reduce transaction costs, build trust, and generate iterative cooperation on climate change.",
-   a:"Liberalism",e:"Liberal institutionalism argues that international institutions facilitate cooperation by providing information, reducing uncertainty, and creating reputational costs for defection."},
-  {s:"Climate change is caused by the capitalist system's drive for endless accumulation. You cannot solve an ecological crisis created by capitalism within capitalism.",
-   a:"Marxism",e:"Marxist and ecological Marxist scholars argue that the climate crisis is a structural consequence of capitalist production \u2014 not a market failure that can be fixed with carbon pricing."},
-  {s:"The norm of climate responsibility has spread globally. Even when states withdraw from agreements, the idea that climate action is a moral obligation continues to gain strength.",
-   a:"Constructivism",e:"Constructivism emphasises how norms and ideas shape state behaviour. The spread of climate consciousness \u2014 through activism, education, media \u2014 creates pressure on states regardless of material incentives."},
-  {s:"Climate change disproportionately affects women in the Global South, who are more dependent on natural resources for food, water, and fuel. Gender must be central to climate policy.",
-   a:"Feminism",e:"Feminist IR shows that climate impacts are gendered: women in developing countries bear disproportionate burdens from drought, flooding, and displacement, yet are underrepresented in climate negotiations."},
-  {s:"The international environmental regime was designed by industrialised countries that caused the crisis. Developing countries are expected to follow rules written by those who broke the planet.",
-   a:"Post-colonialism",e:"Post-colonial critique highlights how the global environmental governance architecture reflects power asymmetries rooted in colonial history \u2014 the polluters write the rules."},
-  {s:"The concept of the 'Anthropocene' is misleading because it implies all humans are equally responsible. It should be called the 'Capitalocene' because the crisis was caused by industrial capitalism, not humanity as a whole.",
-   a:"Marxism",e:"Jason Moore's 'Capitalocene' critique argues that blaming 'humanity' obscures the specific economic system and class of actors responsible for the crisis. A subsistence farmer in Bangladesh did not cause climate change."},
-  {s:"Climate change discourse has securitised the environment, framing it as a threat that justifies emergency measures \u2014 but this can lead to militarised responses rather than justice-based solutions.",
-   a:"Constructivism",e:"The Copenhagen School's securitisation theory applies here: framing climate as a 'security threat' changes the policy response from cooperation and justice to emergency measures, border control, and military planning."},
-  {s:"Elinor Ostrom showed that communities can govern shared resources through polycentric, bottom-up institutions. The Paris Agreement's NDC model reflects this logic.",
-   a:"Liberalism",e:"Ostrom's polycentric governance model \u2014 multiple overlapping institutions at different scales \u2014 aligns with liberal institutionalism's emphasis on cooperation through institutional design."},
-  {s:"Environmental regulations are tools of economic competition. The EU's Carbon Border Adjustment Mechanism (CBAM) is not about saving the planet \u2014 it's about protecting European industry from cheaper imports.",
-   a:"Realism",e:"A realist reading of CBAM: environmental policy as a weapon of economic competition. States use green regulations to gain competitive advantages, not (only) to protect the environment."}
+   a:"Realism",e:"Realism sees states as rational, self-interested actors. Climate cooperation occurs only when aligned with national interest."},
+  {s:"The UNFCCC, the Paris Agreement, and the COP process create frameworks that reduce transaction costs, build trust, and generate iterative cooperation.",
+   a:"Liberalism",e:"Liberal institutionalism: international institutions facilitate cooperation by providing information, reducing uncertainty, and creating reputational costs for defection."},
+  {s:"Climate change is caused by capitalism\u2019s drive for endless accumulation. You cannot solve an ecological crisis created by capitalism within capitalism.",
+   a:"Marxism",e:"Ecological Marxists argue the climate crisis is a structural consequence of capitalist production, not a market failure fixable with carbon pricing."},
+  {s:"The norm of climate responsibility has spread globally. Even when states withdraw, the idea that climate action is a moral obligation continues to gain strength.",
+   a:"Constructivism",e:"Constructivism: norms and ideas shape state behaviour. Climate consciousness creates pressure regardless of material incentives."},
+  {s:"Climate change disproportionately affects women in the Global South. Gender must be central to climate policy.",
+   a:"Feminism",e:"Feminist IR shows climate impacts are gendered: women bear disproportionate burdens yet are underrepresented in negotiations."},
+  {s:"The international environmental regime was designed by industrialised countries that caused the crisis. Developing countries follow rules written by those who broke the planet.",
+   a:"Post-colonialism",e:"Post-colonial critique: global environmental governance reflects power asymmetries rooted in colonial history."},
+  {s:"The AI race between the US and China is fundamentally about national security. Whoever controls AI controls the future balance of power.",
+   a:"Realism",e:"A realist framing of AI competition: technology as a tool of power in an anarchic system. States pursue AI dominance to ensure survival."},
+  {s:"International cooperation on AI safety is possible through institutions, norms, and shared risk \u2014 the same logic that produced nuclear arms control.",
+   a:"Liberalism",e:"Liberal institutionalism applied to AI: shared risks create incentives for cooperation even between rivals, as with nuclear arms control."},
+  {s:"Framing AI as a \u2018security threat\u2019 or climate as a \u2018security issue\u2019 changes the policy response from cooperation to emergency measures.",
+   a:"Constructivism",e:"Securitisation theory (Copenhagen School): framing issues as security threats transforms how they are governed \u2014 emergency measures replace deliberation."},
+  {s:"Vaccine nationalism during COVID showed that the patent system allows pharmaceutical companies to profit from publicly funded research while billions go unvaccinated.",
+   a:"Marxism",e:"A Marxist analysis: intellectual property in the global capitalist system enables private profit from public goods, reproducing inequality between North and South."}
 ];
 
-// ═══════════════════════════════════════
-// KEY THINKERS MATCH
-// ═══════════════════════════════════════
+// ═══════ KEY THINKERS MATCH ═══════
 const MATCH_DATA=[
   {term:"Garrett Hardin",def:"The Tragedy of the Commons (1968) \u2014 rational actors inevitably overexploit shared resources"},
   {term:"Elinor Ostrom",def:"Governing the Commons \u2014 communities can self-govern shared resources; Nobel Prize 2009"},
   {term:"Rachel Carson",def:"Silent Spring (1962) \u2014 launched the modern environmental movement by exposing pesticide harms"},
-  {term:"Paul Crutzen",def:"Popularised the term 'Anthropocene' to describe humanity's geological-scale impact on Earth"},
-  {term:"Vandana Shiva",def:"Ecofeminism and seed sovereignty \u2014 critiques corporate control of agriculture and biopiracy"},
-  {term:"Jason Moore",def:"The 'Capitalocene' \u2014 argues the ecological crisis is caused by capitalism, not humanity as a whole"},
-  {term:"Johan Galtung",def:"Structural violence \u2014 harm produced by systems rather than direct physical force"},
+  {term:"Paul Crutzen",def:"Popularised the term \u2018Anthropocene\u2019 to describe humanity\u2019s geological-scale impact on Earth"},
+  {term:"Naomi Klein",def:"This Changes Everything \u2014 argues the climate crisis requires transformation of capitalism"},
+  {term:"Jason Moore",def:"The \u2018Capitalocene\u2019 \u2014 argues the ecological crisis is caused by capitalism, not humanity as a whole"},
   {term:"Owen Greene",def:"Baylis, Smith & Owens chapter author on environmental issues and global governance in IR"},
-  {term:"Naomi Klein",def:"This Changes Everything \u2014 argues climate crisis requires transformation of the capitalist system"},
-  {term:"Rob Nixon",def:"Slow Violence \u2014 environmental destruction as gradual, invisible violence against the poor"}
+  {term:"Colin Kahl",def:"\u2018The Myth of the AI Race\u2019 (Foreign Affairs, 2026) \u2014 AI bipolarity, not a single winner"},
+  {term:"Osterholm & Olshaker",def:"\u2018The World Is Not Ready for the Next Pandemic\u2019 (Foreign Affairs, 2024) \u2014 military model of preparedness"},
+  {term:"Rob Nixon",def:"Slow Violence \u2014 environmental destruction as gradual, invisible violence against the poor"},
+  {term:"Johan Galtung",def:"Structural violence \u2014 harm produced by systems rather than direct physical force"},
+  {term:"Vandana Shiva",def:"Ecofeminism and seed sovereignty \u2014 critiques corporate control of agriculture and biopiracy"}
 ];
 
-// ═══════════════════════════════════════
-// TIMELINE DATA
-// ═══════════════════════════════════════
+// ═══════ TIMELINE DATA ═══════
 const TL_DATA=[
   {y:1962,e:"Rachel Carson publishes Silent Spring, launching the modern environmental movement"},
-  {y:1968,e:"Garrett Hardin publishes 'The Tragedy of the Commons' in Science"},
-  {y:1972,e:"UN Conference on the Human Environment (Stockholm) \u2014 first major global environmental summit; creates UNEP"},
-  {y:1987,e:"Brundtland Commission defines 'sustainable development' in Our Common Future"},
-  {y:1992,e:"Earth Summit in Rio de Janeiro \u2014 UNFCCC and Convention on Biological Diversity adopted"},
-  {y:1997,e:"Kyoto Protocol adopted \u2014 first binding emissions reduction targets for developed countries"},
-  {y:2005,e:"Kyoto Protocol enters into force (without the US, which never ratified)"},
-  {y:2009,e:"Copenhagen COP15 fails to produce a binding successor to Kyoto; Elinor Ostrom wins Nobel Prize"},
-  {y:2015,e:"Paris Agreement adopted at COP21 \u2014 universal framework with nationally determined contributions; 1.5\u00b0C target"},
-  {y:2018,e:"Greta Thunberg begins school strikes, launching global Fridays for Future movement"},
-  {y:2021,e:"IPCC AR6 declares human influence on climate 'unequivocal'; COP26 in Glasgow"},
-  {y:2022,e:"COP27 in Sharm el-Sheikh establishes the Loss and Damage Fund"},
-  {y:2024,e:"COP29 in Baku agrees $300 billion/year climate finance goal; Vanuatu leads ICJ advisory opinion campaign"},
-  {y:2025,e:"Trump withdraws US from Paris Agreement (again); Cyprus assumes EU Council presidency, pushes Mediterranean climate agenda"}
+  {y:1968,e:"Garrett Hardin publishes \u2018The Tragedy of the Commons\u2019 in Science"},
+  {y:1972,e:"UN Conference on the Human Environment (Stockholm) \u2014 creates UNEP"},
+  {y:1987,e:"Brundtland Commission defines \u2018sustainable development\u2019 in Our Common Future"},
+  {y:1992,e:"Earth Summit in Rio \u2014 UNFCCC and Convention on Biological Diversity adopted"},
+  {y:1997,e:"Kyoto Protocol adopted \u2014 first binding emissions targets for developed countries"},
+  {y:2009,e:"Copenhagen COP15 fails to produce a binding Kyoto successor; Ostrom wins Nobel Prize"},
+  {y:2015,e:"Paris Agreement adopted at COP21 \u2014 1.5\u00b0C target; universal NDC framework"},
+  {y:2018,e:"Greta Thunberg begins school strikes, launching Fridays for Future"},
+  {y:2020,e:"COVID-19 pandemic exposes global health governance failures; vaccine nationalism emerges"},
+  {y:2022,e:"COP27 establishes the Loss and Damage Fund; ChatGPT launches, sparking global AI debate"},
+  {y:2024,e:"COP29 Baku: $300bn/yr climate finance; Vanuatu leads ICJ campaign; DeepSeek shocks AI industry"},
+  {y:2025,e:"Trump withdraws US from Paris (again); COP30 Bel\u00e9m includes AI in agenda; Osterholm warns on H5N1 preparedness"},
+  {y:2026,e:"Kahl publishes \u2018The Myth of the AI Race\u2019; Stimson Center argues US is \u2018running the wrong AI race\u2019; CERD reviews Cyprus"}
 ];
 
-// ═══════════════════════════════════════
-// DEBATE DATA
-// ═══════════════════════════════════════
+// ═══════ DEBATE DATA ═══════
 const DEBATE_DATA=[
-  {title:"Climate Justice vs. Climate Realism",prompt:"Developing countries argue they have a right to industrialise using fossil fuels, just as the West did. Developed countries argue that the climate emergency requires everyone to decarbonise now. Is the principle of 'common but differentiated responsibilities' still viable \u2014 or does the urgency of the crisis override historical fairness?"},
-  {title:"Degrowth vs. Green Growth",prompt:"Can we solve the climate crisis within capitalism through green technology and carbon markets? Or does infinite growth on a finite planet require a fundamental transformation of the economic system? What would 'degrowth' mean for developing countries that haven't yet achieved basic living standards?"},
-  {title:"Should Climate Change Be Securitised?",prompt:"Framing climate as a 'security threat' can mobilise resources and political attention. But it can also lead to militarised responses (border walls against 'climate migrants'), emergency powers, and the marginalisation of justice-based approaches. Is securitisation a useful frame or a dangerous one?"},
-  {title:"The US Withdrawal: Does It Matter?",prompt:"Trump has withdrawn from the Paris Agreement twice. Some argue this proves the agreement is fatally fragile. Others argue that US states, cities, and corporations have maintained climate commitments regardless, and that the global transition is now unstoppable. Who is right?"},
-  {title:"Climate Reparations: Justice or Fantasy?",prompt:"Small island states and the Global South argue that the countries that caused climate change owe compensation to those who suffer its consequences. Developed countries argue this is impractical and could undermine the cooperative framework. Should there be climate reparations? What form should they take?"},
-  {title:"Cyprus: Climate Bridge or Climate Victim?",prompt:"Cyprus positions itself as a climate leader for the Eastern Mediterranean through its EU presidency. But Cyprus also has one of the highest per-capita carbon footprints in the EU and remains heavily car-dependent with limited public transport. Can a country be both a climate champion and a climate problem? What concrete changes would make a difference on this island?"}
+  {title:"Why Is Global Environmental Governance So Difficult?",prompt:"The atmosphere doesn\u2019t respect borders, but political authority is organised around borders. Is the state-centric international system capable of solving the climate crisis? What would it take? (This is one of your discussion questions.)"},
+  {title:"Does AI Represent a New Front in Great-Power Competition?",prompt:"The US leads in frontier models; China leads in deployment. Kahl calls it \u2018AI bipolarity.\u2019 Is this a new Cold War, a new arms race, or something genuinely different? What are the risks of framing AI as a race? (This is one of your discussion questions.)"},
+  {title:"How Are Climate Change, AI, and Pandemic Preparedness Linked?",prompt:"All three are transnational collective action problems. Climate disrupts ecosystems, increasing pandemic risk. AI could help solve both but worsens emissions. The governance gaps are identical. How should we think about these connections? (This is one of your discussion questions.)"},
+  {title:"Climate Reparations: Justice or Fantasy?",prompt:"SIDS and the Global South argue the countries that caused climate change owe compensation. Developed countries say this is impractical. The Loss and Damage Fund exists but is massively underfunded. Should there be climate reparations? What form should they take?"},
+  {title:"Degrowth vs. Green Growth",prompt:"Can we solve the climate crisis within capitalism through technology and carbon markets? Or does infinite growth on a finite planet require systemic transformation? What would degrowth mean for developing countries that haven\u2019t yet achieved basic living standards?"},
+  {title:"Should We Securitise Health?",prompt:"Osterholm argues for a \u2018military model\u2019 of pandemic preparedness. But securitising health can lead to authoritarian responses (lockdowns, surveillance) and divert resources from everyday healthcare. Is the security frame helpful or dangerous?"},
+  {title:"The AI Trust Gap",prompt:"72% of Chinese citizens trust AI; only 32% in Western democracies. The Stimson Center argues trust is the real bottleneck for AI deployment. Should democracies prioritise safety and trust even if it means falling behind China? Or is speed more important?"},
+  {title:"Cyprus: Climate Bridge or Climate Victim?",prompt:"Cyprus positions itself as a Mediterranean climate leader through its EU presidency. But it has one of the highest per-capita carbon footprints in the EU. Can a country be both a climate champion and a climate problem?"}
 ];
 
-// ═══════════════════════════════════════
-// BUILD FUNCTIONS
-// ═══════════════════════════════════════
+// ═══════ BUILD FUNCTIONS ═══════
 
-// ── LANDING ──
+// \u2500\u2500 LANDING \u2500\u2500
 document.getElementById('qr-container').appendChild(QR.generate());
 document.getElementById('startBtn').addEventListener('click',()=>{
   document.getElementById('landing').style.display='none';
@@ -462,7 +479,7 @@ document.getElementById('startBtn').addEventListener('click',()=>{
   document.querySelector('[data-tab="videos"]').click();
 });
 
-// ── TABS ──
+// \u2500\u2500 TABS \u2500\u2500
 document.querySelectorAll('.tab-btn').forEach(b=>{
   b.addEventListener('click',()=>{
     document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
@@ -474,7 +491,7 @@ document.querySelectorAll('.tab-btn').forEach(b=>{
   });
 });
 
-// ── VIDEOS ──
+// \u2500\u2500 VIDEOS \u2500\u2500
 function buildVideos(){
   const nav=document.getElementById('vidSubNav');
   const wrap=document.getElementById('vidSections');
@@ -482,52 +499,52 @@ function buildVideos(){
     const sec=VID_DATA[key];if(!sec)return;
     wrap.innerHTML='';
     const hdr=document.createElement('div');hdr.className='section-header';
-    hdr.innerHTML=`<h3>${sec.title}</h3><p>${sec.desc}</p>`;
+    hdr.innerHTML='<h3>'+sec.title+'</h3><p>'+sec.desc+'</p>';
     wrap.appendChild(hdr);
     sec.items.forEach(item=>{
       const card=document.createElement('div');card.className='card';
-      let inner=`<h4>${item.title}</h4>`;
+      let inner='<h4>'+item.title+'</h4>';
       if(item.type==='video'){
-        inner+=`<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${item.yt}" allowfullscreen loading="lazy"></iframe></div>`;
+        inner+='<div class="video-wrap"><iframe src="https://www.youtube.com/embed/'+item.yt+'" allowfullscreen loading="lazy"></iframe></div>';
       } else {
-        inner+=`<div style="background:var(--light);border-radius:10px;padding:16px;margin:12px 0;font-size:.88em;line-height:1.6">${item.text}</div>`;
+        inner+='<div style="background:var(--light);border-radius:10px;padding:16px;margin:12px 0;font-size:.88em;line-height:1.6">'+item.text+'</div>';
       }
-      inner+=`<div class="reflect-q">${item.q}</div>`;
-      inner+=`<div class="reflect-options" data-id="${item.id}">`;
-      item.opts.forEach((o,i)=>{
-        inner+=`<div class="reflect-opt" data-idx="${i}">${o}</div>`;
+      inner+='<div class="reflect-q">'+item.q+'</div>';
+      inner+='<div class="reflect-options" data-id="'+item.id+'">';
+      item.opts.forEach(function(o,i){
+        inner+='<div class="reflect-opt" data-idx="'+i+'">'+o+'</div>';
       });
-      inner+=`</div>`;
-      inner+=`<button class="reflect-btn" data-id="${item.id}">Submit</button>`;
-      inner+=`<div class="model-answer" data-id="${item.id}">${item.model}</div>`;
+      inner+='</div>';
+      inner+='<button class="reflect-btn" data-id="'+item.id+'">Submit</button>';
+      inner+='<div class="model-answer" data-id="'+item.id+'">'+item.model+'</div>';
       card.innerHTML=inner;
       wrap.appendChild(card);
-
-      const opts=card.querySelectorAll('.reflect-opt');
-      opts.forEach(opt=>{
-        opt.addEventListener('click',()=>{
+      var opts=card.querySelectorAll('.reflect-opt');
+      opts.forEach(function(opt){
+        opt.addEventListener('click',function(){
           if(opt.classList.contains('correct')||opt.classList.contains('wrong'))return;
-          opts.forEach(x=>x.classList.remove('selected'));
+          opts.forEach(function(x){x.classList.remove('selected');});
           opt.classList.add('selected');
         });
       });
-      const btn=card.querySelector('.reflect-btn');
-      btn.addEventListener('click',()=>{
-        const sel=card.querySelector('.reflect-opt.selected');
-        if(!sel)return;
-        btn.disabled=true;
-        const idx=parseInt(sel.dataset.idx);
-        const correct=item.correct;
-        if(idx===correct){sel.classList.add('correct');addXP(10);addStreak();}
-        else{sel.classList.add('wrong');card.querySelectorAll('.reflect-opt')[correct].classList.add('correct');breakStreak();}
-        card.querySelector('.model-answer').classList.add('show');
-        done.videos[item.id]=true;
-      });
+      var btn=card.querySelector('.reflect-btn');
+      btn.addEventListener('click',(function(theItem,theCard){
+        return function(){
+          var sel=theCard.querySelector('.reflect-opt.selected');
+          if(!sel)return;
+          this.disabled=true;
+          var idx=parseInt(sel.dataset.idx);
+          if(idx===theItem.correct){sel.classList.add('correct');addXP(10);addStreak();}
+          else{sel.classList.add('wrong');theCard.querySelectorAll('.reflect-opt')[theItem.correct].classList.add('correct');breakStreak();}
+          theCard.querySelector('.model-answer').classList.add('show');
+          done.videos[theItem.id]=true;
+        };
+      })(item,card));
     });
   }
-  nav.querySelectorAll('.sub-btn').forEach(b=>{
-    b.addEventListener('click',()=>{
-      nav.querySelectorAll('.sub-btn').forEach(x=>x.classList.remove('active'));
+  nav.querySelectorAll('.sub-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      nav.querySelectorAll('.sub-btn').forEach(function(x){x.classList.remove('active');});
       b.classList.add('active');
       showSec(b.dataset.sec);
     });
@@ -535,132 +552,127 @@ function buildVideos(){
   showSec('secA');
 }
 
-// ── SORTER ──
+// \u2500\u2500 SORTER \u2500\u2500
 function buildSorter(){
-  const container=document.getElementById('sorterItems');
-  const items=shuffle([...SORT_DATA]);
-  let selected=null;
+  var container=document.getElementById('sorterItems');
+  var items=shuffle([].concat(SORT_DATA));
+  var selected=null;
   container.innerHTML='';
-  items.forEach((item,i)=>{
-    const el=document.createElement('div');el.className='sort-item';el.textContent=item.s;el.dataset.idx=i;
-    el.addEventListener('click',()=>{
+  items.forEach(function(item,i){
+    var el=document.createElement('div');el.className='sort-item';el.textContent=item.s;el.dataset.idx=i;
+    el.addEventListener('click',function(){
       if(el.classList.contains('placed'))return;
-      document.querySelectorAll('.sort-item').forEach(x=>x.classList.remove('selected'));
+      document.querySelectorAll('.sort-item').forEach(function(x){x.classList.remove('selected');});
       el.classList.add('selected');selected=i;
     });
-    // drag
     el.draggable=true;
-    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);el.classList.add('dragging');});
-    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('dragstart',function(e){e.dataTransfer.setData('text/plain',i);el.classList.add('dragging');});
+    el.addEventListener('dragend',function(){el.classList.remove('dragging');});
     container.appendChild(el);
   });
-  document.querySelectorAll('.sort-zone').forEach(zone=>{
-    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
-    zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
-    zone.addEventListener('drop',e=>{
+  function placeItem(idx,zoneName){
+    var src=container.querySelectorAll('.sort-item')[idx];
+    if(!src||src.classList.contains('placed'))return;
+    src.classList.add('placed');
+    var pill=document.createElement('div');pill.className='sorted-item';pill.textContent=items[idx].s;pill.dataset.idx=idx;pill.dataset.zone=zoneName;
+    document.querySelector('[data-zone="'+zoneName+'"] .zone-items').appendChild(pill);
+    selected=null;
+  }
+  document.querySelectorAll('.sort-zone').forEach(function(zone){
+    zone.addEventListener('dragover',function(e){e.preventDefault();zone.classList.add('over');});
+    zone.addEventListener('dragleave',function(){zone.classList.remove('over');});
+    zone.addEventListener('drop',function(e){
       e.preventDefault();zone.classList.remove('over');
-      const idx=parseInt(e.dataTransfer.getData('text/plain'));
-      placeItem(idx,zone.dataset.zone);
+      placeItem(parseInt(e.dataTransfer.getData('text/plain')),zone.dataset.zone);
     });
-    zone.addEventListener('click',()=>{
+    zone.addEventListener('click',function(){
       if(selected!==null)placeItem(selected,zone.dataset.zone);
     });
   });
-  function placeItem(idx,zoneName){
-    const src=container.querySelectorAll('.sort-item')[idx];
-    if(!src||src.classList.contains('placed'))return;
-    src.classList.add('placed');
-    const pill=document.createElement('div');pill.className='sorted-item';pill.textContent=items[idx].s;pill.dataset.idx=idx;pill.dataset.zone=zoneName;
-    document.querySelector(`[data-zone="${zoneName}"] .zone-items`).appendChild(pill);
-    selected=null;
-  }
-  document.getElementById('checkSorter').addEventListener('click',()=>{
+  document.getElementById('checkSorter').addEventListener('click',function(){
     if(done.sorter)return;
-    let correct=0,total=items.length;
-    document.querySelectorAll('.sorted-item').forEach(pill=>{
-      const idx=parseInt(pill.dataset.idx);
+    var correct=0,total=items.length;
+    document.querySelectorAll('.sorted-item').forEach(function(pill){
+      var idx=parseInt(pill.dataset.idx);
       if(pill.dataset.zone===items[idx].a){pill.classList.add('correct');correct++;addStreak();}
       else{pill.classList.add('wrong');breakStreak();}
     });
     addXP(correct*10);done.sorter=true;
-    const pct=Math.round(correct/total*100);
-    const r=document.getElementById('sorterResult');
+    var pct=Math.round(correct/total*100);
+    var r=document.getElementById('sorterResult');
     r.className='result-banner '+(pct>=80?'great':pct>=50?'good':'try');
-    r.textContent=`${correct}/${total} correct (${pct}%)` + (pct>=80?' Excellent!':pct>=50?' Good effort!':' Review the explanations below.');
+    r.textContent=correct+'/'+total+' correct ('+pct+'%)'+(pct>=80?' Excellent!':pct>=50?' Good effort!':' Review the explanations.');
   });
 }
 
-// ── THEORY IDENTIFIER ──
+// \u2500\u2500 THEORY IDENTIFIER \u2500\u2500
 function buildTheory(){
-  const container=document.getElementById('theoryItems');
-  const perspectives=["Realism","Liberalism","Marxism","Constructivism","Feminism","Post-colonialism"];
+  var container=document.getElementById('theoryItems');
+  var perspectives=["Realism","Liberalism","Marxism","Constructivism","Feminism","Post-colonialism"];
   container.innerHTML='';
-  THEORY_DATA.forEach((item,i)=>{
-    const card=document.createElement('div');card.className='dim-card';
-    let html=`<div class="scenario">${item.s}</div><div class="dim-options" data-idx="${i}">`;
-    perspectives.forEach(p=>{html+=`<div class="dim-pill" data-val="${p}">${p}</div>`;});
-    html+=`</div><div class="dim-explain" data-idx="${i}">${item.e}</div>`;
+  THEORY_DATA.forEach(function(item,i){
+    var card=document.createElement('div');card.className='dim-card';
+    var html='<div class="scenario">'+item.s+'</div><div class="dim-options" data-idx="'+i+'">';
+    perspectives.forEach(function(p){html+='<div class="dim-pill" data-val="'+p+'">'+p+'</div>';});
+    html+='</div><div class="dim-explain" data-idx="'+i+'">'+item.e+'</div>';
     card.innerHTML=html;
     container.appendChild(card);
-    card.querySelectorAll('.dim-pill').forEach(pill=>{
-      pill.addEventListener('click',()=>{
+    card.querySelectorAll('.dim-pill').forEach(function(pill){
+      pill.addEventListener('click',function(){
         if(pill.classList.contains('correct')||pill.classList.contains('wrong'))return;
-        card.querySelectorAll('.dim-pill').forEach(x=>x.classList.remove('selected'));
+        card.querySelectorAll('.dim-pill').forEach(function(x){x.classList.remove('selected');});
         pill.classList.add('selected');
       });
     });
   });
-  document.getElementById('checkTheory').addEventListener('click',()=>{
+  document.getElementById('checkTheory').addEventListener('click',function(){
     if(done.theory)return;
-    let correct=0;
-    THEORY_DATA.forEach((item,i)=>{
-      const card=container.children[i];
-      const sel=card.querySelector('.dim-pill.selected');
+    var correct=0;
+    THEORY_DATA.forEach(function(item,i){
+      var card=container.children[i];
+      var sel=card.querySelector('.dim-pill.selected');
       if(sel){
         if(sel.dataset.val===item.a){sel.classList.add('correct');correct++;addStreak();}
-        else{sel.classList.add('wrong');card.querySelector(`[data-val="${item.a}"]`).classList.add('correct');breakStreak();}
+        else{sel.classList.add('wrong');card.querySelector('[data-val="'+item.a+'"]').classList.add('correct');breakStreak();}
       }
       card.querySelector('.dim-explain').classList.add('show');
     });
     addXP(correct*15);done.theory=true;
-    const pct=Math.round(correct/THEORY_DATA.length*100);
-    const r=document.getElementById('theoryResult');
+    var pct=Math.round(correct/THEORY_DATA.length*100);
+    var r=document.getElementById('theoryResult');
     r.className='result-banner '+(pct>=80?'great':pct>=50?'good':'try');
-    r.textContent=`${correct}/${THEORY_DATA.length} correct (${pct}%)` + (pct>=80?' Excellent!':pct>=50?' Good effort!':' Review and try again.');
+    r.textContent=correct+'/'+THEORY_DATA.length+' correct ('+pct+'%)'+(pct>=80?' Excellent!':pct>=50?' Good effort!':' Review and try again.');
   });
 }
 
-// ── KEY THINKERS MATCH ──
+// \u2500\u2500 KEY THINKERS MATCH \u2500\u2500
 function buildMatch(){
-  const grid=document.getElementById('matchGrid');
+  var grid=document.getElementById('matchGrid');
   grid.innerHTML='';
-  const left=shuffle([...MATCH_DATA].map((m,i)=>({text:m.term,type:'term',idx:i})));
-  const right=shuffle([...MATCH_DATA].map((m,i)=>({text:m.def,type:'def',idx:i})));
-  const all=[...left,...right];
-  // interleave: term, def, term, def
-  const interleaved=[];
-  for(let i=0;i<left.length;i++){interleaved.push(left[i],right[i]);}
-  let sel=null,matched=0;
-  interleaved.forEach(item=>{
-    const el=document.createElement('div');el.className='match-item';el.textContent=item.text;el.dataset.type=item.type;el.dataset.idx=item.idx;
-    el.addEventListener('click',()=>{
+  var left=shuffle(MATCH_DATA.map(function(m,i){return{text:m.term,type:'term',idx:i};}));
+  var right=shuffle(MATCH_DATA.map(function(m,i){return{text:m.def,type:'def',idx:i};}));
+  var interleaved=[];
+  for(var i=0;i<left.length;i++){interleaved.push(left[i],right[i]);}
+  var sel=null,matched=0;
+  interleaved.forEach(function(item){
+    var el=document.createElement('div');el.className='match-item';el.textContent=item.text;el.dataset.type=item.type;el.dataset.idx=item.idx;
+    el.addEventListener('click',function(){
       if(el.classList.contains('matched'))return;
       if(!sel){sel=el;el.classList.add('sel');return;}
       if(sel===el){sel.classList.remove('sel');sel=null;return;}
       if(sel.dataset.type===el.dataset.type){sel.classList.remove('sel');sel=el;el.classList.add('sel');return;}
-      // check match
       if(sel.dataset.idx===el.dataset.idx){
         sel.classList.remove('sel');sel.classList.add('matched');el.classList.add('matched');
         addXP(15);addStreak();matched++;
         if(matched===MATCH_DATA.length){
           done.match=true;
-          const r=document.getElementById('matchResult');
+          var r=document.getElementById('matchResult');
           r.className='result-banner great';r.textContent='All matched! Well done!';
         }
       } else {
         el.classList.add('wrong-flash');sel.classList.add('wrong-flash');
         breakStreak();
-        const s=sel;setTimeout(()=>{s.classList.remove('sel','wrong-flash');el.classList.remove('wrong-flash');},500);
+        var s=sel;setTimeout(function(){s.classList.remove('sel','wrong-flash');el.classList.remove('wrong-flash');},500);
       }
       sel=null;
     });
@@ -668,106 +680,104 @@ function buildMatch(){
   });
 }
 
-// ── TIMELINE SORT ──
+// \u2500\u2500 TIMELINE SORT \u2500\u2500
 function buildTimeline(){
-  const container=document.getElementById('tlItems');
+  var container=document.getElementById('tlItems');
   container.innerHTML='';
-  const shuffled=shuffle([...TL_DATA]);
-  shuffled.forEach((item,i)=>{
-    const el=document.createElement('div');el.className='tl-item';el.dataset.year=item.y;
-    el.innerHTML=`<span class="handle">&#9776;</span><span>${item.e}</span>`;
+  var shuffled=shuffle([].concat(TL_DATA));
+  shuffled.forEach(function(item,i){
+    var el=document.createElement('div');el.className='tl-item';el.dataset.year=item.y;
+    el.innerHTML='<span class="handle">&#9776;</span><span>'+item.e+'</span>';
     el.draggable=true;
-    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);el.classList.add('dragging');});
-    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
-    el.addEventListener('dragover',e=>{e.preventDefault();});
-    el.addEventListener('drop',e=>{
+    el.addEventListener('dragstart',function(e){e.dataTransfer.setData('text/plain',i);el.classList.add('dragging');});
+    el.addEventListener('dragend',function(){el.classList.remove('dragging');});
+    el.addEventListener('dragover',function(e){e.preventDefault();});
+    el.addEventListener('drop',function(e){
       e.preventDefault();
-      const fromIdx=parseInt(e.dataTransfer.getData('text/plain'));
-      const items=[...container.children];
-      const toIdx=items.indexOf(el);
+      var fromIdx=parseInt(e.dataTransfer.getData('text/plain'));
+      var items=[].slice.call(container.children);
+      var toIdx=items.indexOf(el);
       if(fromIdx!==toIdx){
-        const moving=items[fromIdx];
+        var moving=items[fromIdx];
         if(fromIdx<toIdx)el.after(moving);else el.before(moving);
       }
     });
-    // touch reorder
-    let touchY=0;
-    el.addEventListener('touchstart',e=>{touchY=e.touches[0].clientY;el.classList.add('dragging');},{passive:true});
-    el.addEventListener('touchmove',e=>{
-      const cy=e.touches[0].clientY;
-      const items=[...container.children];
-      const idx=items.indexOf(el);
+    var touchY=0;
+    el.addEventListener('touchstart',function(e){touchY=e.touches[0].clientY;el.classList.add('dragging');},{passive:true});
+    el.addEventListener('touchmove',function(e){
+      var cy=e.touches[0].clientY;
+      var items=[].slice.call(container.children);
+      var idx=items.indexOf(el);
       if(cy<touchY-30&&idx>0){el.previousElementSibling.before(el);touchY=cy;}
       if(cy>touchY+30&&idx<items.length-1){el.nextElementSibling.after(el);touchY=cy;}
     },{passive:true});
-    el.addEventListener('touchend',()=>el.classList.remove('dragging'));
+    el.addEventListener('touchend',function(){el.classList.remove('dragging');});
     container.appendChild(el);
   });
-  document.getElementById('checkTL').addEventListener('click',()=>{
+  document.getElementById('checkTL').addEventListener('click',function(){
     if(done.timeline)return;
-    const items=[...container.children];
-    const sorted=[...TL_DATA].sort((a,b)=>a.y-b.y);
-    let correct=0;
-    items.forEach((el,i)=>{
-      const year=parseInt(el.dataset.year);
+    var items=[].slice.call(container.children);
+    var sorted=[].concat(TL_DATA).sort(function(a,b){return a.y-b.y;});
+    var correct=0;
+    items.forEach(function(el,i){
+      var year=parseInt(el.dataset.year);
       if(year===sorted[i].y){el.classList.add('correct');correct++;}
       else el.classList.add('wrong');
     });
     if(correct===sorted.length){addXP(20);addStreak();}else{breakStreak();}
     done.timeline=true;
-    const pct=Math.round(correct/sorted.length*100);
-    const r=document.getElementById('tlResult');
+    var pct=Math.round(correct/sorted.length*100);
+    var r=document.getElementById('tlResult');
     r.className='result-banner '+(pct>=80?'great':pct>=50?'good':'try');
-    r.textContent=`${correct}/${sorted.length} in correct position (${pct}%)` + (pct===100?' Perfect!':pct>=50?' Close!':' Try reviewing the dates.');
+    r.textContent=correct+'/'+sorted.length+' in correct position ('+pct+'%)'+(pct===100?' Perfect!':pct>=50?' Close!':' Review the dates.');
   });
 }
 
-// ── DEBATE ARENA ──
+// \u2500\u2500 DEBATE ARENA \u2500\u2500
 function buildDebate(){
-  const container=document.getElementById('debateItems');
+  var container=document.getElementById('debateItems');
   container.innerHTML='';
-  DEBATE_DATA.forEach(d=>{
-    const card=document.createElement('div');card.className='card';
-    card.innerHTML=`<h3>${d.title}</h3><div class="debate-prompt"><strong>Discuss:</strong> ${d.prompt}</div>`;
+  DEBATE_DATA.forEach(function(d){
+    var card=document.createElement('div');card.className='card';
+    card.innerHTML='<h3>'+d.title+'</h3><div class="debate-prompt"><strong>Discuss:</strong> '+d.prompt+'</div>';
     container.appendChild(card);
   });
 }
 
-// ── STATS ──
+// \u2500\u2500 STATS \u2500\u2500
 function buildStats(){
-  const grid=document.getElementById('statGrid');
+  var grid=document.getElementById('statGrid');
   grid.innerHTML='';
-  const vidCount=Object.keys(done.videos).length;
-  const totalVids=Object.values(VID_DATA).reduce((n,s)=>n+s.items.length,0);
-  const acts=[
+  var vidCount=Object.keys(done.videos).length;
+  var totalVids=Object.values(VID_DATA).reduce(function(n,s){return n+s.items.length;},0);
+  var acts=[
     {name:'Videos',done:vidCount,total:totalVids},
     {name:'Sorter',done:done.sorter?1:0,total:1},
     {name:'Theory',done:done.theory?1:0,total:1},
     {name:'Match',done:done.match?1:0,total:1},
     {name:'Timeline',done:done.timeline?1:0,total:1}
   ];
-  const totalDone=acts.reduce((s,a)=>s+a.done,0);
-  const totalAll=acts.reduce((s,a)=>s+a.total,0);
-  const pct=totalAll?Math.round(totalDone/totalAll*100):0;
-  grid.innerHTML=`
-    <div class="stat-card"><span class="num">${xp}</span><span class="lbl">Total XP</span></div>
-    <div class="stat-card"><span class="num">${streak}</span><span class="lbl">Current Streak</span></div>
-    <div class="stat-card"><span class="num">${maxStreak}</span><span class="lbl">Best Streak</span></div>
-    <div class="stat-card"><span class="num">${pct}%</span><span class="lbl">Overall</span></div>
-  `;
-  const prog=document.getElementById('activityProgress');
-  let ph='<h3>Activity Completion</h3>';
-  acts.forEach(a=>{
-    const ap=a.total?Math.round(a.done/a.total*100):0;
-    ph+=`<p style="margin:10px 0 2px;font-size:.85em;font-weight:600">${a.name} (${ap}%)</p><div class="progress-bar"><div class="fill" style="width:${ap}%"></div></div>`;
+  var totalDone=acts.reduce(function(s,a){return s+a.done;},0);
+  var totalAll=acts.reduce(function(s,a){return s+a.total;},0);
+  var pct=totalAll?Math.round(totalDone/totalAll*100):0;
+  grid.innerHTML=
+    '<div class="stat-card"><span class="num">'+xp+'</span><span class="lbl">Total XP</span></div>'+
+    '<div class="stat-card"><span class="num">'+streak+'</span><span class="lbl">Current Streak</span></div>'+
+    '<div class="stat-card"><span class="num">'+maxStreak+'</span><span class="lbl">Best Streak</span></div>'+
+    '<div class="stat-card"><span class="num">'+pct+'%</span><span class="lbl">Overall</span></div>';
+  var prog=document.getElementById('activityProgress');
+  var ph='<h3>Activity Completion</h3>';
+  acts.forEach(function(a){
+    var ap=a.total?Math.round(a.done/a.total*100):0;
+    ph+='<p style="margin:10px 0 2px;font-size:.85em;font-weight:600">'+a.name+' ('+ap+'%)</p><div class="progress-bar"><div class="fill" style="width:'+ap+'%"></div></div>';
   });
   prog.innerHTML=ph;
-  document.getElementById('resetBtn').onclick=()=>{
-    if(confirm('Reset all progress?')){location.reload();}
+  document.getElementById('resetBtn').onclick=function(){
+    if(confirm('Reset all progress?'))location.reload();
   };
 }
 
-// ── INIT ──
+// \u2500\u2500 INIT \u2500\u2500
 buildVideos();
 buildSorter();
 buildTheory();
@@ -777,3 +787,4 @@ buildDebate();
 </script>
 </body>
 </html>
+ 
