@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PSIR101 – Human Rights Lab</title>
+<style>
+:root{
+  --bg:#f0f4f8;--card:#fff;--primary:#6a1b9a;--primaryDk:#4a148c;
+  --accent:#ffc107;--accentDk:#e0a800;--correct:#28a745;--wrong:#dc3545;
+  --txt:#1a1a2e;--txtLight:#555;--radius:14px;--shadow:0 4px 18px rgba(0,0,0,.08);
+  --topH:56px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);padding-top:var(--topH);}
+.topbar{position:fixed;top:0;left:0;width:100%;height:var(--topH);background:linear-gradient(135deg,var(--primary),var(--primaryDk));color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:900;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.topbar .title{font-size:1.05rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar .badges{display:flex;gap:10px;}
+.topbar .badge{background:rgba(255,255,255,.2);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600;}
+.tab-bar{display:flex;overflow-x:auto;gap:6px;padding:12px 12px 0;background:var(--bg);position:sticky;top:var(--topH);z-index:800;}
+.tab-bar button{flex-shrink:0;padding:8px 14px;border:none;border-radius:var(--radius) var(--radius) 0 0;background:var(--card);color:var(--txtLight);font-size:.82rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:.2s;}
+.tab-bar button.active{color:var(--primary);border-bottom-color:var(--primary);background:#fff;}
+.panel{display:none;padding:16px 12px 60px;max-width:860px;margin:auto;}
+.panel.active{display:block;}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+.card h2{font-size:1.15rem;margin-bottom:10px;color:var(--primaryDk);}
+.card h3{font-size:1rem;margin-bottom:8px;color:var(--primary);}
+.card p,.card li{font-size:.92rem;line-height:1.55;color:var(--txtLight);}
+.card ul{margin-left:18px;margin-bottom:8px;}
+.q-block{background:#f3e5f5;border-radius:10px;padding:14px;margin-top:12px;}
+.q-block p.q-label{font-weight:700;color:var(--primaryDk);margin-bottom:6px;font-size:.9rem;}
+.opt-btn{display:block;width:100%;text-align:left;padding:10px 14px;margin:5px 0;border:2px solid #dce3ea;border-radius:10px;background:#fff;cursor:pointer;font-size:.88rem;transition:.15s;}
+.opt-btn:hover{border-color:var(--primary);}
+.opt-btn.correct{border-color:var(--correct);background:#e6f9ed;}
+.opt-btn.wrong{border-color:var(--wrong);background:#fdeaea;}
+.opt-btn.disabled{pointer-events:none;opacity:.85;}
+.explain{display:none;margin-top:8px;padding:10px 14px;background:#fff8e1;border-left:4px solid var(--accent);border-radius:8px;font-size:.85rem;line-height:1.5;color:var(--txt);}
+.zone-container{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;}
+.zone{flex:1 1 200px;min-height:120px;background:#faf5ff;border:2px dashed #c8d6e5;border-radius:var(--radius);padding:10px;transition:.2s;}
+.zone.over{border-color:var(--primary);background:#f3e5f5;}
+.zone .z-title{font-weight:700;font-size:.85rem;color:var(--primary);margin-bottom:6px;text-align:center;}
+.chip{display:inline-block;padding:8px 14px;margin:4px;border-radius:20px;font-size:.82rem;font-weight:600;cursor:grab;transition:.15s;user-select:none;}
+.chip.src{background:#e1bee7;color:#4a148c;}
+.chip.correct-chip{background:#d1fae5;color:#065f46;}
+.chip.wrong-chip{background:#fee2e2;color:#991b1b;}
+.chip-bank{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;min-height:40px;padding:6px;background:#f3e5f5;border-radius:10px;}
+.flip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:14px;}
+.flip-card{perspective:800px;height:200px;cursor:pointer;}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg);}
+.flip-front,.flip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+.flip-front{background:linear-gradient(135deg,var(--primary),var(--primaryDk));color:#fff;font-weight:700;font-size:1rem;}
+.flip-back{background:var(--card);border:2px solid var(--primary);transform:rotateY(180deg);font-size:.82rem;color:var(--txt);line-height:1.45;overflow-y:auto;}
+.scenario-card{border:2px solid #e2e8f0;border-radius:var(--radius);padding:16px;margin-bottom:16px;transition:.2s;}
+.scenario-card.resolved{opacity:.85;}
+.gen-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:12px 0;}
+.gen-cell{text-align:center;padding:10px 6px;border-radius:8px;font-size:.78rem;font-weight:600;}
+.gen-cell.gen1{background:#e3f2fd;color:#0d47a1;}
+.gen-cell.gen2{background:#e8f5e9;color:#1b5e20;}
+.gen-cell.gen3{background:#fff3e0;color:#e65100;}
+.tl-slot{padding:10px 14px;margin:4px 0;background:#f3e5f5;border-radius:10px;cursor:grab;font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:8px;user-select:none;transition:.15s;}
+.tl-slot:active{background:#e1bee7;}
+.tl-slot.correct-slot{background:#d1fae5;}
+.tl-slot.wrong-slot{background:#fee2e2;}
+.tl-number{width:24px;height:24px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0;}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:14px;}
+.stat-card{background:linear-gradient(135deg,var(--primary),var(--primaryDk));color:#fff;padding:20px;border-radius:var(--radius);text-align:center;}
+.stat-card .num{font-size:2rem;font-weight:800;}
+.stat-card .label{font-size:.8rem;opacity:.85;margin-top:4px;}
+.btn-primary{padding:10px 20px;border:none;border-radius:10px;background:var(--primary);color:#fff;font-weight:700;cursor:pointer;font-size:.9rem;transition:.2s;}
+.btn-primary:hover{background:var(--primaryDk);}
+.btn-accent{padding:10px 20px;border:none;border-radius:10px;background:var(--accent);color:#1a1a2e;font-weight:700;cursor:pointer;font-size:.9rem;transition:.2s;}
+.btn-accent:hover{background:var(--accentDk);}
+.check-row{display:flex;justify-content:flex-end;margin-top:12px;}
+.score-banner{padding:12px;border-radius:10px;text-align:center;font-weight:700;font-size:1rem;margin-top:14px;}
+.score-banner.good{background:#d1fae5;color:#065f46;}
+.score-banner.ok{background:#fef3c7;color:#92400e;}
+.score-banner.bad{background:#fee2e2;color:#991b1b;}
+.debate-prompt{background:#fce4ec;border:2px solid #e91e63;border-radius:10px;padding:16px;margin-top:14px;font-size:.88rem;}
+.debate-prompt strong{color:#c2185b;}
+@media(max-width:520px){
+  .topbar .title{font-size:.88rem;}
+  .tab-bar button{font-size:.72rem;padding:6px 10px;}
+  .zone-container{flex-direction:column;}
+  .gen-grid{grid-template-columns:1fr;}
+  .flip-grid{grid-template-columns:1fr 1fr;}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="title">PSIR101 · Human Rights Lab</div>
+  <div class="badges">
+    <span class="badge" id="xpBadge">0 XP</span>
+    <span class="badge" id="streakBadge">🔥 0</span>
+  </div>
+</div>
+
+<div class="tab-bar" id="tabBar"></div>
+
+<div class="panel" id="panelIntro"></div>
+<div class="panel" id="panelGenerations"></div>
+<div class="panel" id="panelR2P"></div>
+<div class="panel" id="panelIranWar"></div>
+<div class="panel" id="panelCyprus"></div>
+<div class="panel" id="panelMatch"></div>
+<div class="panel" id="panelTimeline"></div>
+<div class="panel" id="panelDebate"></div>
+<div class="panel" id="panelStats"></div>
+<script>
+/* =================================================================
+   DATA
+   ================================================================= */
+
+const TABS=[
+  {id:'panelIntro',label:'Foundations Quiz'},
+  {id:'panelGenerations',label:'Three Generations'},
+  {id:'panelR2P',label:'R2P Case Sorter'},
+  {id:'panelIranWar',label:'Iran War & IHL'},
+  {id:'panelCyprus',label:'Cyprus & the ECHR'},
+  {id:'panelMatch',label:'Key Terms Match'},
+  {id:'panelTimeline',label:'Timeline Sort'},
+  {id:'panelDebate',label:'Debate Arena'},
+  {id:'panelStats',label:'My Stats'}
+];
+
+/* ---------- FOUNDATIONS QUIZ ---------- */
+const INTRO_Q=[
+  {q:'The Universal Declaration of Human Rights (1948) is:',
+   opts:['A binding treaty ratified by all UN members','A non-binding declaration that has been incorporated into many binding instruments','A Security Council resolution','An International Court of Justice ruling'],
+   correct:1,explain:'The UDHR is a General Assembly declaration — not a treaty. However, its principles have been incorporated into the ICCPR, ICESCR, and numerous national constitutions, giving them binding force through those instruments.'},
+  {q:'Which two treaties, together with the UDHR, form the "International Bill of Rights"?',
+   opts:['CEDAW and CRC','CAT and CRPD','ICCPR and ICESCR','Geneva Conventions I and II'],
+   correct:2,explain:'The ICCPR (civil and political rights) and ICESCR (economic, social, and cultural rights), both adopted in 1966, complete the International Bill of Rights alongside the UDHR.'},
+  {q:'The principle of "indivisibility" of human rights means:',
+   opts:['Rights can be divided among different communities','Civil, political, economic, social, and cultural rights are all equally important and interconnected','States can choose which rights to protect','Only first-generation rights are enforceable'],
+   correct:1,explain:'Indivisibility means you cannot fully enjoy civil and political rights without economic and social rights, and vice versa. In practice, states often prioritise one set over another — a central tension in human rights politics.'},
+  {q:'Cultural relativism challenges universal human rights by arguing:',
+   opts:['All cultures have identical values','Rights are culturally constructed and imposing Western norms is a form of imperialism','Human rights should only apply to Western democracies','The UDHR was drafted exclusively by European states'],
+   correct:1,explain:'Cultural relativists argue that "universal" rights reflect Western priorities and that non-Western societies should interpret rights through their own cultural frameworks. Critics reply that authoritarian governments often use relativism to justify repression.'},
+  {q:'Who heads the Office of the High Commissioner for Human Rights (OHCHR)?',
+   opts:['António Guterres','Volker Türk','Karim Khan','Fatou Bensouda'],
+   correct:1,explain:'Volker Türk became UN High Commissioner for Human Rights in 2022. The OHCHR supports treaty bodies, special rapporteurs, and the Human Rights Council.'},
+  {q:'The International Criminal Court (ICC) can prosecute individuals for all of the following EXCEPT:',
+   opts:['Genocide','Drug trafficking','War crimes','Crimes against humanity'],
+   correct:1,explain:'The ICC has jurisdiction over genocide, war crimes, crimes against humanity, and the crime of aggression. Drug trafficking, terrorism, and other crimes fall outside its mandate — a frequent source of debate about whether to expand it.'},
+  {q:'Which of these countries is NOT a member of the ICC?',
+   opts:['Germany','United States','France','United Kingdom'],
+   correct:1,explain:'The US has never ratified the Rome Statute. It signed under Clinton but unsigned under Bush. In 2026, the US intensified sanctions on ICC officials. Russia, China, India, and Israel are also non-members.'},
+  {q:'In 2026, Secretary of Defence Hegseth\'s "no quarter" statement was condemned as:',
+   opts:['A breach of parliamentary protocol','A violation of the Hague Convention and a war crime under US law (18 USC §2441)','An Article 51 self-defence claim','A valid rules-of-engagement directive'],
+   correct:1,explain:'"No quarter" — meaning no mercy and no prisoners — is explicitly prohibited by the 1907 Hague Regulations (Art. 23(d)) and constitutes a war crime under US federal law. Over 100 international law professors condemned this rhetoric in April 2026.'}
+];
+
+/* ---------- THREE GENERATIONS SORTER ---------- */
+const GEN_ITEMS=[
+  {text:'Right to life',gen:1},{text:'Freedom of speech',gen:1},{text:'Right to a fair trial',gen:1},
+  {text:'Freedom from torture',gen:1},{text:'Right to vote',gen:1},
+  {text:'Right to education',gen:2},{text:'Right to health',gen:2},{text:'Right to work',gen:2},
+  {text:'Right to housing',gen:2},{text:'Right to social security',gen:2},
+  {text:'Right to self-determination',gen:3},{text:'Right to development',gen:3},
+  {text:'Right to a clean environment',gen:3},{text:'Right to peace',gen:3},{text:'Right to share in scientific advancement',gen:3}
+];
+
+/* ---------- R2P CASE SORTER ---------- */
+const R2P_CASES=[
+  {text:'Kenya 2007–08: Annan mediation prevented escalation',pillar:'II',explain:'Kofi Annan\'s mediation (Pillar II — international assistance) prevented further violence after disputed elections. Often cited as R2P\'s clearest success.'},
+  {text:'Libya 2011: SC authorised intervention, NATO led regime change',pillar:'III',explain:'Resolution 1973 authorised a no-fly zone under Pillar III. But NATO\'s intervention went beyond civilian protection to regime change — Russia and China felt betrayed, leading them to block Syria action.'},
+  {text:'Syria 2011–: Russia vetoed 17+ resolutions while atrocities continued',pillar:'Failed',explain:'R2P\'s most devastating failure. Pillar III was completely blocked by Russian and Chinese vetoes, even as chemical weapons were used on civilians.'},
+  {text:'Myanmar 2017: 700,000+ Rohingya expelled, no SC action',pillar:'Failed',explain:'China shielded Myanmar in the Security Council. Pillar III could not be activated despite clear evidence of ethnic cleansing. The ICC later opened an investigation.'},
+  {text:'Gaza 2023–: US vetoed multiple ceasefire resolutions',pillar:'Failed',explain:'The US used its veto to block resolutions calling for a ceasefire, arguing they failed to address hostages and Hamas. The Global Centre for R2P called this a manifest failure to protect Palestinian civilians.'},
+  {text:'Colombia: National peace process with FARC and transitional justice',pillar:'I',explain:'Colombia\'s peace accord and transitional justice framework are examples of Pillar I — a state taking responsibility for protecting its own population from further atrocities.'},
+  {text:'Iran Jan 2026: 30,000+ protesters killed; no R2P resolution tabled',pillar:'Failed',explain:'Iran\'s massacre of protesters should have triggered R2P, but no P5 member was willing to table a resolution. The subsequent US-Israeli strikes were framed as self-defence (Art. 51), not R2P — a critical distinction.'},
+  {text:'Timor-Leste 1999: International intervention after independence referendum violence',pillar:'III',explain:'The Security Council authorised INTERFET after Indonesian-backed militias attacked civilians. One of the few cases where Pillar III worked as intended — the intervening force had clear authorisation and a defined mandate.'}
+];
+
+/* ---------- IRAN WAR & IHL ---------- */
+const IRAN_Q=[
+  {q:'The US justified its strikes on Iran under which legal provision?',
+   opts:['R2P Pillar III','Article 51 (self-defence)','Chapter VI (peaceful settlement)','General Assembly Resolution 377'],
+   correct:1,explain:'The US filed an Article 51 letter claiming self-defence. Over 100 international law professors argued in April 2026 that there was no armed attack on the US or imminent threat, making the strikes unlawful under jus ad bellum.'},
+  {q:'The Minab school strike (~175 civilians killed) raises questions about which IHL principle?',
+   opts:['Sovereignty','Distinction (between civilians and combatants)','Self-determination','Cultural relativism'],
+   correct:1,explain:'The principle of distinction — a cornerstone of international humanitarian law (jus in bello) — requires belligerents to distinguish between military targets and civilian objects. Striking a school full of children is a prima facie violation.'},
+  {q:'Hegseth dismantled civilian harm mitigation teams. This undermines which legal obligation?',
+   opts:['Precaution in attack — the duty to take constant care to spare civilians','The right to development','Freedom of navigation','The principle of sovereign equality'],
+   correct:0,explain:'Additional Protocol I (Art. 57) and customary IHL require parties to take all feasible precautions to minimise civilian harm. Deliberately removing the institutional mechanisms that enforce this duty is a dereliction of legal obligation.'},
+  {q:'How many civilian sites were struck in Iran between February and March 2026?',
+   opts:['5,000','15,000','67,414','120,000'],
+   correct:2,explain:'67,414 civilian sites were struck according to reporting cited in the SG\'s 2025 framework. This figure includes schools (498), health facilities (236), and critical infrastructure — raising serious jus in bello concerns.'},
+  {q:'The Pakistan-brokered ceasefire (April 2026) was significant because:',
+   opts:['It was enforced by the Security Council','A non-P5 state succeeded where the Council had failed','It permanently ended the war','It was negotiated by the ICC'],
+   correct:1,explain:'Pakistan, with a last-minute assist from China, brokered what the Security Council could not. This underscores a recurring pattern: when P5 divisions paralyse the Council, regional actors and middle powers fill the gap.'}
+];
+
+/* ---------- CYPRUS & ECHR ---------- */
+const CYPRUS_FLIP=[
+  {name:'Loizidou v. Turkey (1996)',desc:'The ECHR held Turkey responsible for property rights violations in the north. Established that Turkey exercises effective control over the TRNC and is therefore liable under the Convention.'},
+  {name:'Cyprus v. Turkey (2001)',desc:'Grand Chamber found multiple violations: property rights of Greek Cypriot IDPs, right to home, missing persons, education, freedom of religion in the TRNC.'},
+  {name:'Immovable Property Commission',desc:'Created by TRNC Law 67/2005. Offers restitution, compensation, or exchange to Greek Cypriot property owners. The ECHR declared it an "effective remedy" in Demopoulos (2010), but critics call it "essentially compensatory."'},
+  {name:'Demopoulos v. Turkey (2010)',desc:'Grand Chamber ruled that the IPC is an effective domestic remedy. Greek Cypriot IDPs must exhaust it before applying to Strasbourg. ~1,400 pending cases were redirected. Controversial because it arguably legitimises the TRNC legal system.'},
+  {name:'K.V. Mediterranean Tours (2025)',desc:'ECHR found a violation due to protracted IPC delays (over a decade), but still refused to declare the IPC ineffective. The EVKAF (Muslim foundation) was allowed as a third party, potentially blocking restitution.'},
+  {name:'Erel & Damdelen v. Cyprus (2010)',desc:'Two Turkish Cypriots in the TRNC sought to vote in RoC elections. Declared inadmissible — the ECHR said the habitual-residence requirement was legitimate and their link to the RoC legislature was "severed by de facto partition."'}
+];
+
+const CYPRUS_Q=[
+  {q:'Why was the Erel & Damdelen case declared inadmissible?',
+   opts:['The applicants had criminal records','They did not live in the government-controlled area (habitual residence requirement)','Cyprus had not ratified the ECHR','The ECHR lacked jurisdiction over electoral matters'],
+   correct:1,explain:'The ECHR ruled that residence requirements for voting are legitimate restrictions. Since Erel and Damdelen lived in the TRNC, outside the Republic\'s effective control, their link to the Cypriot legislature was severed by de facto partition.'},
+  {q:'The Immovable Property Commission was declared an "effective remedy" by the ECHR in which case?',
+   opts:['Loizidou v. Turkey','Erel & Damdelen v. Cyprus','Demopoulos v. Turkey','K.V. Mediterranean Tours v. Türkiye'],
+   correct:2,explain:'The 2010 Grand Chamber decision in Demopoulos redirected ~1,400 applications to the IPC. Critics argue this effectively requires Greek Cypriot property owners to submit to a legal system they do not recognise.'},
+  {q:'What is the core criticism of the IPC?',
+   opts:['It meets too frequently','It turns legitimate owners into "claimants" who must re-prove ownership under TRNC law, and restitution is rarely granted','It only handles cases from after 2005','It is funded by the EU'],
+   correct:1,explain:'The IPC\'s legal framework, based on TRNC law, does not automatically recognise Republic of Cyprus land titles. Applicants are claimants, not owners. The mechanism is criticised as "essentially compensatory" rather than genuinely offering restitution.'},
+  {q:'Turkish Cypriots in the TRNC face which unique human rights situation?',
+   opts:['They have full EU citizenship rights','They cannot vote in RoC elections, cannot participate directly in EU institutions, and live under an internationally unrecognised entity','They are stateless','They are refugees under UNHCR protection'],
+   correct:1,explain:'This isolation — political, legal, and economic — raises fundamental questions about whether it constitutes a human rights problem in itself or is a political consequence of the unresolved conflict. The ECHR\'s Erel & Damdelen ruling suggests the Court views it as the latter.'}
+];
+
+/* ---------- KEY TERMS MATCH ---------- */
+const MATCH_DATA=[
+  {term:'UDHR',def:'1948 non-binding declaration — 30 articles covering all human rights; moral foundation of the international regime'},
+  {term:'ICCPR',def:'1966 treaty on civil and political rights — right to life, fair trial, free speech, freedom from torture'},
+  {term:'ICESCR',def:'1966 treaty on economic, social, and cultural rights — right to work, education, health, housing'},
+  {term:'R2P',def:'Responsibility to Protect — sovereignty as responsibility; applies to genocide, war crimes, ethnic cleansing, crimes against humanity'},
+  {term:'Jus ad bellum',def:'Law governing the right to go to war — central question in evaluating the 2026 US strikes on Iran'},
+  {term:'Jus in bello',def:'International humanitarian law governing conduct during war — proportionality, distinction, precaution'},
+  {term:'ICC',def:'International Criminal Court — prosecutes individuals for genocide, war crimes, crimes against humanity; US, Russia, China not members'},
+  {term:'Cultural relativism',def:'Argument that rights are culturally constructed; imposing Western-defined norms is a form of imperialism'},
+  {term:'IPC',def:'Immovable Property Commission in the TRNC — offers restitution, compensation, or exchange for displaced Greek Cypriot property owners'},
+  {term:'Article 51',def:'UN Charter self-defence clause — invoked by the US to justify strikes on Iran in February 2026'}
+];
+
+/* ---------- TIMELINE ---------- */
+const TL_DATA=[
+  {year:1215,event:'Magna Carta — first limits on sovereign power'},
+  {year:1948,event:'Universal Declaration of Human Rights adopted'},
+  {year:1965,event:'CERD — Convention on the Elimination of Racial Discrimination'},
+  {year:1966,event:'ICCPR and ICESCR adopted'},
+  {year:1984,event:'Convention Against Torture (CAT)'},
+  {year:1994,event:'Rwanda genocide — 800,000 killed; R2P origins'},
+  {year:1996,event:'Loizidou v. Turkey — ECHR holds Turkey liable for TRNC property violations'},
+  {year:2001,event:'ICISS coins "Responsibility to Protect"'},
+  {year:2002,event:'Rome Statute enters into force — ICC established'},
+  {year:2005,event:'World Summit unanimously adopts R2P'},
+  {year:2010,event:'Demopoulos v. Turkey — IPC declared effective; Erel & Damdelen dismissed'},
+  {year:2024,event:'ICC arrest warrant for Netanyahu; South Africa\'s ICJ genocide case'},
+  {year:2025,event:'SG report: "R2P at 20" — gap between promises and action; K.V. Mediterranean Tours judgment'},
+  {year:2026,event:'US-Israel strike Iran; Minab school; 100+ professors condemn; Pakistan ceasefire; Hezbollah drone hits Cyprus'}
+];
+
+/* ---------- DEBATE PROMPTS ---------- */
+const DEBATE_DATA=[
+  {title:'Universalism is dead',prompt:'When the US — the loudest proponent of universal rights — declares "I don\'t need international law" and orders "no quarter, no mercy," does universalism have any meaning left? Or does this actually prove that universalism is needed more than ever?'},
+  {title:'R2P is a paper norm',prompt:'The SG\'s 2025 report admits a "persistent gap between promises and action." R2P has failed in Syria, Myanmar, Gaza, and Iran. Is it time to declare R2P dead — or are Pillars I and II still worth defending?'},
+  {title:'The ICC: justice or neo-colonialism?',prompt:'The ICC has overwhelmingly prosecuted African leaders. The US, Russia, China, India, and Israel are not members. The US sanctions ICC officials. Is the ICC a tool of justice or selective Western power?'},
+  {title:'Turkish Cypriot isolation: human rights or politics?',prompt:'Turkish Cypriots in the TRNC cannot vote in RoC elections (Erel & Damdelen), cannot participate in EU institutions, and live under an unrecognised entity. Is this isolation a human rights violation — or a political consequence of unresolved conflict? Who bears responsibility: Turkey, the RoC, the international community, or all three?'},
+  {title:'The IPC: remedy or legitimation?',prompt:'The ECHR says the IPC is an "effective remedy." Critics say it turns owners into claimants, rarely grants restitution, and effectively legitimises the TRNC. If you were a Greek Cypriot IDP, would you apply to the IPC — or wait for a political settlement that may never come?'},
+  {title:'Should the P5 veto be abolished?',prompt:'The veto blocked action on Syria (17+ times), Gaza, and Iran. But defenders argue it keeps great powers inside the system and prevents world wars. Would abolishing the veto make the UN more effective — or would the US, Russia, and China simply leave?'}
+];
+
+/* =================================================================
+   STATE
+   ================================================================= */
+let xp=0,streak=0,bestStreak=0;
+let done={},actScores={};
+function addXP(n){xp+=n;streak++;if(streak>bestStreak)bestStreak=streak;document.getElementById('xpBadge').textContent=xp+' XP';document.getElementById('streakBadge').textContent='🔥 '+streak;}
+function breakStreak(){streak=0;document.getElementById('streakBadge').textContent='🔥 0';}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* =================================================================
+   TABS
+   ================================================================= */
+(function(){
+  const bar=document.getElementById('tabBar');
+  TABS.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t.label;b.onclick=()=>switchTab(i);bar.appendChild(b);});
+  switchTab(0);
+})();
+function switchTab(idx){
+  document.querySelectorAll('.tab-bar button').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===idx));
+  if(idx===0&&!document.getElementById('panelIntro').innerHTML)buildIntro();
+  if(idx===1&&!document.getElementById('panelGenerations').innerHTML)buildGen();
+  if(idx===2&&!document.getElementById('panelR2P').innerHTML)buildR2P();
+  if(idx===3&&!document.getElementById('panelIranWar').innerHTML)buildIran();
+  if(idx===4&&!document.getElementById('panelCyprus').innerHTML)buildCyprus();
+  if(idx===5&&!document.getElementById('panelMatch').innerHTML)buildMatch();
+  if(idx===6&&!document.getElementById('panelTimeline').innerHTML)buildTimeline();
+  if(idx===7&&!document.getElementById('panelDebate').innerHTML)buildDebate();
+  if(idx===8)buildStats();
+}
+
+/* =================================================================
+   BUILD: FOUNDATIONS QUIZ
+   ================================================================= */
+function buildIntro(){
+  const p=document.getElementById('panelIntro');
+  let h='<div class="card"><h2>⚖️ Foundations Quiz</h2><p>Test your understanding of the core human rights concepts from the textbook (Baylis, Smith & Owens, pp. 498–513) and the 2026 context. Earn <strong>10 XP</strong> per correct answer.</p></div>';
+  INTRO_Q.forEach((q,qi)=>{
+    h+=`<div class="q-block" id="iq-${qi}"><p class="q-label">Q${qi+1}: ${q.q}</p>`;
+    q.opts.forEach((o,oi)=>{h+=`<button class="opt-btn" onclick="handleIntro(${qi},${oi})">${o}</button>`;});
+    h+=`<div class="explain" id="iex-${qi}">${q.explain}</div></div>`;
+  });
+  p.innerHTML=h;
+}
+function handleIntro(qi,oi){
+  const k='iq-'+qi;if(done[k])return;done[k]=true;
+  const q=INTRO_Q[qi],bl=document.getElementById(k),btns=bl.querySelectorAll('.opt-btn');
+  btns.forEach((b,i)=>{b.classList.add('disabled');if(i===q.correct)b.classList.add('correct');if(i===oi&&oi!==q.correct)b.classList.add('wrong');});
+  document.getElementById('iex-'+qi).style.display='block';
+  if(oi===q.correct)addXP(10);else breakStreak();
+}
+
+/* =================================================================
+   BUILD: THREE GENERATIONS SORTER
+   ================================================================= */
+function buildGen(){
+  const p=document.getElementById('panelGenerations');
+  let items=shuffle([...GEN_ITEMS]);
+  let h='<div class="card"><h2>🏛️ Three Generations Sorter</h2><p>Drag each right into the correct generation. Earn <strong>5 XP</strong> per correct placement.</p>';
+  h+='<div class="gen-grid"><div class="gen-cell gen1">1st: Civil & Political</div><div class="gen-cell gen2">2nd: Economic, Social, Cultural</div><div class="gen-cell gen3">3rd: Solidarity / Collective</div></div></div>';
+  h+='<div class="card"><div class="chip-bank" id="genBank">';
+  items.forEach((it,i)=>{h+=`<span class="chip src" draggable="true" data-idx="${i}" data-gen="${it.gen}">${it.text}</span>`;});
+  h+='</div><div class="zone-container">';
+  [1,2,3].forEach(g=>{
+    const labels={1:'1st Generation — Civil & Political',2:'2nd Generation — Economic, Social, Cultural',3:'3rd Generation — Solidarity / Collective'};
+    h+=`<div class="zone" id="genZone${g}" data-gen="${g}"><div class="z-title">${labels[g]}</div></div>`;
+  });
+  h+='</div><div class="check-row"><button class="btn-primary" onclick="checkGen()">Check Answers</button></div><div id="genResult"></div></div>';
+  p.innerHTML=h;
+  // drag-drop
+  document.querySelectorAll('#genBank .chip').forEach(c=>{
+    c.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',c.dataset.idx));
+  });
+  [1,2,3].forEach(g=>{
+    const z=document.getElementById('genZone'+g);
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over');});
+    z.addEventListener('dragleave',()=>z.classList.remove('over'));
+    z.addEventListener('drop',e=>{
+      e.preventDefault();z.classList.remove('over');
+      const idx=e.dataTransfer.getData('text/plain');
+      const chip=document.querySelector(`.chip[data-idx="${idx}"]`);
+      if(chip)z.appendChild(chip);
+    });
+  });
+}
+function checkGen(){
+  if(done['gen'])return;done['gen']=true;
+  let correct=0,total=GEN_ITEMS.length;
+  [1,2,3].forEach(g=>{
+    document.querySelectorAll(`#genZone${g} .chip`).forEach(c=>{
+      if(parseInt(c.dataset.gen)===g){c.classList.remove('src');c.classList.add('correct-chip');correct++;}
+      else{c.classList.remove('src');c.classList.add('wrong-chip');}
+    });
+  });
+  // bank leftovers are wrong
+  document.querySelectorAll('#genBank .chip').forEach(c=>{c.classList.remove('src');c.classList.add('wrong-chip');});
+  const pct=Math.round(correct/total*100);
+  const cls=pct>=80?'good':pct>=50?'ok':'bad';
+  document.getElementById('genResult').innerHTML=`<div class="score-banner ${cls}">${correct}/${total} correct (${pct}%) — ${correct*5} XP earned</div>`;
+  for(let i=0;i<correct;i++)addXP(5);
+}
+
+/* =================================================================
+   BUILD: R2P CASE SORTER
+   ================================================================= */
+function buildR2P(){
+  const p=document.getElementById('panelR2P');
+  let cases=shuffle([...R2P_CASES]);
+  let h='<div class="card"><h2>🛡️ R2P Case Sorter</h2><p>Sort each case into the correct R2P pillar — or mark it as "Failed." Earn <strong>10 XP</strong> per correct answer.</p></div>';
+  cases.forEach((c,i)=>{
+    h+=`<div class="scenario-card" id="r2p-${i}"><p style="font-weight:600;font-size:.9rem">${c.text}</p>`;
+    h+=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">`;
+    ['I','II','III','Failed'].forEach(opt=>{
+      h+=`<button class="opt-btn" style="width:auto;flex:1;text-align:center;" onclick="handleR2P(${i},'${opt}')">${opt==='Failed'?'❌ Failed':'Pillar '+opt}</button>`;
+    });
+    h+=`</div><div class="explain" id="r2pex-${i}">${c.explain}</div></div>`;
+  });
+  p.innerHTML=h;
+}
+function handleR2P(i,chosen){
+  const k='r2p-'+i;if(done[k])return;done[k]=true;
+  const c=R2P_CASES.find((_,idx)=>true);// need correct mapping
+  const card=document.getElementById('r2p-'+i);
+  const btns=card.querySelectorAll('.opt-btn');
+  const correctAns=R2P_CASES[i]?R2P_CASES[i].pillar:null;
+  // since we shuffled, we need to store mapping
+  // simpler: re-check from DOM text
+  let caseData=R2P_CASES.find(c=>card.querySelector('p').textContent.includes(c.text.substring(0,20)));
+  if(!caseData)return;
+  const isCorrect=chosen===caseData.pillar;
+  btns.forEach(b=>{
+    b.classList.add('disabled');
+    const bLabel=b.textContent.includes('Failed')?'Failed':b.textContent.replace('Pillar ','');
+    if(bLabel===caseData.pillar)b.classList.add('correct');
+    if(bLabel===chosen&&!isCorrect)b.classList.add('wrong');
+  });
+  document.getElementById('r2pex-'+i).style.display='block';
+  card.classList.add('resolved');
+  if(isCorrect)addXP(10);else breakStreak();
+}
+
+/* =================================================================
+   BUILD: IRAN WAR & IHL
+   ================================================================= */
+function buildIran(){
+  const p=document.getElementById('panelIranWar');
+  let h='<div class="card"><h2>💥 Iran War & International Humanitarian Law</h2><p>The 2026 Iran war raises critical questions about jus ad bellum (right to go to war) and jus in bello (conduct in war). Test your understanding. <strong>15 XP</strong> per correct answer.</p></div>';
+  IRAN_Q.forEach((q,qi)=>{
+    h+=`<div class="q-block" id="irq-${qi}"><p class="q-label">Q${qi+1}: ${q.q}</p>`;
+    q.opts.forEach((o,oi)=>{h+=`<button class="opt-btn" onclick="handleIran(${qi},${oi})">${o}</button>`;});
+    h+=`<div class="explain" id="irex-${qi}">${q.explain}</div></div>`;
+  });
+  p.innerHTML=h;
+}
+function handleIran(qi,oi){
+  const k='irq-'+qi;if(done[k])return;done[k]=true;
+  const q=IRAN_Q[qi],bl=document.getElementById(k),btns=bl.querySelectorAll('.opt-btn');
+  btns.forEach((b,i)=>{b.classList.add('disabled');if(i===q.correct)b.classList.add('correct');if(i===oi&&oi!==q.correct)b.classList.add('wrong');});
+  document.getElementById('irex-'+qi).style.display='block';
+  if(oi===q.correct)addXP(15);else breakStreak();
+}
+
+/* =================================================================
+   BUILD: CYPRUS & ECHR
+   ================================================================= */
+function buildCyprus(){
+  const p=document.getElementById('panelCyprus');
+  let h='<div class="card"><h2>🇨🇾 Cyprus & the ECHR</h2><p>The European Court of Human Rights has profoundly shaped the Cyprus conflict. Explore the landmark cases, then test your knowledge. <strong>15 XP</strong> per correct answer.</p></div>';
+  h+='<div class="card"><h3>Landmark Cases — Click to Reveal</h3><div class="flip-grid">';
+  CYPRUS_FLIP.forEach(c=>{
+    h+=`<div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front"><div style="font-size:1.5rem">⚖️</div><div>${c.name}</div></div><div class="flip-back"><strong>${c.name}</strong><p style="margin-top:6px;font-size:.8rem">${c.desc}</p></div></div></div>`;
+  });
+  h+='</div></div>';
+  h+='<div class="card"><h3>Quiz</h3>';
+  CYPRUS_Q.forEach((q,qi)=>{
+    h+=`<div class="q-block" id="cyq-${qi}"><p class="q-label">Q${qi+1}: ${q.q}</p>`;
+    q.opts.forEach((o,oi)=>{h+=`<button class="opt-btn" onclick="handleCyprus(${qi},${oi})">${o}</button>`;});
+    h+=`<div class="explain" id="cyex-${qi}">${q.explain}</div></div>`;
+  });
+  h+='</div>';
+  p.innerHTML=h;
+}
+function handleCyprus(qi,oi){
+  const k='cyq-'+qi;if(done[k])return;done[k]=true;
+  const q=CYPRUS_Q[qi],bl=document.getElementById(k),btns=bl.querySelectorAll('.opt-btn');
+  btns.forEach((b,i)=>{b.classList.add('disabled');if(i===q.correct)b.classList.add('correct');if(i===oi&&oi!==q.correct)b.classList.add('wrong');});
+  document.getElementById('cyex-'+qi).style.display='block';
+  if(oi===q.correct)addXP(15);else breakStreak();
+}
+
+/* =================================================================
+   BUILD: KEY TERMS MATCH
+   ================================================================= */
+function buildMatch(){
+  const p=document.getElementById('panelMatch');
+  let terms=shuffle([...MATCH_DATA]);
+  let defs=shuffle([...MATCH_DATA]);
+  let h='<div class="card"><h2>🔗 Key Terms Match</h2><p>Match each term to its definition. Click a term, then click its matching definition. <strong>10 XP</strong> per correct pair.</p></div>';
+  h+='<div class="card"><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="matchGrid">';
+  h+='<div><h3>Terms</h3>';
+  terms.forEach((t,i)=>{h+=`<div class="chip src" id="mt-${i}" onclick="selectTerm(${i})" style="display:block;margin:4px 0;cursor:pointer;">${t.term}</div>`;});
+  h+='</div><div><h3>Definitions</h3>';
+  defs.forEach((d,i)=>{h+=`<div class="chip src" id="md-${i}" onclick="selectDef(${i})" style="display:block;margin:4px 0;cursor:pointer;background:#f3e5f5;color:#4a148c;">${d.def}</div>`;});
+  h+='</div></div></div>';
+  p.innerHTML=h;
+  window._matchTerms=terms;window._matchDefs=defs;window._selTerm=null;window._matchDone={};
+}
+function selectTerm(i){if(window._matchDone['t'+i])return;window._selTerm=i;document.querySelectorAll('[id^="mt-"]').forEach(e=>e.style.outline='');document.getElementById('mt-'+i).style.outline='3px solid var(--primary)';}
+function selectDef(i){
+  if(window._selTerm===null||window._matchDone['d'+i])return;
+  const ti=window._selTerm;
+  const termObj=window._matchTerms[ti];
+  const defObj=window._matchDefs[i];
+  const termEl=document.getElementById('mt-'+ti);
+  const defEl=document.getElementById('md-'+i);
+  if(termObj.term===defObj.term){
+    termEl.classList.remove('src');termEl.classList.add('correct-chip');termEl.style.outline='';
+    defEl.classList.remove('src');defEl.classList.add('correct-chip');defEl.style.background='';
+    window._matchDone['t'+ti]=true;window._matchDone['d'+i]=true;
+    addXP(10);
+  }else{
+    termEl.style.outline='3px solid var(--wrong)';defEl.style.outline='3px solid var(--wrong)';
+    setTimeout(()=>{termEl.style.outline='';defEl.style.outline='';},800);
+    breakStreak();
+  }
+  window._selTerm=null;
+}
+
+/* =================================================================
+   BUILD: TIMELINE SORT
+   ================================================================= */
+function buildTimeline(){
+  const p=document.getElementById('panelTimeline');
+  let items=shuffle([...TL_DATA]);
+  let h='<div class="card"><h2>📅 Timeline Sort</h2><p>Drag the events into chronological order (earliest at top). Then check your answers. <strong>5 XP</strong> per correct position.</p></div>';
+  h+='<div class="card"><div id="tlList">';
+  items.forEach((it,i)=>{
+    h+=`<div class="tl-slot" draggable="true" data-year="${it.year}" id="tls-${i}"><span class="tl-number">${i+1}</span><span>${it.event}</span></div>`;
+  });
+  h+='</div><div class="check-row"><button class="btn-primary" onclick="checkTL()">Check Order</button></div><div id="tlResult"></div></div>';
+  p.innerHTML=h;
+  // drag reorder
+  const list=document.getElementById('tlList');
+  let dragEl=null;
+  list.querySelectorAll('.tl-slot').forEach(slot=>{
+    slot.addEventListener('dragstart',()=>{dragEl=slot;slot.style.opacity='.4';});
+    slot.addEventListener('dragend',()=>{slot.style.opacity='1';dragEl=null;renumberTL();});
+    slot.addEventListener('dragover',e=>{e.preventDefault();});
+    slot.addEventListener('drop',e=>{e.preventDefault();if(dragEl&&dragEl!==slot)list.insertBefore(dragEl,slot);});
+  });
+}
+function renumberTL(){document.querySelectorAll('#tlList .tl-number').forEach((n,i)=>n.textContent=i+1);}
+function checkTL(){
+  if(done['tl'])return;done['tl']=true;
+  const slots=document.querySelectorAll('#tlList .tl-slot');
+  let correct=0;
+  const sorted=[...TL_DATA].sort((a,b)=>a.year-b.year);
+  slots.forEach((s,i)=>{
+    if(parseInt(s.dataset.year)===sorted[i].year){s.classList.add('correct-slot');correct++;}
+    else s.classList.add('wrong-slot');
+  });
+  const pct=Math.round(correct/TL_DATA.length*100);
+  const cls=pct>=80?'good':pct>=50?'ok':'bad';
+  document.getElementById('tlResult').innerHTML=`<div class="score-banner ${cls}">${correct}/${TL_DATA.length} correct (${pct}%) — ${correct*5} XP earned</div>`;
+  for(let i=0;i<correct;i++)addXP(5);
+}
+
+/* =================================================================
+   BUILD: DEBATE ARENA
+   ================================================================= */
+function buildDebate(){
+  const p=document.getElementById('panelDebate');
+  let h='<div class="card"><h2>🗣️ Debate Arena</h2><p>No points here — just critical thinking. Use these prompts for class discussion, small-group debate, or written reflection. Each connects directly to the lecture themes.</p></div>';
+  DEBATE_DATA.forEach((d,i)=>{
+    h+=`<div class="card"><h3>${i+1}. ${d.title}</h3><div class="debate-prompt"><strong>Prompt:</strong> ${d.prompt}</div></div>`;
+  });
+  p.innerHTML=h;
+}
+
+/* =================================================================
+   BUILD: STATS
+   ================================================================= */
+function buildStats(){
+  const p=document.getElementById('panelStats');
+  const totalQ=INTRO_Q.length+IRAN_Q.length+CYPRUS_Q.length+R2P_CASES.length+GEN_ITEMS.length+MATCH_DATA.length+TL_DATA.length;
+  const maxXP=INTRO_Q.length*10+GEN_ITEMS.length*5+R2P_CASES.length*10+IRAN_Q.length*15+CYPRUS_Q.length*15+MATCH_DATA.length*10+TL_DATA.length*5;
+  let h=`<div class="card"><h2>📊 My Stats</h2><p>Session performance — resets on page reload.</p></div>`;
+  h+=`<div class="stat-grid">`;
+  h+=`<div class="stat-card"><div class="num">${xp}</div><div class="label">Total XP</div></div>`;
+  h+=`<div class="stat-card"><div class="num">${maxXP}</div><div class="label">Max Possible XP</div></div>`;
+  h+=`<div class="stat-card"><div class="num">${streak}</div><div class="label">Current Streak</div></div>`;
+  h+=`<div class="stat-card"><div class="num">${bestStreak}</div><div class="label">Best Streak</div></div>`;
+  h+=`<div class="stat-card"><div class="num">${Math.round(xp/maxXP*100)}%</div><div class="label">Completion</div></div>`;
+  h+=`<div class="stat-card"><div class="num">${Object.keys(done).length}</div><div class="label">Activities Done</div></div>`;
+  h+=`</div>`;
+  h+=`<div style="margin-top:20px;text-align:center;"><button class="btn-accent" onclick="if(confirm('Reset all progress?')){location.reload();}">🔄 Reset All</button></div>`;
+  h+=`<div class="card" style="margin-top:20px;"><h3>📖 Back to Slides</h3><p><a href="https://efkaymak-del.github.io/PSIR101/humanrights-slides.html" target="_blank" style="color:var(--primary);font-weight:600;">← Return to Human Rights Lecture Slides</a></p></div>`;
+  p.innerHTML=h;
+}
+</script>
+</body>
+</html>
