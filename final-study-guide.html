@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSIR101 Final Exam Review</title>
+<style>
+:root{
+--bg:#0f172a;--card:#1e293b;--accent:#6366f1;--accent2:#8b5cf6;
+--green:#22c55e;--red:#ef4444;--yellow:#eab308;--text:#e2e8f0;
+--dim:#94a3b8;--radius:12px;--shadow:0 4px 24px rgba(0,0,0,.4);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.container{max-width:860px;margin:0 auto;padding:16px}
+header{text-align:center;padding:32px 16px 16px}
+header h1{font-size:1.6rem;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+header p{color:var(--dim);margin-top:8px;font-size:.95rem}
+.exam-info{background:var(--card);border-radius:var(--radius);padding:20px;margin:16px 0;text-align:center;border:1px solid #334155}
+.exam-info strong{color:var(--accent)}
+nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:20px 0}
+nav button{background:var(--card);color:var(--dim);border:1px solid #334155;padding:10px 16px;border-radius:var(--radius);cursor:pointer;font-size:.85rem;transition:.2s}
+nav button:hover,nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tab{display:none}
+.tab.active{display:block}
+
+/* Flashcards */
+.fc-filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.fc-filters button{background:#334155;color:var(--dim);border:none;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:.8rem}
+.fc-filters button.active{background:var(--accent);color:#fff}
+.flashcard{background:var(--card);border-radius:var(--radius);padding:32px 24px;min-height:200px;cursor:pointer;text-align:center;border:1px solid #334155;position:relative;margin-bottom:12px}
+.flashcard .fc-module{position:absolute;top:12px;left:16px;font-size:.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px}
+.flashcard .fc-num{position:absolute;top:12px;right:16px;font-size:.7rem;color:var(--dim)}
+.flashcard h3{font-size:1.2rem;margin-top:16px}
+.flashcard .fc-def{margin-top:16px;color:var(--dim);display:none}
+.flashcard.flipped .fc-def{display:block;color:var(--text)}
+.flashcard .fc-hint{margin-top:12px;font-size:.8rem;color:var(--dim)}
+.flashcard.flipped .fc-hint{display:none}
+.fc-btns{display:flex;gap:10px;justify-content:center;margin:12px 0}
+.fc-btns button{padding:10px 24px;border-radius:var(--radius);border:none;cursor:pointer;font-weight:600;font-size:.9rem}
+.fc-btns .btn-again{background:var(--red);color:#fff}
+.fc-btns .btn-got{background:var(--green);color:#fff}
+.fc-counter{text-align:center;color:var(--dim);font-size:.9rem;margin-bottom:16px}
+
+/* Theory Sorter */
+.ts-card{background:var(--card);border-radius:var(--radius);padding:24px;margin-bottom:16px;border:1px solid #334155}
+.ts-card blockquote{font-style:italic;color:var(--text);margin-bottom:16px;padding-left:16px;border-left:3px solid var(--accent)}
+.ts-options{display:flex;flex-wrap:wrap;gap:8px}
+.ts-options button{background:#334155;color:var(--text);border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:.85rem;transition:.2s}
+.ts-options button:hover{background:#475569}
+.ts-options button.correct{background:var(--green);color:#fff}
+.ts-options button.wrong{background:var(--red);color:#fff}
+.ts-feedback{margin-top:12px;padding:12px;border-radius:8px;display:none;font-size:.9rem}
+.ts-feedback.show{display:block}
+
+/* Confused Pairs */
+.cp-card{background:var(--card);border-radius:var(--radius);padding:24px;margin-bottom:16px;border:1px solid #334155}
+.cp-pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.cp-item{background:#334155;border-radius:8px;padding:16px}
+.cp-item h4{color:var(--accent);margin-bottom:8px}
+.cp-question{background:#0f172a;padding:16px;border-radius:8px;margin-bottom:12px;font-style:italic}
+.cp-opts button{display:block;width:100%;text-align:left;background:#334155;color:var(--text);border:none;padding:12px 16px;border-radius:8px;cursor:pointer;margin-bottom:8px;font-size:.9rem;transition:.2s}
+.cp-opts button:hover{background:#475569}
+.cp-opts button.correct{background:var(--green);color:#fff}
+.cp-opts button.wrong{background:var(--red);color:#fff}
+.cp-explain{margin-top:12px;padding:12px;background:#1a1a2e;border-radius:8px;display:none;font-size:.9rem;color:var(--dim)}
+.cp-explain.show{display:block;color:var(--text)}
+
+/* Essay Builder */
+.eb-card{background:var(--card);border-radius:var(--radius);padding:24px;margin-bottom:16px;border:1px solid #334155}
+.eb-card h3{color:var(--accent);margin-bottom:8px}
+.eb-card .prompt{font-style:italic;margin-bottom:16px;color:var(--dim)}
+.eb-card textarea{width:100%;background:#0f172a;color:var(--text);border:1px solid #334155;border-radius:8px;padding:12px;font-size:.9rem;resize:vertical;min-height:60px;margin-bottom:8px;font-family:inherit}
+.eb-card .reveal-btn{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:.9rem;margin-top:8px}
+.eb-model{background:#0f172a;border-radius:8px;padding:16px;margin-top:12px;display:none;font-size:.9rem;line-height:1.7}
+.eb-model.show{display:block}
+.eb-model strong{color:var(--accent)}
+
+/* Exam Simulator */
+.sim-intro{text-align:center;padding:32px}
+.sim-intro button{background:var(--accent);color:#fff;border:none;padding:14px 32px;border-radius:var(--radius);cursor:pointer;font-size:1rem;margin:8px}
+.sim-intro button.secondary{background:#334155}
+.sim-timer{text-align:center;font-size:1.4rem;color:var(--yellow);margin:16px 0;font-variant-numeric:tabular-nums}
+.sim-q{background:var(--card);border-radius:var(--radius);padding:24px;margin-bottom:12px;border:1px solid #334155}
+.sim-q h4{margin-bottom:12px}
+.sim-q label{display:block;background:#334155;padding:12px 16px;border-radius:8px;margin-bottom:6px;cursor:pointer;transition:.2s;font-size:.9rem}
+.sim-q label:hover{background:#475569}
+.sim-q input{margin-right:10px}
+.sim-submit{display:block;margin:20px auto;background:var(--green);color:#fff;border:none;padding:14px 40px;border-radius:var(--radius);cursor:pointer;font-size:1rem}
+.sim-results{background:var(--card);border-radius:var(--radius);padding:24px;text-align:center;border:1px solid #334155}
+.sim-results h2{color:var(--green);margin-bottom:8px}
+.sim-review{text-align:left;margin-top:16px}
+.sim-review .rev-q{padding:12px;border-bottom:1px solid #334155}
+.rev-q.rev-correct{border-left:3px solid var(--green)}
+.rev-q.rev-wrong{border-left:3px solid var(--red)}
+
+/* Progress */
+.prog-card{background:var(--card);border-radius:var(--radius);padding:24px;margin-bottom:16px;border:1px solid #334155;text-align:center}
+.prog-card h3{color:var(--accent);margin-bottom:8px}
+.prog-bar{background:#334155;border-radius:20px;height:20px;overflow:hidden;margin:12px 0}
+.prog-fill{background:linear-gradient(90deg,var(--accent),var(--green));height:100%;border-radius:20px;transition:width .5s}
+.ready-btn{background:var(--accent);color:#fff;border:none;padding:12px 28px;border-radius:var(--radius);cursor:pointer;font-size:1rem;margin-top:16px}
+
+footer{text-align:center;padding:32px 16px;color:var(--dim);font-size:.8rem}
+@media(max-width:600px){
+.cp-pair{grid-template-columns:1fr}
+nav button{font-size:.75rem;padding:8px 12px}
+header h1{font-size:1.3rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>PSIR101 Final Exam Review</h1>
+<p>Eastern Mediterranean University &bull; Spring 2025&ndash;2026</p>
+</header>
+
+<div class="container">
+
+<div class="exam-info">
+<strong>Exam: Monday 15 June 2026</strong><br>
+40 points (20 MC + 20 essay) = 40% of your grade<br>
+20% pre-midterm &bull; 80% post-midterm (Race, Human Rights, Environment, Cyprus)
+</div>
+
+<nav id="mainNav">
+<button class="active" data-tab="home">Home</button>
+<button data-tab="flashcards">Flashcards</button>
+<button data-tab="sorter">Theory Sorter</button>
+<button data-tab="pairs">Confused Pairs</button>
+<button data-tab="essay">Essay Builder</button>
+<button data-tab="simulator">Exam Simulator</button>
+<button data-tab="progress">Progress</button>
+</nav>
+
+<!-- ========== HOME ========== -->
+<div class="tab active" id="home">
+<div style="background:var(--card);border-radius:var(--radius);padding:24px;border:1px solid #334155">
+<h2 style="margin-bottom:16px">Final Exam Review App</h2>
+<p>Six tools to help you prepare:</p><br>
+<p><strong>Flashcards</strong> &mdash; learn and review 40 key concepts across all modules</p>
+<p><strong>Theory Sorter</strong> &mdash; practise identifying which theory a statement reflects</p>
+<p><strong>Confused Pairs</strong> &mdash; master the concepts students mix up most</p>
+<p><strong>Essay Builder</strong> &mdash; practise structuring essay arguments for the four possible prompts</p>
+<p><strong>Exam Simulator</strong> &mdash; take a timed mock exam under real conditions</p>
+<p><strong>Progress</strong> &mdash; track your preparation</p>
+</div>
+</div>
+
+<!-- ========== FLASHCARDS ========== -->
+<div class="tab" id="flashcards">
+<div class="fc-filters" id="fcFilters">
+<button class="active" data-filter="all">All</button>
+<button data-filter="pre">Pre-Midterm</button>
+<button data-filter="race">Race</button>
+<button data-filter="hr">Human Rights</button>
+<button data-filter="env">Environment</button>
+<button data-filter="cyp">Cyprus</button>
+</div>
+<div class="fc-counter" id="fcCounter">0 of 40 concepts mastered</div>
+<div id="fcCard"></div>
+<div class="fc-btns" id="fcBtns" style="display:none">
+<button class="btn-again" id="fcAgain">Review again</button>
+<button class="btn-got" id="fcGot">Got it</button>
+</div>
+</div>
+
+<!-- ========== THEORY SORTER ========== -->
+<div class="tab" id="sorter">
+<p style="color:var(--dim);margin-bottom:16px">Read each statement and pick the theory it best reflects. This skill is essential for both the MCQs and the essay.</p>
+<div id="tsCards"></div>
+<div class="fc-counter" id="tsCounter">0 of 12 correct</div>
+</div>
+
+<!-- ========== CONFUSED PAIRS ========== -->
+<div class="tab" id="pairs">
+<p style="color:var(--dim);margin-bottom:16px">These are the concepts students mix up most on exams. Study both definitions, then answer the scenario question.</p>
+<div id="cpCards"></div>
+</div>
+
+<!-- ========== ESSAY BUILDER ========== -->
+<div class="tab" id="essay">
+<p style="color:var(--dim);margin-bottom:16px">Pick an essay topic, write your own outline, then reveal the model to compare. Remember: <strong>PEEL</strong> for each paragraph.</p>
+<div id="ebCards"></div>
+</div>
+
+<!-- ========== EXAM SIMULATOR ========== -->
+<div class="tab" id="simulator">
+<div class="sim-intro" id="simIntro">
+<h2>Exam Simulator</h2>
+<p style="color:var(--dim);margin:12px 0">Format mirrors your actual final: 20 MCQs + 1 essay prompt selection. Questions drawn randomly from a bank of 60+ so every attempt is different.</p>
+<button id="simFull">Start Full Mock (90 min)</button>
+<button class="secondary" id="simMC">MC Only (no timer)</button>
+</div>
+<div id="simArea" style="display:none">
+<div class="sim-timer" id="simTimer">90:00</div>
+<div id="simQuestions"></div>
+<button class="sim-submit" id="simSubmit">Submit Exam</button>
+</div>
+<div id="simResults" style="display:none"></div>
+</div>
+
+<!-- ========== PROGRESS ========== -->
+<div class="tab" id="progress">
+<div class="prog-card">
+<h3>Flashcards Mastered</h3>
+<div class="prog-bar"><div class="prog-fill" id="progFC" style="width:0%"></div></div>
+<span id="progFCText">0 / 40</span>
+</div>
+<div class="prog-card">
+<h3>Theory Sorter</h3>
+<div class="prog-bar"><div class="prog-fill" id="progTS" style="width:0%"></div></div>
+<span id="progTSText">0 / 12</span>
+</div>
+<div class="prog-card">
+<h3>Confused Pairs</h3>
+<div class="prog-bar"><div class="prog-fill" id="progCP" style="width:0%"></div></div>
+<span id="progCPText">0 / 8</span>
+</div>
+<div class="prog-card">
+<h3>Mock Exams Taken</h3>
+<span id="progSim">0</span>
+</div>
+<div class="prog-card">
+<h3>Best Mock Score</h3>
+<span id="progBest">— / 20</span>
+</div>
+<button class="ready-btn" id="readyBtn">Am I Ready?</button>
+<div id="readyMsg" style="margin-top:16px;text-align:center;color:var(--dim)"></div>
+</div>
+
+</div>
+
+<footer>PSIR101 Introduction to Global Politics &bull; Eastern Mediterranean University &bull; June 2026</footer>
+
+<script>
+/* ===== TAB NAVIGATION ===== */
+const tabs=document.querySelectorAll('.tab'),navBtns=document.querySelectorAll('nav button');
+navBtns.forEach(b=>b.addEventListener('click',()=>{
+navBtns.forEach(x=>x.classList.remove('active'));b.classList.add('active');
+tabs.forEach(t=>t.classList.remove('active'));document.getElementById(b.dataset.tab).classList.add('active');
+}));
+
+/* ===== FLASHCARD DATA ===== */
+const fcData=[
+{t:"Anarchy",d:"No central authority above sovereign states. Not chaos — just no world government. The starting point of all major IR theories.",m:"pre"},
+{t:"Security Dilemma",d:"One state's efforts to increase its own security (e.g., building weapons) make other states feel less secure, triggering an arms race.",m:"pre"},
+{t:"Relative vs. Absolute Gains",d:"Realists focus on relative gains (how your benefit compares to others'). Liberals focus on absolute gains (total benefit for all).",m:"pre"},
+{t:"Supranationalism",d:"An international body can make binding decisions on member states even without unanimous agreement. Strongest example: the EU.",m:"pre"},
+{t:"Intergovernmentalism",d:"States retain control; decisions require consensus. No authority above the state can impose decisions. Most IOs work this way.",m:"pre"},
+{t:"Democratic Peace Theory",d:"Liberal theory: democracies rarely go to war with each other because of shared norms and institutional constraints.",m:"pre"},
+{t:"Deterritorialization",d:"Activities and connections that increasingly transcend territorial boundaries. A key concept in globalization studies.",m:"pre"},
+{t:"Peacekeeping vs. Peacebuilding",d:"Peacekeeping: monitoring ceasefires (consent, impartiality, minimum force). Peacebuilding: rebuilding institutions, elections, reconciliation — broader, post-Cold War shift.",m:"pre"},
+{t:"Racial Hierarchy",d:"A system positioning certain racial groups as superior, shaping global power relations. Underpinned European colonialism and still influences international structures.",m:"race"},
+{t:"Civilizing Mission",d:"Colonial ideology: Europeans justified domination of non-European peoples by claiming to bring civilization, Christianity, and progress to 'backward' races.",m:"race"},
+{t:"Postcolonial Critique",d:"IR was built on Western/Eurocentric experiences. Mainstream theories treat the state system as natural, ignoring how it was imposed through colonialism.",m:"race"},
+{t:"Apartheid",d:"Institutionalized racial segregation in South Africa (1948–1994). Challenged through international sanctions, activism, and norm change — shows race as an IR issue.",m:"race"},
+{t:"Decolonization",d:"Process through which colonized peoples gained independence, mainly 1945–1970s. Postcolonial scholars argue structural inequalities persist beyond formal independence.",m:"race"},
+{t:"Race as Social Construct",d:"Race is not a biological fact but a category created through social, political, and legal practices. Its meaning changes across time and place.",m:"race"},
+{t:"Eurocentrism in IR",d:"The discipline of IR centres European/Western experiences as universal, marginalizing perspectives from the Global South and formerly colonized peoples.",m:"race"},
+{t:"Three Generations of HR (Vasak)",d:"1st: civil & political rights (freedom from). 2nd: economic, social & cultural rights (freedom to). 3rd: solidarity/collective rights (development, peace, environment).",m:"hr"},
+{t:"UDHR (1948)",d:"Universal Declaration of Human Rights. First comprehensive international statement of fundamental rights. NOT legally binding — a declaration, not a treaty.",m:"hr"},
+{t:"ICCPR & ICESCR",d:"Two binding covenants flowing from UDHR. ICCPR: civil & political rights. ICESCR: economic, social & cultural rights. Together with UDHR = International Bill of Rights.",m:"hr"},
+{t:"Universalism",d:"Human rights apply equally to all people everywhere, regardless of culture, religion, or political system.",m:"hr"},
+{t:"Cultural Relativism",d:"Human rights standards may reflect Western values and should not be imposed on other cultures. Does NOT mean 'anything goes.'",m:"hr"},
+{t:"Responsibility to Protect (R2P)",d:"2005 World Summit. Three pillars: state responsibility, international assistance, collective action via UNSC if state manifestly fails. Covers genocide, war crimes, ethnic cleansing, crimes against humanity.",m:"hr"},
+{t:"Natural Rights vs. Positive Rights",d:"Natural/negative rights: freedom FROM interference (speech, religion). Positive rights: entitlement TO something (education, healthcare). Maps onto 1st vs. 2nd generation.",m:"hr"},
+{t:"Tragedy of the Commons",d:"Shared resources (atmosphere, oceans) are overexploited when individuals pursue self-interest without collective regulation. Foundational for environmental politics.",m:"env"},
+{t:"Global Commons",d:"Resources belonging to no single state: atmosphere, high seas, outer space, Antarctica. Governance requires international cooperation.",m:"env"},
+{t:"CBDR",d:"Common But Differentiated Responsibilities. All states share responsibility for environmental problems, but developed countries bear greater burden due to historical emissions and capacity.",m:"env"},
+{t:"Sustainable Development",d:"Brundtland (1987): development that meets present needs without compromising future generations' ability to meet theirs.",m:"env"},
+{t:"Paris Agreement (2015)",d:"First universal climate agreement. Nationally determined contributions (NDCs). Bottom-up, pledge-and-review. Aim: limit warming well below 2°C, pursuing 1.5°C.",m:"env"},
+{t:"Kyoto Protocol (1997)",d:"First binding emission targets — but only for developed countries. Developing countries exempt. US never ratified. Top-down approach.",m:"env"},
+{t:"Montreal Protocol (1987)",d:"Phased out ozone-depleting substances. Often cited as the most successful international environmental agreement.",m:"env"},
+{t:"UNFCCC",d:"UN Framework Convention on Climate Change (1992 Rio). Umbrella treaty under which Kyoto and Paris were negotiated.",m:"env"},
+{t:"Annan Plan (2004)",d:"UN proposal: United Cyprus Republic — bi-zonal, bi-communal federation. TC voted yes (~65%), GC voted no (~76%). Plan became null and void.",m:"cyp"},
+{t:"UNFICYP",d:"UN peacekeeping force in Cyprus since 1964. Monitors the Green Line buffer zone. One of the longest-running UN missions.",m:"cyp"},
+{t:"Crans-Montana (2017)",d:"Last serious attempt at federal settlement between Anastasiades (GC) and Akıncı (TC). Collapsed over Turkey's security guarantees and military presence.",m:"cyp"},
+{t:"Two-State Solution (Cyprus)",d:"Post-2020 position of Turkey and Tatar: sovereign equality of two states. Rejected by GC side, UN, and international community, who support bi-zonal federation.",m:"cyp"},
+{t:"Eastern Med Gas Disputes",d:"Gas discoveries reinforced sovereignty disputes rather than creating cooperation. Turkey drills in contested waters; EastMed Forum excludes Turkey.",m:"cyp"},
+{t:"Balance of Threat (Walt / Direkli)",d:"GC perceive Turkey as a threat (military power, proximity, intent). Drove GC strategy of balancing through EU membership rather than accepting power-sharing.",m:"cyp"},
+{t:"Enosis & 1974 Intervention",d:"1974 Greek junta-backed coup aimed for union with Greece (Enosis). Turkey intervened militarily. Island divided ever since.",m:"cyp"},
+{t:"TRNC",d:"Turkish Republic of Northern Cyprus, declared 1983. Recognized only by Turkey. UNSC Resolution 550 declared it legally invalid.",m:"cyp"},
+];
+
+let fcMastered=new Set(),fcCurrent=0,fcFiltered=[...fcData];
+const fcCard=document.getElementById('fcCard'),fcBtns=document.getElementById('fcBtns'),fcCounter=document.getElementById('fcCounter');
+
+function renderFC(){
+if(fcFiltered.length===0){fcCard.innerHTML='<div class="flashcard"><h3>No cards in this category</h3></div>';fcBtns.style.display='none';return;}
+if(fcCurrent>=fcFiltered.length)fcCurrent=0;
+const c=fcFiltered[fcCurrent];
+fcCard.innerHTML=`<div class="flashcard" id="fcFlip"><span class="fc-module">${c.m==='pre'?'Pre-Midterm':c.m==='race'?'Race':c.m==='hr'?'Human Rights':c.m==='env'?'Environment':'Cyprus'}</span><span class="fc-num">${fcCurrent+1} of ${fcFiltered.length}</span><h3>${c.t}</h3><div class="fc-def">${c.d}</div><div class="fc-hint">Tap to reveal definition</div></div>`;
+document.getElementById('fcFlip').addEventListener('click',function(){this.classList.toggle('flipped');fcBtns.style.display='flex';});
+fcBtns.style.display='none';
+fcCounter.textContent=`${fcMastered.size} of ${fcData.length} concepts mastered`;
+}
+
+document.getElementById('fcAgain').addEventListener('click',()=>{fcCurrent++;renderFC();});
+document.getElementById('fcGot').addEventListener('click',()=>{fcMastered.add(fcFiltered[fcCurrent].t);fcCurrent++;renderFC();updateProgress();});
+document.getElementById('fcFilters').addEventListener('click',e=>{
+if(e.target.tagName!=='BUTTON')return;
+document.querySelectorAll('#fcFilters button').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');
+const f=e.target.dataset.filter;
+fcFiltered=f==='all'?[...fcData]:fcData.filter(c=>c.m===f);fcCurrent=0;renderFC();
+});
+renderFC();
+
+/* ===== THEORY SORTER ===== */
+const tsData=[
+{q:"International law only matters when powerful states decide to follow it.",a:"Realism",e:"Realists see law as secondary to power."},
+{q:"The meaning of 'human rights' has changed because states collectively redefined what counts as a right.",a:"Constructivism",e:"Norms and shared ideas evolve through social interaction."},
+{q:"Global capitalism systematically transfers wealth from the Global South to the Global North.",a:"Marxism",e:"Core-periphery exploitation is central to Marxist IR."},
+{q:"The Paris Agreement works because it reduces uncertainty and provides a framework for repeated cooperation.",a:"Liberalism",e:"Institutions facilitate cooperation — classic liberal institutionalism."},
+{q:"Environmental treaties only hold when they do not threaten a great power's economic competitiveness.",a:"Realism",e:"National interest overrides collective commitments in the realist view."},
+{q:"Colonial racial hierarchies didn't just shape history — they continue to structure who gets a voice in international institutions today.",a:"Postcolonialism",e:"Postcolonial theory examines how colonial legacies persist in global structures."},
+{q:"The concept of 'sovereignty' was imposed on colonized peoples through violence, not through consent.",a:"Postcolonialism",e:"Postcolonialism challenges the naturalness of the Westphalian state system."},
+{q:"The ozone regime succeeded because scientific consensus reshaped states' understanding of their interests.",a:"Constructivism",e:"Ideas and knowledge change what states want — constructivist logic."},
+{q:"States will never truly cooperate on climate change because they are too worried about others free-riding.",a:"Realism",e:"Collective action failure driven by self-interest and relative gains."},
+{q:"Gender is not just a women's issue — it structures how we think about war, security, and power.",a:"Feminism",e:"Feminist IR reveals gendered assumptions in mainstream theories."},
+{q:"Turkey's military intervention in Cyprus in 1974 was driven by perceived threats to Turkish Cypriots and Turkey's strategic interests.",a:"Realism",e:"Balance of threat and security-driven state behaviour."},
+{q:"The development of an international human rights regime shows that states can internalize new norms over time.",a:"Constructivism",e:"Norm diffusion and socialization — states change their behaviour as norms spread."},
+];
+let tsCorrect=0;
+const tsCards=document.getElementById('tsCards'),tsCounter=document.getElementById('tsCounter');
+const theories=["Realism","Liberalism","Constructivism","Marxism","Feminism","Postcolonialism"];
+tsData.forEach((item,i)=>{
+const div=document.createElement('div');div.className='ts-card';
+div.innerHTML=`<blockquote>"${item.q}"</blockquote><div class="ts-options">${theories.map(t=>`<button data-t="${t}">${t}</button>`).join('')}</div><div class="ts-feedback" id="tsFB${i}"></div>`;
+div.querySelectorAll('.ts-options button').forEach(btn=>{
+btn.addEventListener('click',function(){
+if(div.querySelector('.correct')||div.querySelector('.wrong'))return;
+const fb=document.getElementById(`tsFB${i}`);
+if(this.dataset.t===item.a){this.classList.add('correct');fb.innerHTML=`✓ Correct! ${item.e}`;fb.style.background='#14532d';tsCorrect++;tsCounter.textContent=`${tsCorrect} of ${tsData.length} correct`;updateProgress();}
+else{this.classList.add('wrong');div.querySelector(`button[data-t="${item.a}"]`).classList.add('correct');fb.innerHTML=`✗ The answer is <strong>${item.a}</strong>. ${item.e}`;fb.style.background='#7f1d1d';}
+fb.classList.add('show');
+});
+});
+tsCards.appendChild(div);
+});
+
+/* ===== CONFUSED PAIRS ===== */
+const cpData=[
+{a:{t:"Universalism",d:"Human rights apply equally to all people everywhere, regardless of cultural context."},b:{t:"Cultural Relativism",d:"Human rights standards may reflect Western values and should be adapted to local cultural contexts. Not 'anything goes.'"},q:"A government argues that Western freedom-of-press norms should not apply to its society because its cultural values prioritize social harmony over individual expression. Which position is this?",opts:["Universalism — they are defending universal standards","Cultural relativism — they are arguing rights should reflect local cultural values"],correct:1,exp:"This is the cultural relativist position. They are not rejecting rights entirely — they are arguing that implementation should reflect local values. A universalist would counter that freedom of expression is a fundamental right regardless of cultural context."},
+{a:{t:"Kyoto Protocol (1997)",d:"Top-down, binding targets for developed countries only. Developing countries exempt. US never ratified."},b:{t:"Paris Agreement (2015)",d:"Bottom-up, universal. ALL countries submit nationally determined contributions. Pledge-and-review, not binding targets with enforcement."},q:"A student writes: 'The Paris Agreement finally imposed mandatory emission cuts on all countries.' What's wrong with this statement?",opts:["Nothing — it is accurate","The Paris Agreement relies on voluntary nationally determined contributions, not mandatory cuts with enforcement"],correct:1,exp:"The Paris Agreement is bottom-up: countries set their own targets (NDCs) and are subject to transparency and review, but there is no enforcement mechanism for non-compliance. This is fundamentally different from Kyoto's top-down approach."},
+{a:{t:"Bi-zonal, Bi-communal Federation",d:"The established UN framework for Cyprus: one state with two constituent zones, shared central government, political equality for both communities."},b:{t:"Two-State Solution (Cyprus)",d:"Turkey/Tatar position since 2020: two separate sovereign states with equal international status. Rejected by UN and international community."},q:"A news headline reads: 'Turkish Cypriot leader proposes sovereign equality between two states on the island.' Which framework is this?",opts:["Bi-zonal, bi-communal federation — it mentions equality","Two-state solution — it calls for two separate sovereign states, not a shared federation"],correct:1,exp:"'Sovereign equality between two states' is the language of the two-state solution. The federation model envisions one united state with two constituent parts — not two sovereign states."},
+{a:{t:"First Generation Rights",d:"Civil and political rights: life, liberty, free speech, fair trial, vote. Negative rights — freedom FROM state interference."},b:{t:"Second Generation Rights",d:"Economic, social, and cultural rights: education, healthcare, housing, work. Positive rights — entitlements TO something from the state."},q:"A country guarantees free elections and freedom of speech but provides no public healthcare or education. Which generation of rights is it protecting?",opts:["First generation — civil and political rights are in place","Second generation — the country is providing basic services"],correct:0,exp:"Free elections and free speech are first-generation (civil/political) rights. The absence of public healthcare and education indicates a gap in second-generation (economic/social) rights."},
+{a:{t:"Tragedy of the Commons",d:"Shared resources are overexploited when individuals pursue self-interest without collective regulation."},b:{t:"CBDR",d:"Common But Differentiated Responsibilities: all states share environmental responsibility, but developed states bear more due to historical emissions."},q:"Developing countries argue at COP that rich nations caused most of the pollution and should therefore cut emissions more. Which principle are they invoking?",opts:["Tragedy of the commons — the atmosphere is a shared resource","CBDR — developed countries bear greater responsibility due to historical emissions"],correct:1,exp:"CBDR is about differentiated burden-sharing based on historical responsibility and capacity. The tragedy of the commons explains WHY the atmosphere is at risk; CBDR addresses WHO should bear more of the cost."},
+{a:{t:"Postcolonialism",d:"Critiques IR's Eurocentric foundations. Argues colonial legacies persist in international institutions, norms, and power structures."},b:{t:"Constructivism",d:"Ideas, norms, and identities shape state behaviour. Interests are socially constructed, not fixed."},q:"A scholar argues that the concept of 'sovereignty' was imposed on non-European peoples through colonialism and continues to serve Western interests. Is this constructivism or postcolonialism?",opts:["Constructivism — it is about how ideas like sovereignty are constructed","Postcolonialism — it specifically critiques the colonial origins and power dynamics behind the concept"],correct:1,exp:"While both approaches deal with ideas and norms, the key distinction is the focus on COLONIAL POWER. Postcolonialism specifically examines how concepts like sovereignty were tools of domination. A constructivist might say sovereignty is socially constructed; a postcolonial scholar adds that it was constructed through violence and exploitation."},
+{a:{t:"R2P (Responsibility to Protect)",d:"International community acts via UNSC when a state fails to protect its population from mass atrocities (genocide, war crimes, ethnic cleansing, crimes against humanity)."},b:{t:"Humanitarian Intervention",d:"Military intervention in another state on humanitarian grounds. More controversial — can be unilateral or without UNSC authorization."},q:"NATO intervened in Kosovo in 1999 without UN Security Council authorization. Was this an example of R2P?",opts:["Yes — NATO was protecting civilians from mass atrocities","No — R2P was not formalized until 2005 and requires action through the UNSC; this was a unilateral humanitarian intervention"],correct:1,exp:"R2P was endorsed at the 2005 World Summit — six years after Kosovo. More importantly, R2P specifically channels action through the UNSC. NATO's Kosovo intervention was unilateral (no UNSC authorization due to Russian veto) and is better described as humanitarian intervention."},
+{a:{t:"Annan Plan",d:"2004 UN proposal: United Cyprus Republic — bi-zonal, bi-communal federation. Rejected by Greek Cypriots (76% no), accepted by Turkish Cypriots (65% yes)."},b:{t:"Crans-Montana (2017)",d:"Last serious attempt at a federal solution. Talks between Anastasiades and Akıncı collapsed over security guarantees and Turkey's military presence."},q:"A student confuses the two and writes: 'The Crans-Montana plan was put to a referendum.' What would you correct?",opts:["Nothing — Crans-Montana did go to a referendum","Crans-Montana was a negotiation that collapsed before reaching a plan — only the Annan Plan was put to a referendum"],correct:1,exp:"The Annan Plan (2004) is the only Cyprus settlement plan that reached the referendum stage. Crans-Montana (2017) collapsed during negotiations — no plan was finalized, and no referendum took place."},
+];
+const cpCards=document.getElementById('cpCards');
+let cpCorrect=0;
+cpData.forEach((p,i)=>{
+const div=document.createElement('div');div.className='cp-card';
+div.innerHTML=`<div class="cp-pair"><div class="cp-item"><h4>${p.a.t}</h4><p>${p.a.d}</p></div><div class="cp-item"><h4>${p.b.t}</h4><p>${p.b.d}</p></div></div><div class="cp-question">${p.q}</div><div class="cp-opts">${p.opts.map((o,j)=>`<button data-idx="${j}">${o}</button>`).join('')}</div><div class="cp-explain" id="cpExp${i}">${p.exp}</div>`;
+div.querySelectorAll('.cp-opts button').forEach(btn=>{
+btn.addEventListener('click',function(){
+if(div.querySelector('.correct')||div.querySelector('.wrong'))return;
+const idx=parseInt(this.dataset.idx);
+if(idx===p.correct){this.classList.add('correct');cpCorrect++;updateProgress();}
+else{this.classList.add('wrong');div.querySelector(`button[data-idx="${p.correct}"]`).classList.add('correct');}
+document.getElementById(`cpExp${i}`).classList.add('show');
+});
+});
+cpCards.appendChild(div);
+});
+
+/* ===== ESSAY BUILDER ===== */
+const ebData=[
+{title:"Human Rights: Universal or Culturally Relative?",prompt:'"Critically evaluate the claim that human rights are universal. Discuss the tension between universalism and cultural relativism, reference the three generations of human rights, and use at least one real-world example."',model:`<strong>Thesis:</strong> "Human rights aspire to universality, but their implementation is complicated by legitimate cultural differences — the key is finding common ground without imposing a single model."<br><br><strong>Para 1 — Universalism:</strong> The UDHR (1948) was intended to apply to all people. The three generations framework (Vasak) shows the expanding scope: civil/political → economic/social → solidarity rights. Liberal perspective: these are inherent to human dignity.<br><br><strong>Para 2 — Cultural Relativism:</strong> Critics argue the UDHR reflects Western liberal values. "Asian values" debate (1990s): Singapore and Malaysia argued that collective harmony and economic development should take priority over individual freedoms. Does not mean rejecting rights entirely — argues for adaptation.<br><br><strong>Para 3 — Real-world example:</strong> The debate over women's rights in different cultural contexts. CEDAW has near-universal ratification but many reservations on religious/cultural grounds. Shows tension in practice.<br><br><strong>Conclusion:</strong> Core rights (freedom from torture, genocide) may be truly universal; the challenge is implementation across different political and cultural systems. Neither pure universalism nor extreme relativism is satisfactory.`},
+{title:"Climate Change and International Cooperation",prompt:'"To what extent have international efforts to address climate change been successful? Discuss with reference to at least two major agreements and apply relevant IR theoretical perspectives."',model:`<strong>Thesis:</strong> "International climate efforts have achieved partial successes but remain insufficient, as the tension between national interests and collective action continues to limit ambition."<br><br><strong>Para 1 — Liberal institutionalist view:</strong> Kyoto (1997) and Paris (2015) show institutions facilitating cooperation. Paris got near-universal participation through bottom-up NDCs. Montreal Protocol proves environmental regimes CAN work. Institutions reduce uncertainty and provide monitoring.<br><br><strong>Para 2 — Realist critique:</strong> States free-ride and defect when costs are high. US withdrew from Paris under Trump (2017), rejoined under Biden, uncertain again. CBDR debates show states prioritize relative economic position. No enforcement mechanism.<br><br><strong>Para 3 — Structural tensions:</strong> Tragedy of the commons: atmosphere is a shared resource with no owner. North-South divide: developing countries argue for CBDR; developed countries push for universal action. COP processes show incremental progress but insufficient speed.<br><br><strong>Conclusion:</strong> Paris Agreement was a breakthrough in participation but its bottom-up design may be too weak. Success depends on whether institutions can build enough trust and transparency to overcome the collective action problem.`},
+{title:"Cyprus as an Internationalized Ethnic Conflict",prompt:'"Analyse the Cyprus conflict as an example of an internationalized ethnic conflict. Explain the roles of key actors, discuss the shift from federation to two-state framework, and evaluate prospects for resolution."',model:`<strong>Thesis:</strong> "The Cyprus conflict illustrates how an ethnic dispute becomes internationalized through external powers, regional dynamics, and institutional involvement, making resolution increasingly difficult."<br><br><strong>Para 1 — Key actors and history:</strong> Two communities (GC and TC), three guarantor powers (UK, Turkey, Greece), the UN (UNFICYP since 1964, mediation), the EU (GC accession 2004). 1974 Turkish intervention after Greek junta coup. Island divided; TRNC declared 1983, recognized only by Turkey.<br><br><strong>Para 2 — From federation to two-state:</strong> Annan Plan (2004): bi-zonal, bi-communal federation — TC yes (65%), GC no (76%). GC rejected power-sharing; EU membership reduced incentive to compromise. Crans-Montana (2017) collapsed over security guarantees. Post-2020: Tatar and Turkey advocate two-state solution; UN/international community still supports federation.<br><br><strong>Para 3 — Complicating factors:</strong> Eastern Med gas disputes added resource dimension to sovereignty claims. Turkey's increasing grip on north. Domestic politics on both sides favour status quo. Theoretical lens: balance of threat (Walt/Direkli) — GC see Turkey as threat, drove EU balancing strategy.<br><br><strong>Conclusion:</strong> Prospects for resolution are dim. The shift from federation to two-state framing has hardened positions. Without a change in the underlying balance of threat perceptions and genuine willingness to share power, the status quo will likely persist.`},
+{title:"Race in the Theory and Practice of IR",prompt:'"How has race shaped the theory and practice of international relations? Discuss racial hierarchies, colonialism, and the discipline of IR itself, with at least two specific examples."',model:`<strong>Thesis:</strong> "Race has been a foundational but often invisible force in international relations, shaping colonial empires, global institutions, and the very theories we use to study world politics."<br><br><strong>Para 1 — Race and colonialism:</strong> European colonial expansion was justified through racial hierarchy and the "civilizing mission." Non-European peoples were classified as inferior, justifying domination. Example: the Berlin Conference (1884–85) partitioned Africa without African representation, based on assumptions of European racial superiority.<br><br><strong>Para 2 — Race and global governance:</strong> Apartheid South Africa (1948–1994) institutionalized racial hierarchy at the state level. International response (sanctions, divestment, activism) showed how race became an IR issue. But structural racial inequality persists in global institutions — e.g., representation on the UNSC, leadership of the IMF/World Bank.<br><br><strong>Para 3 — Race and IR theory:</strong> Postcolonial critique: mainstream IR (realism, liberalism) was built in the context of empire and naturalizes the Western state system. The discipline largely ignored race until recently. Decolonization created dozens of new states but did not eliminate economic dependence or cultural hierarchies.<br><br><strong>Conclusion:</strong> Race is not a marginal issue in IR — it is woven into the foundations of the modern international system. Acknowledging this is essential for understanding both historical and contemporary global politics.`}
+];
+const ebCards=document.getElementById('ebCards');
+ebData.forEach((e,i)=>{
+const div=document.createElement('div');div.className='eb-card';
+div.innerHTML=`<h3>${e.title}</h3><p class="prompt">${e.prompt}</p>
+<textarea placeholder="1. Your thesis (one sentence)"></textarea>
+<textarea placeholder="2. First theoretical perspective / argument"></textarea>
+<textarea placeholder="3. Second theoretical perspective / argument"></textarea>
+<textarea placeholder="4. Real-world example(s)"></textarea>
+<textarea placeholder="5. Conclusion"></textarea>
+<button class="reveal-btn" id="ebReveal${i}">Reveal Model Outline</button>
+<div class="eb-model" id="ebModel${i}">${e.model}</div>`;
+div.querySelector(`#ebReveal${i}`).addEventListener('click',()=>{document.getElementById(`ebModel${i}`).classList.toggle('show');});
+ebCards.appendChild(div);
+});
+
+/* ===== EXAM SIMULATOR QUESTION BANK ===== */
+const qBank=[
+// Pre-midterm (12 questions in bank, 4 drawn)
+{q:"The concept of 'anarchy' in IR refers to:",opts:["Chaos and constant warfare","The absence of a central authority above sovereign states","Rule by international organizations","The dominance of one superpower","Armed conflict between non-state actors"],ans:1,mod:"Pre-Midterm"},
+{q:"According to liberal institutionalism, IOs help states cooperate primarily by:",opts:["Replacing sovereignty with global governance","Imposing sanctions automatically","Eliminating anarchy","Reducing transaction costs and providing information","Ensuring military balance"],ans:3,mod:"Pre-Midterm"},
+{q:"Which UN organ issues legally binding resolutions on peace and security?",opts:["General Assembly","ICJ","Economic and Social Council","Secretariat","Security Council"],ans:4,mod:"Pre-Midterm"},
+{q:"Intersectionality in feminist IR means:",opts:["IOs coordinate across sectors","Gender intersects with race, class and other identities","Military alliances overlap with trade","Feminism is only domestic","Women's experiences are uniform"],ans:1,mod:"Pre-Midterm"},
+{q:"A constructivist would most likely study:",opts:["Military balance of power","How norms and identities shape state behaviour","Free trade's effect on GDP","Rates of foreign direct investment","Core-periphery trade flows"],ans:1,mod:"Pre-Midterm"},
+{q:"The security dilemma refers to:",opts:["States cooperating against common threats","IO enforcement failures","One state's security efforts making others less secure","Non-state actors undermining sovereignty","Great powers creating instability"],ans:2,mod:"Pre-Midterm"},
+{q:"Realists focus on relative gains because:",opts:["Total benefit matters most","They believe cooperation is always successful","How your gains compare to rivals affects the balance of power","Institutions eliminate competition","Absolute wealth determines security"],ans:2,mod:"Pre-Midterm"},
+{q:"Deterritorialization means:",opts:["Factory relocation","Border redrawing after war","Growing significance of activities transcending territorial boundaries","Collapse of failed states","Expansion of territorial waters"],ans:2,mod:"Pre-Midterm"},
+{q:"The key difference between supranationalism and intergovernmentalism is:",opts:["Supranational bodies can bind states without unanimity; intergovernmental bodies require consensus","They are the same thing","Supranationalism only applies to trade","Intergovernmentalism means states have no role","Supranationalism was abolished after WWII"],ans:0,mod:"Pre-Midterm"},
+{q:"The Brahimi Report (2000) recommended:",opts:["Abolishing peacekeeping entirely","Creating the Human Rights Council","Major reforms to make UN peace operations more effective","Introducing the SDGs","Establishing the ICC"],ans:2,mod:"Pre-Midterm"},
+{q:"Democratic peace theory argues that:",opts:["Democracies have stronger militaries","Democratic leaders are more rational","Democracies rarely go to war with each other due to shared norms and institutional constraints","International law prohibits war between democracies","Democracies lack resources for war"],ans:2,mod:"Pre-Midterm"},
+{q:"Marxist IR theory argues global capitalism:",opts:["Benefits all states equally","Produces systematic inequality between core and periphery","Strengthens the UN","Promotes cultural diversity","Eliminates state sovereignty"],ans:1,mod:"Pre-Midterm"},
+
+// Race (12 questions in bank, 4 drawn)
+{q:"A 'racial hierarchy' in IR refers to:",opts:["GDP-based ranking of states","A system positioning certain racial groups as superior, shaping global power relations","UN regional voting blocs","Biological determinism of state capacity","A concept with no relevance to IR"],ans:1,mod:"Race"},
+{q:"Apartheid in South Africa is significant for IR because it:",opts:["Was purely domestic","Showed racial classification institutionalized and challenged through international pressure","Was endorsed by the UNGA","Had no colonial connections","Ended without external pressure"],ans:1,mod:"Race"},
+{q:"A postcolonial critique of mainstream IR argues that:",opts:["Realism and liberalism are universally applicable","Colonial history is irrelevant","IR was built on Eurocentric experiences, marginalizing colonized peoples' perspectives","Race was always central to realism","Decolonization ended all inequalities"],ans:2,mod:"Race"},
+{q:"The colonial 'civilizing mission' doctrine:",opts:["Promoted equality between European and non-European peoples","Justified domination of non-Europeans based on claims of racial and cultural superiority","Was created by the United Nations","Applied only to the Americas","Had no racial dimensions"],ans:1,mod:"Race"},
+{q:"Decolonization primarily occurred during:",opts:["The 18th century","The 1945–1970s period","The 1990s after the Cold War","The 21st century","The medieval period"],ans:1,mod:"Race"},
+{q:"Race in IR is best understood as:",opts:["A fixed biological category","A social construct created through political and legal practices","Irrelevant to international politics","Identical to ethnicity","A concept invented in the 20th century"],ans:1,mod:"Race"},
+{q:"The Berlin Conference (1884–85) is significant because it:",opts:["Created the United Nations","Established European colonial boundaries in Africa without African participation","Ended World War I","Founded NATO","Resolved the Cyprus conflict"],ans:1,mod:"Race"},
+{q:"Eurocentrism in IR refers to:",opts:["Europe being the geographic centre of the world","The discipline centering Western experiences as universal while marginalizing Global South perspectives","European states being the most powerful","The EU's role in global governance","The study of European integration"],ans:1,mod:"Race"},
+{q:"Postcolonial scholars argue that formal independence:",opts:["Completely ended colonial power structures","Did not end structural inequalities — economic dependence and cultural hierarchies persist","Made all states equal in the international system","Eliminated racial thinking in global politics","Was unnecessary for development"],ans:1,mod:"Race"},
+{q:"The international anti-apartheid movement demonstrates:",opts:["That race is only a domestic issue","That international norms, sanctions, and activism can challenge institutionalized racism","That the UN has no role in human rights","That economic interests always override moral concerns","That powerful states never support racial justice"],ans:1,mod:"Race"},
+{q:"Which theoretical tradition is most concerned with how colonial legacies continue to shape international relations?",opts:["Neorealism","Liberal institutionalism","Postcolonialism","Game theory","Neoliberalism"],ans:2,mod:"Race"},
+{q:"The concept of 'race as a social construct' means:",opts:["Race is biologically determined and fixed","Race has no real-world effects","Racial categories are created through social and political practices and change over time","Scientists agree on clear racial boundaries","Race only matters in domestic politics"],ans:2,mod:"Race"},
+
+// Human Rights (12 questions in bank, 4 drawn)
+{q:"Vasak's three generations of human rights are:",opts:["Individual, group, state rights","Civil/political; economic/social/cultural; solidarity/collective rights","Pre-modern, modern, post-modern","National, regional, international","Legal, moral, customary"],ans:1,mod:"Human Rights"},
+{q:"The UDHR (1948) is:",opts:["A legally binding treaty","The first comprehensive international human rights statement, though not legally binding","The founding document of the ICC","Applicable only to Western states","Focused only on economic rights"],ans:1,mod:"Human Rights"},
+{q:"The universalism vs. cultural relativism debate centres on:",opts:["Whether the UN needs more members","Whether rights apply equally everywhere or reflect Western values","Whether economic rights outweigh political rights","Which state leads the HRC","Whether law should regulate trade"],ans:1,mod:"Human Rights"},
+{q:"R2P holds that when a state fails to protect its population, responsibility shifts to:",opts:["Neighbouring states acting unilaterally","NGOs","The international community acting through the UNSC","The ICJ","Regional media"],ans:2,mod:"Human Rights"},
+{q:"First-generation human rights are best described as:",opts:["Economic rights to housing and healthcare","Civil and political rights — freedoms FROM state interference","Collective rights to development and peace","Rights created after WWII only","Environmental rights"],ans:1,mod:"Human Rights"},
+{q:"Second-generation human rights include:",opts:["Freedom of speech and fair trial","Right to vote and freedom of religion","Economic, social, and cultural rights such as education and healthcare","Right to development and clean environment","Military security guarantees"],ans:2,mod:"Human Rights"},
+{q:"Third-generation (solidarity) rights include:",opts:["Right to a fair trial","Freedom of the press","Right to development, peace, and a clean environment","Right to private property","Right to bear arms"],ans:2,mod:"Human Rights"},
+{q:"The ICCPR and ICESCR are significant because they:",opts:["Replaced the UDHR","Made the principles of the UDHR legally binding through two covenants","Created the UN Security Council","Applied only to European states","Focused only on women's rights"],ans:1,mod:"Human Rights"},
+{q:"A criticism of R2P is that:",opts:["It prevents all humanitarian action","It can be used by powerful states to justify intervention for strategic purposes","It applies only to African countries","The UNSC always authorizes interventions unanimously","It has never been invoked"],ans:1,mod:"Human Rights"},
+{q:"The 'Asian values' debate in human rights argued that:",opts:["Asian countries should have no human rights","Collective harmony and economic development may take priority over individual liberties in some cultural contexts","Western rights are biologically superior","The UDHR was written by Asian delegates","Economic rights do not exist in Asia"],ans:1,mod:"Human Rights"},
+{q:"Cultural relativism does NOT mean:",opts:["Rights should be adapted to local contexts","Different cultures have different value priorities","Anything goes — there are no universal standards at all","Implementation of rights may vary","Western norms should not be imposed uncritically"],ans:2,mod:"Human Rights"},
+{q:"The International Bill of Rights consists of:",opts:["The UN Charter only","The UDHR, ICCPR, and ICESCR","The Geneva Conventions","The Rome Statute","The Kyoto Protocol and Paris Agreement"],ans:1,mod:"Human Rights"},
+
+// Environment (12 questions in bank, 4 drawn)
+{q:"The 'tragedy of the commons' illustrates:",opts:["Private ownership solves all environmental problems","Shared resources are overexploited when actors pursue self-interest without collective regulation","Environmental degradation only affects developing countries","Environmental agreements always succeed","States never cooperate"],ans:1,mod:"Environment"},
+{q:"The Paris Agreement (2015) is a landmark because:",opts:["It imposed binding cuts with enforcement on all states","It was the first universal climate agreement with nationally determined contributions","It replaced the UNFCCC entirely","It applied only to developed countries","It eliminated fossil fuel use"],ans:1,mod:"Environment"},
+{q:"CBDR means:",opts:["All states have identical obligations","Developed countries bear greater responsibility due to historical emissions and capacity","Developing countries have zero environmental responsibility","Only the US must cut emissions","Environmental costs should be shared based on population size"],ans:1,mod:"Environment"},
+{q:"The Montreal Protocol is often cited as:",opts:["A failure of international cooperation","The most successful international environmental agreement","A climate change treaty","Applicable only to developing countries","A Cold War military agreement"],ans:1,mod:"Environment"},
+{q:"Liberal institutionalists explain environmental cooperation by arguing:",opts:["States can never cooperate due to anarchy","Military alliances solve environmental problems","Institutions reduce uncertainty and facilitate cooperation through rules and monitoring","Environmental issues are irrelevant to IR","Powerful states always defect"],ans:2,mod:"Environment"},
+{q:"The Brundtland Report (1987) defined:",opts:["Nuclear deterrence","Sustainable development as meeting present needs without compromising future generations","The security dilemma","Common but differentiated responsibilities","The three generations of human rights"],ans:1,mod:"Environment"},
+{q:"The key difference between Kyoto and Paris is:",opts:["Kyoto was universal, Paris applied only to developed states","Kyoto imposed top-down binding targets on developed countries; Paris uses bottom-up nationally determined contributions from all countries","They are identical","Paris was signed first","Kyoto addressed ozone, Paris addressed biodiversity"],ans:1,mod:"Environment"},
+{q:"Realists are skeptical about climate cooperation because:",opts:["They support environmental protection above all","States will free-ride and prioritize national economic interests over collective commitments","Institutions always solve environmental problems","Climate change is not a real issue","All states cooperate naturally on the environment"],ans:1,mod:"Environment"},
+{q:"A constructivist would explain the success of the ozone regime by arguing:",opts:["Military threats forced compliance","Scientific consensus reshaped states' understanding of their interests","States acted purely out of economic self-interest","The regime had strict enforcement mechanisms","Powerful states imposed the agreement on weaker ones"],ans:1,mod:"Environment"},
+{q:"The UNFCCC (1992) is significant because it:",opts:["Is the binding enforcement mechanism for climate targets","Is the umbrella framework under which Kyoto and Paris were negotiated","Replaced the Montreal Protocol","Applied only to island states","Created the World Trade Organization"],ans:1,mod:"Environment"},
+{q:"Global commons include:",opts:["Only national forests","The atmosphere, high seas, outer space, and Antarctica — resources shared by all","Private property in developing countries","Military bases","Territorial waters of coastal states"],ans:1,mod:"Environment"},
+{q:"A Marxist/critical perspective on environmental degradation argues:",opts:["Capitalism has no environmental impact","Environmental damage is a product of global capitalism, with developing countries bearing disproportionate costs","All states pollute equally","Environmental treaties benefit developing countries most","The free market naturally solves environmental problems"],ans:1,mod:"Environment"},
+
+// Cyprus (12 questions in bank, 4 drawn)
+{q:"The Annan Plan (2004) proposed:",opts:["Full integration into Greece","A unitary state under GC majority","A bi-zonal, bi-communal federation — United Cyprus Republic","UN administration of the island","Two fully independent states"],ans:2,mod:"Cyprus"},
+{q:"The 2004 Annan Plan referendum resulted in:",opts:["Both communities saying yes","TC yes (~65%), GC no (~76%)","GC yes, TC no","Both saying no","Cancellation"],ans:1,mod:"Cyprus"},
+{q:"Since Crans-Montana (2017), Turkey and TC leadership advocate:",opts:["Return to Annan Plan","Full demilitarization","A two-state solution based on sovereign equality","Joining NATO unified","UNFICYP withdrawal"],ans:2,mod:"Cyprus"},
+{q:"Eastern Med gas discoveries affected Cyprus by:",opts:["Creating cooperation that united both communities","Having no impact","Adding a resource dimension to competing sovereignty claims","Leading to reunification","Causing the EU to abandon Cyprus"],ans:2,mod:"Cyprus"},
+{q:"UNFICYP has been deployed since:",opts:["1974","1983","2004","1964","2017"],ans:3,mod:"Cyprus"},
+{q:"The TRNC is recognized by:",opts:["All UN member states","The EU","Only Turkey","The US and UK","NATO members"],ans:2,mod:"Cyprus"},
+{q:"The 1974 Turkish intervention was triggered by:",opts:["A UN Security Council resolution","A Greek junta-backed coup aiming for Enosis (union with Greece)","A Turkish Cypriot declaration of independence","EU enlargement","Discovery of gas reserves"],ans:1,mod:"Cyprus"},
+{q:"Direkli uses Walt's 'balance of threat' theory to argue that Greek Cypriots:",opts:["Always supported federation","Perceived Turkey as a threat and pursued EU membership as a balancing strategy","Had no security concerns","Preferred the two-state solution","Rejected EU membership"],ans:1,mod:"Cyprus"},
+{q:"The Crans-Montana talks (2017) collapsed primarily over:",opts:["Economic disagreements","Property restitution","Security guarantees and Turkey's military presence on the island","EU membership terms","Language policies"],ans:2,mod:"Cyprus"},
+{q:"The East Mediterranean Gas Forum (EastMed) is significant because:",opts:["It includes Turkey as a member","It resolved the Cyprus gas dispute","Turkey is excluded, reflecting how gas finds reinforced conflict rather than cooperation","It replaced UNFICYP","It was created by the UN"],ans:2,mod:"Cyprus"},
+{q:"Greek Cypriots rejected the Annan Plan primarily because:",opts:["They preferred union with Greece","They were unwilling to share power, dissolve the Republic of Cyprus, and saw no need to compromise given EU accession","The plan gave too much territory to Greek Cypriots","Turkish Cypriots rejected it first","The UN pressured them to reject it"],ans:1,mod:"Cyprus"},
+{q:"UN Security Council Resolution 550 declared:",opts:["The Republic of Cyprus illegal","The TRNC declaration legally invalid","The Annan Plan binding","UNFICYP's mandate expired","Turkey's EU membership approved"],ans:1,mod:"Cyprus"},
+];
+
+/* ===== EXAM SIMULATOR LOGIC ===== */
+let simTimer,simSeconds,simTimed=false,simAttempts=0,simBest=0;
+const simIntro=document.getElementById('simIntro'),simArea=document.getElementById('simArea'),simResults=document.getElementById('simResults');
+let simQs=[];
+
+function pickQuestions(){
+const byMod={};qBank.forEach(q=>{if(!byMod[q.mod])byMod[q.mod]=[];byMod[q.mod].push(q);});
+const picked=[];
+['Pre-Midterm'].forEach(m=>{const a=byMod[m]||[];shuffle(a);picked.push(...a.slice(0,4));});
+['Race','Human Rights','Environment','Cyprus'].forEach(m=>{const a=byMod[m]||[];shuffle(a);picked.push(...a.slice(0,4));});
+return picked;
+}
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+function startSim(timed){
+simTimed=timed;simSeconds=5400;simQs=pickQuestions();
+simIntro.style.display='none';simResults.style.display='none';simArea.style.display='block';
+const qDiv=document.getElementById('simQuestions');qDiv.innerHTML='';
+document.getElementById('simTimer').style.display=timed?'block':'none';
+simQs.forEach((q,i)=>{
+const shuffledOpts=q.opts.map((o,idx)=>({text:o,origIdx:idx}));shuffle(shuffledOpts);
+const d=document.createElement('div');d.className='sim-q';
+d.innerHTML=`<h4>Q${i+1}. <span style="color:var(--dim);font-size:.75rem">[${q.mod}]</span></h4><p style="margin-bottom:12px">${q.q}</p>${shuffledOpts.map((o,j)=>`<label><input type="radio" name="sq${i}" value="${o.origIdx}">${String.fromCharCode(65+j)}) ${o.text}</label>`).join('')}`;
+qDiv.appendChild(d);
+});
+if(timed){clearInterval(simTimer);simTimer=setInterval(()=>{simSeconds--;if(simSeconds<=0){clearInterval(simTimer);submitSim();}document.getElementById('simTimer').textContent=`${Math.floor(simSeconds/60)}:${String(simSeconds%60).padStart(2,'0')}`;},1000);}
+}
+
+document.getElementById('simFull').addEventListener('click',()=>startSim(true));
+document.getElementById('simMC').addEventListener('click',()=>startSim(false));
+document.getElementById('simSubmit').addEventListener('click',submitSim);
+
+function submitSim(){
+clearInterval(simTimer);let score=0;const review=[];
+simQs.forEach((q,i)=>{
+const sel=document.querySelector(`input[name="sq${i}"]:checked`);
+const chosen=sel?parseInt(sel.value):-1;const correct=chosen===q.ans;if(correct)score++;
+review.push({q:q.q,correct,chosen:chosen>=0?q.opts[chosen]:'(no answer)',answer:q.opts[q.ans],mod:q.mod});
+});
+simAttempts++;if(score>simBest)simBest=score;
+simArea.style.display='none';simResults.style.display='block';
+simResults.innerHTML=`<div class="sim-results"><h2>${score} / 20</h2><p>${score>=16?'Excellent! You are well prepared.':score>=12?'Good, but review the topics you missed.':score>=8?'You need more revision. Focus on your weak modules.':'Significant revision needed. Use the flashcards and confused pairs tools.'}</p><div class="sim-review">${review.map(r=>`<div class="rev-q ${r.correct?'rev-correct':'rev-wrong'}"><strong>[${r.mod}]</strong> ${r.q}<br>Your answer: ${r.chosen}<br>${r.correct?'✓ Correct':`✗ Correct answer: ${r.answer}`}</div>`).join('')}</div><br><button onclick="simResults.style.display='none';simIntro.style.display='block'" style="background:var(--accent);color:#fff;border:none;padding:12px 24px;border-radius:8px;cursor:pointer">Try Again</button></div>`;
+updateProgress();
+}
+
+/* ===== PROGRESS ===== */
+function updateProgress(){
+const fcPct=Math.round(fcMastered.size/fcData.length*100);
+document.getElementById('progFC').style.width=fcPct+'%';document.getElementById('progFCText').textContent=`${fcMastered.size} / ${fcData.length}`;
+const tsPct=Math.round(tsCorrect/tsData.length*100);
+document.getElementById('progTS').style.width=tsPct+'%';document.getElementById('progTSText').textContent=`${tsCorrect} / ${tsData.length}`;
+const cpPct=Math.round(cpCorrect/cpData.length*100);
+document.getElementById('progCP').style.width=cpPct+'%';document.getElementById('progCPText').textContent=`${cpCorrect} / ${cpData.length}`;
+document.getElementById('progSim').textContent=simAttempts;
+document.getElementById('progBest').textContent=simBest>0?`${simBest} / 20`:'— / 20';
+}
+
+document.getElementById('readyBtn').addEventListener('click',()=>{
+const fc=fcMastered.size/fcData.length,ts=tsCorrect/tsData.length,cp=cpCorrect/cpData.length,sm=simBest/20;
+const avg=Math.round((fc+ts+cp+sm)/4*100);
+const msg=document.getElementById('readyMsg');
+msg.textContent=avg>=80?`${avg}% — You're in great shape! Keep reviewing any weak spots.`:avg>=60?`${avg}% — Getting there. Focus on the modules where you scored lowest.`:avg>=40?`${avg}% — More work needed. Prioritise flashcards and confused pairs.`:`${avg}% — You need significant revision. Start with the flashcards and work through each module systematically.`;
+msg.style.color=avg>=80?'var(--green)':avg>=60?'var(--yellow)':'var(--red)';
+});
+
+</script>
+</body>
+</html>
