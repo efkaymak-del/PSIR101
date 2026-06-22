@@ -110,418 +110,655 @@ body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--light);colo
 </head>
 <body>
 <div class="topbar">
-  <h1>ULUS101 \u0130nsan Haklar\u0131 Lab.</h1>
+  <h1>ULUS101 İnsan Hakları Lab.</h1>
   <div>
     <span class="xp-badge" id="xpDisplay">0 XP</span>
     <span class="streak-badge" id="streakDisplay">0 Seri</span>
   </div>
 </div>
 <div class="tabs" id="tabBar" style="display:none">
-  <button class="tab-btn active" data-tab="videos">Video &amp; Vaka \u0130ncelemeleri</button>
-  <button class="tab-btn" data-tab="sorter">Mit mi, Ger\u00e7ek mi, Karma\u015f\u0131k m\u0131?</button>
-  <button class="tab-btn" data-tab="theory">Teori Tan\u0131mlay\u0131c\u0131</button>
-  <button class="tab-btn" data-tab="match">D\u00fc\u015f\u00fcn\u00fcrler &amp; Kavramlar</button>
-  <button class="tab-btn" data-tab="timeline">Zaman \u00c7izelgesi</button>
-  <button class="tab-btn" data-tab="debate">Tart\u0131\u015fma Arenas\u0131</button>
-  <button class="tab-btn" data-tab="stats">\u0130statistiklerim</button>
+  <button class="tab-btn active" data-tab="videos">Video &amp; Vaka İncelemeleri</button>
+  <button class="tab-btn" data-tab="sorter">Mit mi, Gerçek mi, Karmaşık mı?</button>
+  <button class="tab-btn" data-tab="theory">Teori Tanımlayıcı</button>
+  <button class="tab-btn" data-tab="match">Düşünürler &amp; Kavramlar</button>
+  <button class="tab-btn" data-tab="timeline">Zaman Çizelgesi</button>
+  <button class="tab-btn" data-tab="debate">Tartışma Arenası</button>
+  <button class="tab-btn" data-tab="stats">İstatistiklerim</button>
 </div>
 <div class="container">
 
 <div id="landing">
-  <h2>ULUS101 \u0130nsan Haklar\u0131 Laboratuvar\u0131</h2>
-  <p>D\u00fcnya Siyasetinde \u0130nsan Haklar\u0131 &mdash; Etkile\u015fimli \u00c7al\u0131\u015fma Uygulamas\u0131<br>Bahar 2026 | Do\u011fu Akdeniz \u00dcniversitesi</p>
+  <h2>ULUS101 İnsan Hakları Laboratuvarı</h2>
+  <p>Dünya Siyasetinde İnsan Hakları &mdash; Etkileşimli Çalışma Uygulaması<br>Bahar 2026 | Doğu Akdeniz Üniversitesi</p>
   <div id="qr-container"></div>
-  <p style="font-size:.75em;color:#999;margin-top:10px">Telefonunuzdan a\u00e7mak i\u00e7in taray\u0131n</p>
+  <p style="font-size:.75em;color:#999;margin-top:10px">Telefonunuzdan açmak için tarayın</p>
   <br>
-  <button class="start-btn" id="startBtn">\u00d6\u011frenmeye Ba\u015fla</button>
+  <button class="start-btn" id="startBtn">Öğrenmeye Başla</button>
 </div>
 
 <div class="panel" id="panel-videos">
-  <div class="sub-nav" id="vidSubNav">
-    <button class="sub-btn active" data-sec="secA">A: Evrensel \u0130nsan Haklar\u0131</button>
-    <button class="sub-btn" data-sec="secB">B: \u0130nsan Haklar\u0131 Rejimi</button>
-    <button class="sub-btn" data-sec="secC">C: R2P ve \u0130nsani M\u00fcdahale</button>
-    <button class="sub-btn" data-sec="secD">D: Vaka \u00c7al\u0131\u015fmalar\u0131</button>
-  </div>
+  <div class="sub-nav" id="vidSubNav"></div>
   <div id="vidSections"></div>
 </div>
 
 <div class="panel" id="panel-sorter">
   <div class="card">
-    <h3>Kavram S\u0131ralay\u0131c\u0131: Mit mi, Ger\u00e7ek mi, Karma\u015f\u0131k m\u0131?</h3>
-    <p style="font-size:.85em;color:#666">Her ifadeyi do\u011fru kategoriye yerle\u015ftirin. Do\u011fru cevap ba\u015f\u0131na 10 XP.</p>
+    <h3>Kavram Sıralayıcı: Mit mi, Gerçek mi, Karmaşık mı?</h3>
+    <p style="font-size:.85em;color:#666;margin-bottom:14px">Her ifadeyi doğru kategoriye yerleştirin. Doğru cevap başına 10 XP.</p>
+    <div id="sortItems"></div>
+    <div class="sort-zones" id="sortZones">
+      <div class="sort-zone" data-cat="mit"><h4>MIT</h4></div>
+      <div class="sort-zone" data-cat="karmasik"><h4>KARMAŞIK</h4></div>
+      <div class="sort-zone" data-cat="gercek"><h4>GERÇEK</h4></div>
+    </div>
+    <button class="check-btn" id="checkSort">Cevapları Kontrol Et</button>
+    <div id="sortResult"></div>
   </div>
-  <div id="sorterItems"></div>
-  <div class="sort-zones">
-    <div class="sort-zone" id="zoneMyth" data-zone="mit"><h4>M\u0130T</h4><div class="zone-items"></div></div>
-    <div class="sort-zone" id="zoneComplex" data-zone="karmasik"><h4>KARMA\u015eIK</h4><div class="zone-items"></div></div>
-    <div class="sort-zone" id="zoneReality" data-zone="gercek"><h4>GER\u00c7EK</h4><div class="zone-items"></div></div>
-  </div>
-  <button class="check-btn" id="checkSorter">Cevaplar\u0131 Kontrol Et</button>
-  <div id="sorterResult"></div>
 </div>
 
 <div class="panel" id="panel-theory">
   <div class="card">
-    <h3>Teori Tan\u0131mlay\u0131c\u0131</h3>
-    <p style="font-size:.85em;color:#666">Her ifadeyi hangi U\u0130 perspektifini en iyi yans\u0131tt\u0131\u011f\u0131n\u0131 belirleyin. Do\u011fru cevap ba\u015f\u0131na 15 XP.</p>
+    <h3>Teori Tanımlayıcı</h3>
+    <p style="font-size:.85em;color:#666;margin-bottom:14px">Her ifadeyi hangi Uİ perspektifini en iyi yansıttığını belirleyin. Doğru cevap başına 15 XP.</p>
+    <div id="theoryItems"></div>
+    <button class="check-btn" id="checkTheory">Cevapları Kontrol Et</button>
+    <div id="theoryResult"></div>
   </div>
-  <div id="theoryItems"></div>
-  <button class="check-btn" id="checkTheory">Cevaplar\u0131 Kontrol Et</button>
-  <div id="theoryResult"></div>
 </div>
 
 <div class="panel" id="panel-match">
   <div class="card">
-    <h3>D\u00fc\u015f\u00fcn\u00fcrler ve Kavramlar E\u015fle\u015ftirme</h3>
-    <p style="font-size:.85em;color:#666">Bir d\u00fc\u015f\u00fcn\u00fcr veya kavram se\u00e7in, ard\u0131ndan tan\u0131m\u0131n\u0131 se\u00e7in. Do\u011fru e\u015fle\u015fme ba\u015f\u0131na 15 XP.</p>
+    <h3>Düşünürler ve Kavramlar Eşleştirme</h3>
+    <p style="font-size:.85em;color:#666;margin-bottom:14px">Bir düşünür veya kavram seçin, ardından tanımını seçin. Doğru eşleşme başına 15 XP.</p>
+    <div class="match-grid" id="matchGrid"></div>
   </div>
-  <div class="match-grid" id="matchGrid"></div>
-  <div id="matchResult"></div>
 </div>
 
 <div class="panel" id="panel-timeline">
   <div class="card">
-    <h3>Zaman \u00c7izelgesi S\u0131ralama: \u0130nsan Haklar\u0131 D\u00f6n\u00fcm Noktalar\u0131</h3>
-    <p style="font-size:.85em;color:#666">Olaylar\u0131 kronolojik s\u0131raya g\u00f6re s\u00fcr\u00fckleyin (en eski \u00fcstte). M\u00fckemmel s\u0131ra i\u00e7in 20 XP.</p>
+    <h3>Zaman Çizelgesi Sıralama: İnsan Hakları Dönüm Noktaları</h3>
+    <p style="font-size:.85em;color:#666;margin-bottom:14px">Olayları kronolojik sıraya göre sürükleyin (en eski üstte). Mükemmel sıra için 20 XP.</p>
+    <div id="tlItems"></div>
+    <button class="check-btn" id="checkTL">Sırayı Kontrol Et</button>
+    <div id="tlResult"></div>
   </div>
-  <div id="tlItems"></div>
-  <button class="check-btn" id="checkTL">S\u0131ralamay\u0131 Kontrol Et</button>
-  <div id="tlResult"></div>
 </div>
 
 <div class="panel" id="panel-debate">
   <div class="card">
-    <h3>Tart\u0131\u015fma Arenas\u0131</h3>
-    <p style="font-size:.85em;color:#666">Do\u011fru cevap yok &mdash; sadece zor sorular. Ders tart\u0131\u015fmalar\u0131 veya \u00f6dev haz\u0131rl\u0131\u011f\u0131 i\u00e7in kullan\u0131n.</p>
+    <h3>Tartışma Arenası</h3>
+    <p style="font-size:.85em;color:#666;margin-bottom:14px">Doğru cevap yok — sadece zor sorular. Ders tartışmaları veya ödev hazırlığı için kullanın.</p>
+    <div id="debatePrompts"></div>
   </div>
-  <div id="debateItems"></div>
 </div>
 
 <div class="panel" id="panel-stats">
-  <div class="card"><h3>\u0130lerlemem</h3></div>
-  <div class="stat-grid" id="statGrid"></div>
-  <div class="card" id="activityProgress"><h3>Aktivite Tamamlanma</h3></div>
-  <button class="reset-btn" id="resetBtn">T\u00fcm \u0130lerlemeyi S\u0131f\u0131rla</button>
+  <div class="card">
+    <h3>İlerlemem</h3>
+    <div class="stat-grid" id="statGrid"></div>
+  </div>
+  <div class="card">
+    <h3>Aktivite Tamamlanma</h3>
+    <div id="completionList"></div>
+    <button class="reset-btn" id="resetBtn">Tüm İlerlemeyi Sıfırla</button>
+  </div>
 </div>
 
-</div>
+</div><!-- /container -->
 
 <script>
-const QR=(function(){function g(){
-const c=document.createElement('canvas');const sz=200;c.width=sz;c.height=sz;const x=c.getContext('2d');
-x.fillStyle='#fff';x.fillRect(0,0,sz,sz);x.fillStyle='#1a237e';
-const bs=8;for(let r=0;r<25;r++)for(let cl=0;cl<25;cl++){if(Math.random()>.55||(r<7&&cl<7)||(r<7&&cl>17)||(r>17&&cl<7))x.fillRect(cl*bs,r*bs,bs,bs);}
-function fp(ox,oy){x.fillStyle='#1a237e';x.fillRect(ox,oy,7*bs,7*bs);x.fillStyle='#fff';x.fillRect(ox+bs,oy+bs,5*bs,5*bs);x.fillStyle='#1a237e';x.fillRect(ox+2*bs,oy+2*bs,3*bs,3*bs);}
-fp(0,0);fp(18*bs,0);fp(0,18*bs);return c;}
-return{generate:g};})();
+/* ============  QR CODE MINI LIB  ============ */
+var QRCode=function(){function a(a){this.mode=c.MODE_8BIT_BYTE;this.data=a;this.parsedData=[];for(var b=0,d=this.data.length;b<d;b++){var e=[],f=this.data.charCodeAt(b);f>65536?(e[0]=240|(1835008&f)>>>18,e[1]=128|(258048&f)>>>12,e[2]=128|(4032&f)>>>6,e[3]=128|63&f):f>2048?(e[0]=224|(61440&f)>>>12,e[1]=128|(4032&f)>>>6,e[2]=128|63&f):f>128?(e[0]=192|(1984&f)>>>6,e[1]=128|63&f):e[0]=f;this.parsedData.push.apply(this.parsedData,e)}this.parsedData.length!=this.data.length&&(this.parsedData.unshift(191),this.parsedData.unshift(187),this.parsedData.unshift(239))}function b(a,b){this.typeNumber=a;this.errorCorrectLevel=b;this.modules=null;this.moduleCount=0;this.dataCache=null;this.dataList=[]}var c={MODE_NUMBER:1,MODE_ALPHA_NUM:2,MODE_8BIT_BYTE:4},d={L:1,M:0,Q:3,H:2};a.prototype={getLength:function(){return this.parsedData.length},write:function(a){for(var b=0,c=this.parsedData.length;b<c;b++)a.put(this.parsedData[b],8)}};b.prototype={addData:function(b){var c=new a(b);this.dataList.push(c);this.dataCache=null},make:function(){if(this.typeNumber<1){var a=1;for(a=1;a<40;a++){for(var b=0,c=e.getRSBlocks(a,this.errorCorrectLevel),d=0;d<c.length;d++)b+=c[d].dataCount;if(b>=this.dataList[0].parsedData.length+3)break}this.typeNumber=a}this.makeImpl(!1,this.getBestMaskPattern())},makeImpl:function(a,b){this.moduleCount=4*this.typeNumber+17;this.modules=new Array(this.moduleCount);for(var c=0;c<this.moduleCount;c++){this.modules[c]=new Array(this.moduleCount);for(var d=0;d<this.moduleCount;d++)this.modules[c][d]=null}this.setupPositionProbePattern(0,0);this.setupPositionProbePattern(this.moduleCount-7,0);this.setupPositionProbePattern(0,this.moduleCount-7);this.setupPositionAdjustPattern();this.setupTimingPattern();this.setupTypeInfo(a,b);this.typeNumber>=7&&this.setupTypeNumber(a);null==this.dataCache&&(this.dataCache=b_createData(this.typeNumber,this.errorCorrectLevel,this.dataList));this.mapData(this.dataCache,b)},setupPositionProbePattern:function(a,b){for(var c=-1;c<=7;c++)if(!(a+c<=-1||this.moduleCount<=a+c))for(var d=-1;d<=7;d++)b+d<=-1||this.moduleCount<=b+d||(this.modules[a+c][b+d]=0<=c&&c<=6&&(0==d||6==d)||0<=d&&d<=6&&(0==c||6==c)||2<=c&&c<=4&&2<=d&&d<=4)},getBestMaskPattern:function(){for(var a=0,b=0,c=0;c<8;c++){this.makeImpl(!0,c);var d=f.getLostPoint(this);(0==c||a>d)&&(a=d,b=c)}return b},setupTimingPattern:function(){for(var a=8;a<this.moduleCount-8;a++)null==this.modules[a][6]&&(this.modules[a][6]=a%2==0),null==this.modules[6][a]&&(this.modules[6][a]=a%2==0)},setupPositionAdjustPattern:function(){for(var a=f.getPatternPosition(this.typeNumber),b=0;b<a.length;b++)for(var c=0;c<a.length;c++){var d=a[b],e=a[c];if(null==this.modules[d][e])for(var g=-2;g<=2;g++)for(var h=-2;h<=2;h++)this.modules[d+g][e+h]=-2==g||2==g||-2==h||2==h||0==g&&0==h}},setupTypeNumber:function(a){for(var b=f.getBCHTypeNumber(this.typeNumber),c=0;c<18;c++){var d=!a&&1==(b>>c&1);this.modules[Math.floor(c/3)][c%3+this.moduleCount-8-3]=d}for(c=0;c<18;c++)d=!a&&1==(b>>c&1),this.modules[c%3+this.moduleCount-8-3][Math.floor(c/3)]=d},setupTypeInfo:function(a,b){for(var c=this.errorCorrectLevel<<3|b,d=f.getBCHTypeInfo(c),e=0;e<15;e++){var g=!a&&1==(d>>e&1);e<6?this.modules[e][8]=g:e<8?this.modules[e+1][8]=g:this.modules[this.moduleCount-15+e][8]=g}for(e=0;e<15;e++)g=!a&&1==(d>>e&1),e<8?this.modules[8][this.moduleCount-e-1]=g:e<9?this.modules[8][15-e-1+1]=g:this.modules[8][15-e-1]=g;this.modules[this.moduleCount-8][8]=!a},mapData:function(a,b){for(var c=-1,d=this.moduleCount-1,e=7,g=0,h=this.moduleCount-1;h>0;h-=2)for(6==h&&h--;;){for(var i=0;i<2;i++)null==this.modules[d][h-i]&&(n=!1,g<a.length&&(n=1==(a[g]>>>e&1)),f.getMask(b,d,h-i)&&(n=!n),this.modules[d][h-i]=n,-1==--e&&(g++,e=7));if((d+=c)<0||this.moduleCount<=d){d-=c;c=-c;break}}}};b.createCanvas=function(a,c){var d=new b(0,c||d.M);d.addData(a);d.make();var e=document.createElement("canvas"),f=e.getContext("2d"),g=d.moduleCount,h=256/g;e.width=e.height=256;for(var i=0;i<g;i++)for(var j=0;j<g;j++)f.fillStyle=d.modules[i][j]?"#1a237e":"#ffffff",f.fillRect(j*h,i*h,h,h);return e};var e={getRSBlocks:function(a,b){var c=this.getRsBlockTable(a,b);if(void 0==c)throw Error("bad rs block @ typeNumber:"+a+"/errorCorrectLevel:"+b);for(var d=[],e=0;e<c.length;e+=3)for(var f=0;f<c[e];f++)d.push({totalCount:c[e+1],dataCount:c[e+2]});return d},getRsBlockTable:function(a,b){switch(b){case d.L:return[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[1,70,24],[1,100,80],[2,50,32],[2,50,24],[4,25,9]][a-1];case d.M:return[[1,26,16],[1,26,14],[1,26,11],[1,26,8],[1,44,28],[1,44,26],[1,44,18],[1,44,14],[1,70,44],[2,35,22],[2,35,16],[2,35,12],[1,100,62],[2,50,26],[2,50,20],[4,25,8]][a-1];case d.Q:return[[1,26,13],[1,26,11],[1,26,9],[1,26,7],[1,44,22],[1,44,20],[1,44,16],[1,44,12],[2,35,17],[2,35,16],[2,35,14],[2,35,10],[2,50,24],[2,50,22],[2,50,18],[4,25,7]][a-1];case d.H:return[[1,26,9],[1,26,8],[1,26,7],[1,26,4],[1,44,16],[1,44,14],[1,44,12],[1,44,10],[2,35,13],[2,35,12],[2,35,10],[2,35,8],[2,50,18],[4,25,9],[2,50,14],[4,25,6]][a-1]}}},f={PATTERN_POSITION_TABLE:[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],G15:1335,G18:7973,G15_MASK:21522,getBCHTypeInfo:function(a){for(var b=a<<10;f.getBCHDigit(b)-f.getBCHDigit(f.G15)>=0;)b^=f.G15<<f.getBCHDigit(b)-f.getBCHDigit(f.G15);return(a<<10|b)^f.G15_MASK},getBCHTypeNumber:function(a){for(var b=a<<12;f.getBCHDigit(b)-f.getBCHDigit(f.G18)>=0;)b^=f.G18<<f.getBCHDigit(b)-f.getBCHDigit(f.G18);return a<<12|b},getBCHDigit:function(a){for(var b=0;0!=a;)b++,a>>>=1;return b},getPatternPosition:function(a){return f.PATTERN_POSITION_TABLE[a-1]},getMask:function(a,b,c){switch(a){case 0:return(b+c)%2==0;case 1:return b%2==0;case 2:return c%3==0;case 3:return(b+c)%3==0;case 4:return(Math.floor(b/2)+Math.floor(c/3))%2==0;case 5:return b*c%2+b*c%3==0;case 6:return(b*c%2+b*c%3)%2==0;case 7:return(b*c%3+(b+c)%2)%2==0}},getLostPoint:function(a){for(var b=a.moduleCount,c=0,d=0;d<b;d++)for(var e=0;e<b;e++){for(var f=0,g=a.modules[d][e],h=-1;h<=1;h++)if(!(d+h<0||b<=d+h))for(var i=-1;i<=1;i++)e+i<0||b<=e+i||(0==h&&0==i||g==a.modules[d+h][e+i]&&f++);f>5&&(c+=3+f-5)}for(d=0;d<b-1;d++)for(e=0;e<b-1;e++){var j=0;a.modules[d][e]&&j++,a.modules[d+1][e]&&j++,a.modules[d][e+1]&&j++,a.modules[d+1][e+1]&&j++,0!=j&&4!=j||(c+=3)}for(d=0;d<b;d++)for(e=0;e<b-6;e++)a.modules[d][e]&&!a.modules[d][e+1]&&a.modules[d][e+2]&&a.modules[d][e+3]&&a.modules[d][e+4]&&!a.modules[d][e+5]&&a.modules[d][e+6]&&(c+=40);for(e=0;e<b;e++)for(d=0;d<b-6;d++)a.modules[d][e]&&!a.modules[d+1][e]&&a.modules[d+2][e]&&a.modules[d+3][e]&&a.modules[d+4][e]&&!a.modules[d+5][e]&&a.modules[d+6][e]&&(c+=40);for(var k=0,e=0;e<b;e++)for(d=0;d<b;d++)a.modules[d][e]&&k++;return c+=10*(Math.abs(100*k/b/b-50)/5)}};function b_createData(a,b,c){for(var d=e.getRSBlocks(a,b),g=new h,i=0;i<c.length;i++){var j=c[i];g.put(j.mode,4);g.put(j.getLength(),f.getLengthInBits(j.mode,a));j.write(g)}var k=0;for(i=0;i<d.length;i++)k+=d[i].dataCount;if(g.getLengthInBits()>8*k)throw Error("code length overflow");g.getLengthInBits()+4<=8*k&&g.put(0,4);for(;g.getLengthInBits()%8!=0;)g.putBit(!1);for(;!(g.getLengthInBits()>=8*k);)g.put(236,8),g.getLengthInBits()>=8*k||g.put(17,8);return function(a,b){for(var c=0,d=0,e=0,f=new Array(b.length),h=new Array(b.length),i=0;i<b.length;i++){var j=b[i].dataCount,k=b[i].totalCount-j;d=Math.max(d,j);e=Math.max(e,k);f[i]=new Array(j);for(var l=0;l<f[i].length;l++)f[i][l]=255&a.buffer[l+c];c+=j;var m=f.getErrorCorrectPolynomial(k),n=new g(f[i],m.getLength()-1).mod(m);h[i]=new Array(m.getLength()-1);for(l=0;l<h[i].length;l++){var o=l+n.getLength()-h[i].length;h[i][l]=o>=0?n.get(o):0}}var p=0;for(i=0;i<b.length;i++)p+=b[i].totalCount;var q=new Array(p);for(l=c=0;l<d;l++)for(i=0;i<b.length;i++)l<f[i].length&&(q[c++]=f[i][l]);for(l=0;l<e;l++)for(i=0;i<b.length;i++)l<h[i].length&&(q[c++]=h[i][l]);return q}(g,d)}f.getLengthInBits=function(a,b){if(1<=b&&b<10)switch(a){case c.MODE_NUMBER:return 10;case c.MODE_ALPHA_NUM:return 9;case c.MODE_8BIT_BYTE:return 8}else if(b<27)switch(a){case c.MODE_NUMBER:return 12;case c.MODE_ALPHA_NUM:return 11;case c.MODE_8BIT_BYTE:return 16}else if(b<41)switch(a){case c.MODE_NUMBER:return 14;case c.MODE_ALPHA_NUM:return 13;case c.MODE_8BIT_BYTE:return 16}};var g=function(a,b){if(void 0==a.length)throw Error(a.length+"/"+b);for(var c=0;c<a.length&&0==a[c];)c++;this.num=new Array(a.length-c+b);for(var d=0;d<a.length-c;d++)this.num[d]=a[d+c]};g.prototype={get:function(a){return this.num[a]},getLength:function(){return this.num.length},multiply:function(a){for(var b=new Array(this.getLength()+a.getLength()-1),c=0;c<this.getLength();c++)for(var d=0;d<a.getLength();d++)b[c+d]^=i.gexp(i.glog(this.get(c))+i.glog(a.get(d)));return new g(b,0)},mod:function(a){if(this.getLength()-a.getLength()<0)return this;for(var b=i.glog(this.get(0))-i.glog(a.get(0)),c=new Array(this.getLength()),d=0;d<this.getLength();d++)c[d]=this.get(d);for(d=0;d<a.getLength();d++)c[d]^=i.gexp(i.glog(a.get(d))+b);return new g(c,0).mod(a)}};f.getErrorCorrectPolynomial=function(a){for(var b=new g([1],0),c=0;c<a;c++)b=b.multiply(new g([1,i.gexp(c)],0));return b};var i={glog:function(a){if(a<1)throw Error("glog("+a+")");return i.LOG_TABLE[a]},gexp:function(a){for(;a<0;)a+=255;for(;a>=256;)a-=255;return i.EXP_TABLE[a]},EXP_TABLE:new Array(256),LOG_TABLE:new Array(256)};for(var j=0;j<8;j++)i.EXP_TABLE[j]=1<<j;for(j=8;j<256;j++)i.EXP_TABLE[j]=i.EXP_TABLE[j-4]^i.EXP_TABLE[j-5]^i.EXP_TABLE[j-6]^i.EXP_TABLE[j-8];for(j=0;j<255;j++)i.LOG_TABLE[i.EXP_TABLE[j]]=j;var h=function(){this.buffer=[];this.length=0};h.prototype={get:function(a){var b=Math.floor(a/8);return 1==(this.buffer[b]>>>7-a%8&1)},put:function(a,b){for(var c=0;c<b;c++)this.putBit(1==(a>>>b-c-1&1))},getLengthInBits:function(){return this.length},putBit:function(a){var b=Math.floor(this.length/8);this.buffer.length<=b&&this.buffer.push(0);a&&(this.buffer[b]|=128>>>this.length%8);this.length++}};return b}();
 
-let xp=0,streak=0,maxStreak=0;
-const done={sorter:false,theory:false,match:false,timeline:false,videos:{}};
-function addXP(n){xp+=n;document.getElementById('xpDisplay').textContent=xp+' XP';}
-function addStreak(){streak++;if(streak>maxStreak)maxStreak=streak;document.getElementById('streakDisplay').textContent=streak+' Seri';}
-function breakStreak(){streak=0;document.getElementById('streakDisplay').textContent='0 Seri';}
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+/* ============  STATE  ============ */
+let xp=0,streak=0,completed={videos:0,sorter:0,theory:0,match:0,timeline:0};
+const LS_KEY='ulus101_hr_state';
+function saveState(){localStorage.setItem(LS_KEY,JSON.stringify({xp,streak,completed}))}
+function loadState(){try{const s=JSON.parse(localStorage.getItem(LS_KEY));if(s){xp=s.xp||0;streak=s.streak||0;completed=Object.assign(completed,s.completed)}}catch(e){}}
+function addXP(n){xp+=n;streak++;document.getElementById('xpDisplay').textContent=xp+' XP';document.getElementById('streakDisplay').textContent=streak+' Seri';saveState()}
+loadState();
+document.getElementById('xpDisplay').textContent=xp+' XP';
+document.getElementById('streakDisplay').textContent=streak+' Seri';
 
+/* ============  SHUFFLE UTIL  ============ */
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+
+/* ============  VIDEO DATA  ============ */
 const VID_DATA={
-secA:{
-  title:"A: Evrensel \u0130nsan Haklar\u0131 \u2014 Temel",
-  desc:"\u0130nsan haklar\u0131 nedir? Nereden gelir? Ger\u00e7ekten evrensel mi? (Baylis, Smith & Owens, s. 498\u2013513)",
-  items:[
-    {id:"a1",type:"video",title:"\u0130nsan Haklar\u0131 Evrensel Beyannamesi Animasyonu (\u0130stanbul Bilgi \u00dcniversitesi)",yt:"SFMBniadS3M",
-     q:"Bu video \u0130nsan Haklar\u0131 Evrensel Beyannamesi\u2019nin temel ilkelerini anlat\u0131yor. Ancak Baylis, Smith & Owens, insan haklar\u0131 alan\u0131nda s\u00fcregelen bir gerilime dikkat \u00e7eker. Bu gerilim nedir?",
-     opts:["Ekonomik haklar\u0131n insan haklar\u0131na dahil edilip edilmemesi","Evrenselcilik (insan haklar\u0131 herkese, her yerde, her zaman uygulan\u0131r) ile k\u00fclt\u00fcrel g\u00f6recelilik (haklar k\u00fclt\u00fcrel ba\u011flam taraf\u0131ndan \u015fekillendirilir ve d\u0131\u015far\u0131dan dayat\u0131lamaz) aras\u0131ndaki gerilim","BM\u2019nin haklar\u0131 uygulamak i\u00e7in bir ordusu olup olmamas\u0131 gerekti\u011fi"],
-     correct:1,
-     model:"Bu, insan haklar\u0131 b\u00f6l\u00fcm\u00fcn\u00fcn merkezi tart\u0131\u015fmas\u0131d\u0131r. Evrenselciler, i\u015fkence yasa\u011f\u0131, ya\u015fam hakk\u0131 ve yasa \u00f6n\u00fcnde e\u015fitlik gibi haklar\u0131n k\u00fclt\u00fcrden ba\u011f\u0131ms\u0131z olarak t\u00fcm insanlara ait oldu\u011funu savunur. K\u00fclt\u00fcrel g\u00f6receliciler ise Evrensel Beyanname\u2019nin Bat\u0131l\u0131 liberal de\u011ferleri yans\u0131tt\u0131\u011f\u0131n\u0131 ve s\u00f6m\u00fcrge alt\u0131ndaki halklar\u0131n kat\u0131l\u0131m\u0131 olmadan haz\u0131rland\u0131\u011f\u0131n\u0131 ileri s\u00fcrer. Ger\u00e7ek her iki u\u00e7tan daha nyansl\u0131d\u0131r: \u0130slam hukuku, Ubuntu felsefesi ve Konf\u00fc\u00e7y\u00fcs d\u00fc\u015f\u00fcncesi gibi Bat\u0131 d\u0131\u015f\u0131 geleneklerde de haklar benzeri kavramlar vard\u0131r. \u2018Evrenselcilik\u2019 ele\u015ftirisini ciddiye almak, ancak ilkeyi terk etmemek gerekir."},
-    {id:"a2",type:"case",title:"Okuma: \u0130HEB \u2014 D\u00f6neminin \u00dcr\u00fcn\u00fc m\u00fc?",
-     text:"\u0130nsan Haklar\u0131 Evrensel Beyannamesi, 10 Aral\u0131k 1948\u2019de BM Genel Kurulu taraf\u0131ndan 48 lehte oy, 0 aleyhte, 8 \u00e7ekimser ile kabul edildi (Sovyet bloku, Suudi Arabistan, G\u00fcney Afrika). Taslak komitesinin ba\u015fkanl\u0131\u011f\u0131n\u0131 Eleanor Roosevelt yapt\u0131. Ele\u015ftirmenler, 1948\u2019de Afrika ve Asya\u2019n\u0131n \u00e7o\u011funun hala s\u00f6m\u00fcrge alt\u0131nda oldu\u011funa dikkat \u00e7eker. Destekleyenler ise komitede P.C. Chang (\u00c7in), Charles Malik (L\u00fcbnan) ve Hansa Mehta (Hindistan) gibi isimlerin bulundu\u011funu belirtir. 1993 Viyana Bildirisi evrenselli\u011fi yeniden teyit ederken \u2018ulusal ve b\u00f6lgesel \u00f6zellikleri\u2019 de kabul etti.",
-     q:"D\u00fcnyan\u0131n \u00e7o\u011fu s\u00f6m\u00fcrge alt\u0131ndayken haz\u0131rlanan \u0130HEB, ger\u00e7ekten \u2018evrensel\u2019 oldu\u011funu iddia edebilir mi?",
-     opts:["Hay\u0131r \u2014 Bat\u0131l\u0131 bir belgedir ve reddedilmelidir","\u0130HEB\u2019in k\u00f6kenleri kusurlu olsa da, sonraki neredeyse evrensel onay\u0131, d\u00fcnya genelinde ulusal anayasalar \u00fczerindeki etkisi ve s\u00f6m\u00fcrge sonras\u0131 devletlerin bask\u0131ya kar\u015f\u0131 bir ara\u00e7 olarak benimsemesi, evrenselli\u011fin sadece taslak s\u00fcrecinden de\u011fil, uygulamadan kaynakland\u0131\u011f\u0131n\u0131 g\u00f6sterir","Evet \u2014 m\u00fckemmeldir ve ele\u015ftirilemez"],
-     correct:1,
-     model:"Bu, bir in\u015faac\u0131 (konstr\u00fcktivist) i\u00e7g\u00f6r\u00fcd\u00fcr: normlar me\u015fruiyetlerini yaln\u0131zca k\u00f6kenlerinden de\u011fil, uygulama ve benimseme yoluyla da kazanabilir. \u0130HEB s\u00f6m\u00fcrgecilik d\u00f6neminde haz\u0131rland\u0131, ancak s\u00f6m\u00fcrge sonras\u0131 devletler onu s\u00f6m\u00fcrgecilere kar\u015f\u0131 aktif olarak kulland\u0131: apartheid kar\u015f\u0131t\u0131 hareket, Hint ba\u011f\u0131ms\u0131zl\u0131k hareketi ve Afrika kurtulu\u015f hareketleri onun diline ba\u015fvurdu."},
-    {id:"a3",type:"case",title:"Temel Kavram: Evrenselcilik vs. K\u00fclt\u00fcrel G\u00f6recelilik \u2014 \u2018Asya De\u011ferleri\u2019 Tart\u0131\u015fmas\u0131",
-     text:"1990\u2019larda Lee Kuan Yew (Singapur) ve Mahathir Mohamad (Malezya) gibi liderler, toplulu\u011fu, d\u00fczeni ve otoriteye sayg\u0131y\u0131 vurgulayan \u2018Asya de\u011ferleri\u2019nin Bat\u0131 tarz\u0131 bireysel insan haklar\u0131yla ba\u011fda\u015fmad\u0131\u011f\u0131n\u0131 savundu. Amartya Sen gibi ele\u015ftirmenler, \u2018Asya de\u011ferleri\u2019 arg\u00fcman\u0131n\u0131n otoriter liderler taraf\u0131ndan bask\u0131y\u0131 me\u015frula\u015ft\u0131rmak i\u00e7in se\u00e7ici olarak kullan\u0131ld\u0131\u011f\u0131n\u0131 ve Asya\u2019n\u0131n \u00e7e\u015fitli geleneklerinin insan onuruna g\u00fc\u00e7l\u00fc ba\u011fl\u0131l\u0131klar i\u00e7erdi\u011fini belirtti.",
-     q:"\u2018Asya de\u011ferleri\u2019 tart\u0131\u015fmas\u0131 haklar hakk\u0131nda ger\u00e7ek bir felsefi anla\u015fmazl\u0131k m\u0131yd\u0131, yoksa otoriter liderlerin siyasi stratejisi mi?",
-     opts:["Tamamen felsefi bir tart\u0131\u015fmayd\u0131","Her ikisiydi \u2014 bireysel haklar ile toplumsal y\u00fck\u00fcml\u00fcl\u00fckler aras\u0131ndaki ili\u015fki hakk\u0131nda ger\u00e7ek felsefi sorular vard\u0131r, ancak \u2018Asya de\u011ferleri\u2019 arg\u00fcman\u0131 \u00f6ncelikle uluslararas\u0131 ele\u015ftirilerden ka\u00e7mak isteyen liderler taraf\u0131ndan kullan\u0131ld\u0131","Asya de\u011ferleri Bat\u0131 de\u011ferlerinden \u00fcst\u00fcnd\u00fcr"],
-     correct:1,
-     model:"Sen\u2019in yan\u0131t\u0131 kilit \u00f6nemdedir: Asya\u2019n\u0131n tek bir de\u011ferler dizisi olmad\u0131\u011f\u0131n\u0131, Budizm, Konf\u00fc\u00e7y\u00fcs\u00e7\u00fcl\u00fck ve \u0130slam gibi geleneklerin haklar ve otorite konusunda farkl\u0131 g\u00f6r\u00fc\u015fler i\u00e7erdi\u011fini savundu. K\u00fclt\u00fcrel g\u00f6recelilik \u00e7o\u011fu zaman devletler taraf\u0131ndan denetimden ka\u00e7mak i\u00e7in silah olarak kullan\u0131l\u0131r. Ancak felsefi soru ger\u00e7ektir: evrensel ilkeler ger\u00e7ekten kapsay\u0131c\u0131 bir diyalog yoluyla yorumlanmal\u0131d\u0131r."}
-  ]
-},
-secB:{
-  title:"B: Uluslararas\u0131 \u0130nsan Haklar\u0131 Rejimi",
-  desc:"Uluslararas\u0131 toplum insan haklar\u0131n\u0131 nas\u0131l korumaya \u00e7al\u0131\u015ft\u0131? Hangi kurumlar var ve ne kadar etkili?",
-  items:[
-    {id:"b1",type:"video",title:"\u0130nsan Haklar\u0131 ve Demokrasi: \u00d6zetin \u00d6zeti",yt:"XL1QRp-ijcY",
-     q:"Bu video insan haklar\u0131n\u0131n tarihsel geli\u015fimini, \u00fc\u00e7 ku\u015fak haklar\u0131, hukuk devleti ilkesini ve uluslararas\u0131 kurumlar\u0131 \u00f6zetliyor. Uluslararas\u0131 insan haklar\u0131 rejiminin etkileyici kurumsal mimarisine ra\u011fmen uygulamas\u0131 neden zay\u0131ft\u0131r?",
-     opts:["\u00c7\u00fcnk\u00fc kimse insan haklar\u0131n\u0131 \u00f6nemsemiyor","\u00c7\u00fcnk\u00fc uluslararas\u0131 sistem devlet egemenli\u011fi \u00fczerine kuruludur \u2014 devletler insan haklar\u0131 kurumlar\u0131 olu\u015fturur ama egemen otoriteyi ge\u00e7ersiz k\u0131lacak yetki vermekten ka\u00e7\u0131n\u0131r, bu da ka\u011f\u0131t \u00fczerindeki haklar ile uygulamadaki haklar aras\u0131nda yap\u0131sal bir bo\u015fluk yarat\u0131r","\u00c7\u00fcnk\u00fc kurumlar etkili olamayacak kadar yeni"],
-     correct:1,
-     model:"Bu, uluslararas\u0131 insan haklar\u0131 hukukunun temel paradoksudur: kurallar\u0131 olu\u015fturan devletler ayn\u0131 zamanda onlara uymak zorunda olanlard\u0131r ve kendilerine kar\u015f\u0131 kullan\u0131labilecek uygulama mekanizmalar\u0131 yaratmaya direnir. Bir realizm perspektifinden bu ka\u00e7\u0131n\u0131lmazd\u0131r. Liberal kurumsalc\u0131lar zay\u0131f kurumlar\u0131n bile \u00f6nemli oldu\u011funu savunur \u2014 ad\u0131n\u0131 koyma ve utan\u00e7 verme, UPR bask\u0131s\u0131 ve soru\u015fturma komisyonlar\u0131 zamanla normatif bask\u0131 olu\u015fturur."},
-    {id:"b2",type:"case",title:"Okuma: HRW D\u00fcnya Raporu 2026 \u2014 Suriye",
-     text:"Human Rights Watch\u2019\u0131n 2026 D\u00fcnya Raporu, Aral\u0131k 2024\u2019te Esad\u2019\u0131n devrilmesinin ard\u0131ndan Suriye\u2019nin ge\u00e7i\u015f s\u00fcrecini belgeliyor. Ahmed al-Sharaa liderli\u011findeki ge\u00e7i\u015f h\u00fck\u00fcmeti Mart 2025\u2019te ilan edildi. Ancak anayasa bildirgesi y\u00fcr\u00fctme g\u00fcc\u00fcn\u00fc denetim olmaks\u0131z\u0131n yo\u011funla\u015ft\u0131r\u0131yor. Mart ve Temmuz 2025\u2019te Alevi ve D\u00fcrz\u00fc sivillere y\u00f6nelik kimlik temelli katliamlar en az 2.400 ki\u015finin \u00f6l\u00fcm\u00fcne yol a\u00e7t\u0131. Ge\u00e7i\u015f Adaleti Komisyonu yaln\u0131zca eski h\u00fck\u00fcmetin ihlallerini soru\u015fturuyor. Suriyelilerin %90\u2019\u0131ndan fazlas\u0131 yoksulluk s\u0131n\u0131r\u0131n\u0131n alt\u0131nda ya\u015f\u0131yor.",
-     q:"Suriye\u2019nin Ge\u00e7i\u015f Adaleti Komisyonu yaln\u0131zca eski Esad h\u00fck\u00fcmetinin ihlallerini soru\u015fturuyor. Bu neden insan haklar\u0131 a\u00e7\u0131s\u0131ndan sorunludur?",
-     opts:["Sorunlu de\u011fildir \u2014 yaln\u0131zca eski h\u00fck\u00fcmet ihlal i\u015fledi","Se\u00e7ici adalet, insan haklar\u0131n\u0131n evrenselli\u011fini zedeliyor: yaln\u0131zca bir taraf\u0131n ihlalleri soru\u015fturulursa, di\u011fer akt\u00f6rlerin (muhalefet g\u00fc\u00e7leri, T\u00fcrkiye destekli gruplar, \u0130srail g\u00fc\u00e7leri, SDG) ma\u011fdurlar\u0131 hesap sorulabilirlikten yoksun kal\u0131r","Komisyon bar\u0131\u015f tam sa\u011flanana kadar beklemelidir"],
-     correct:1,
-     model:"\u0130nsan haklar\u0131 hukuku bir \u00e7at\u0131\u015fmadaki t\u00fcm taraflara uygulan\u0131r, yaln\u0131zca kaybeden tarafa de\u011fil. Suriye\u2019nin ge\u00e7i\u015f adaleti yaln\u0131zca Esad d\u00f6nemi su\u00e7lar\u0131n\u0131 ele al\u0131rsa, \u2018galiplerin adaleti\u2019ne d\u00f6n\u00fc\u015fme riski ta\u015f\u0131r. G\u00fcvenilir bir ge\u00e7i\u015f adaleti s\u00fcreci t\u00fcm taraflar\u0131n ihlallerini kapsamal\u0131d\u0131r."},
-    {id:"b3",type:"video",title:"Gazze\u2019deki \u0130nsani Kriz \u2014 Uluslararas\u0131 \u0130nsan Haklar\u0131 Hukuku Ba\u011flam\u0131nda (T\u0130HEK)",yt:"xlSWX9tS57s",
-     q:"Bu video Gazze\u2019deki insani krizi uluslararas\u0131 insan haklar\u0131 hukuku \u00e7er\u00e7evesinde ele al\u0131yor. BM \u0130nsan Haklar\u0131 Konseyi (HRC) bu t\u00fcr krizlere yan\u0131t vermede neden etkisiz kalabiliyor?",
-     opts:["HRC \u00e7ok yeni bir kurumdur","HRC\u2019nin 47 \u00fcyeli yap\u0131s\u0131nda insan haklar\u0131 sicili zay\u0131f devletler de yer alabilir; ayr\u0131ca g\u00fc\u00e7l\u00fc devletlerin (ABD veto hakk\u0131, \u00c7in ve Rusya\u2019n\u0131n egemenlik vurgusu) direnci, kararlar\u0131n uygulanmas\u0131n\u0131 engeller","HRC yaln\u0131zca Afrika \u00fclkelerini denetler"],
-     correct:1,
-     model:"HRC\u2019nin \u00fcyelik paradoksu, egemen e\u015fitlik ile insan haklar\u0131 ko\u015fullulu\u011fu aras\u0131ndaki gerilimi g\u00f6sterir. Bir realist perspektiften g\u00fc\u00e7l\u00fc devletler elbette kurumlar\u0131 manip\u00fcle eder. Bir liberal perspektiften mekanizmalar (\u00d6ED, \u00d6zel Prosed\u00fcrler, Soru\u015fturma Komisyonlar\u0131) \u00fcyelerin erdeminden daha \u00f6nemlidir. Bir konstr\u00fcktivist, ikiy\u00fczl\u00fc \u00fcyeli\u011fin bile \u2018retorik tuza\u011fa d\u00fc\u015f\u00fcrme\u2019 yaratt\u0131\u011f\u0131n\u0131 not eder."}
-  ]
-},
-secC:{
-  title:"C: R2P ve \u0130nsani M\u00fcdahale \u2014 D\u00fcnya Ne Zaman Harekete Ge\u00e7meli?",
-  desc:"Egemenlik, devletlerin d\u0131\u015f m\u00fcdahaleden ba\u011f\u0131ms\u0131z olmas\u0131 demektir. Peki bir devlet kendi halk\u0131n\u0131 katletti\u011finde ne olur?",
-  items:[
-    {id:"c1",type:"video",title:"\u2018Koruma Sorumlulu\u011fu\u2019 Nedir? Libya Harek\u00e2t\u0131 \u00d6rne\u011fi",yt:"ptqpzc9e3hg",
-     q:"Bu video Koruma Sorumlulu\u011funu (R2P) Libya m\u00fcdahalesi \u00f6rne\u011fiyle a\u00e7\u0131kl\u0131yor. R2P neden tutarl\u0131 bir \u015fekilde uygulanam\u0131yor?",
-     opts:["Kitle vahsetleri nadirdir ve R2P gereksizdir","R2P, G\u00fcvenlik Konseyi yetkisi gerektirir ve P5\u2019in veto hakk\u0131, bir daimi \u00fcyenin fail devletle stratejik \u00e7\u0131karlar\u0131 oldu\u011funda m\u00fcdahaleyi engeller \u2014 bu, R2P\u2019nin g\u00fc\u00e7l\u00fc m\u00fcttefikleri olmayan zay\u0131f devletlere kar\u015f\u0131 i\u015fleyip, olanlara kar\u015f\u0131 i\u015flemedi\u011fi yap\u0131sal bir tutars\u0131zl\u0131k yarat\u0131r","R2P BM taraf\u0131ndan resmen terk edildi"],
-     correct:1,
-     model:"R2P bir yasa de\u011fil, siyasi taahh\u00fctt\u00fcr. Uygulanmas\u0131, P5\u2019ten herhangi birinin veto kullanabildi\u011fi G\u00fcvenlik Konseyi\u2019ne ba\u011fl\u0131d\u0131r. Rusya, m\u00fcttefiki Esad\u2019\u0131 korumak i\u00e7in Suriye kararlar\u0131n\u0131 veto etti. ABD, \u0130srail\u2019i hesap verebilirlikten korudu. Libya (2011) m\u00fcmk\u00fcnd\u00fc \u00e7\u00fcnk\u00fc Rusya ve \u00c7in \u00e7ekimser kald\u0131; Suriye engellendi \u00e7\u00fcnk\u00fc Rusya veto kulland\u0131. Bu se\u00e7icilik R2P\u2019nin en b\u00fcy\u00fck zay\u0131fl\u0131\u011f\u0131d\u0131r."},
-    {id:"c2",type:"video",title:"\u0130nsani M\u00fcdahale Nedir? (Akademik Pusula)",yt:"Im88lMZnUn4",
-     q:"Bu video insani m\u00fcdahalenin hukuki ve siyasi boyutlar\u0131n\u0131 a\u00e7\u0131kl\u0131yor. K\u00fcresel R2P Merkezi\u2019nin Eyl\u00fcl 2025\u2019te Filistin halk\u0131 i\u00e7in R2P \u00e7a\u011fr\u0131s\u0131 yapt\u0131\u011f\u0131n\u0131 d\u00fc\u015f\u00fcn\u00fcn. Bu uygulama neden siyasi olarak tart\u0131\u015fmal\u0131?",
-     opts:["R2P i\u015fgal alt\u0131ndaki topraklara uygulanmaz","ABD, \u0130srail ile stratejik ba\u011flar\u0131 olan daimi G\u00fcvenlik Konseyi \u00fcyesi olarak, toplu eyleme izin verecek kararlar\u0131 s\u00fcrekli veto etmi\u015ftir (14\u20131 oy kal\u0131b\u0131) \u2014 bu, R2P\u2019nin \u00fc\u00e7\u00fcnc\u00fc ayg\u0131t\u0131n\u0131n (devlet ba\u015far\u0131s\u0131z oldu\u011funda uluslararas\u0131 eylem) P5 m\u00fcttefiki olan devletler s\u00f6z konusu oldu\u011funda yap\u0131sal olarak engellenebilece\u011fini g\u00f6sterir","K\u00fcresel R2P Merkezi\u2019nin R2P\u2019yi \u00e7a\u011f\u0131rma yetkisi yoktur"],
-     correct:1,
-     model:"Bu vaka R2P\u2019nin yap\u0131sal zay\u0131fl\u0131\u011f\u0131n\u0131 kristalize eder. Hukuki analiz uygulamay\u0131 destekleyebilir: d\u00f6rt su\u00e7 (soyk\u0131r\u0131m, sava\u015f su\u00e7lar\u0131, insanl\u0131\u011fa kar\u015f\u0131 su\u00e7lar, etnik temizlik) \u00f6nemli kan\u0131tlarla ileri s\u00fcr\u00fclmektedir. Ancak siyasi mekanizma (G\u00fcvenlik Konseyi eylemi) ABD vetosuyla engellenmektedir. \u2018Libya i\u00e7in R2P uyguland\u0131ysa, Filistin i\u00e7in neden uygulanm\u0131yor?\u2019 sorusu \u2018\u00e7ifte standart\u2019 ele\u015ftirisini ortaya koyar."},
-    {id:"c3",type:"case",title:"Okuma: BM Genel Sekreteri (May\u0131s 2025) \u2014 \u2018R2P: 20 Y\u0131ll\u0131k Taahh\u00fct\u2019",
-     text:"BM Genel Sekreteri\u2019nin R2P \u00fczerine 17. raporu, 20. y\u0131ld\u00f6n\u00fcm\u00fcnde sert bir de\u011ferlendirme sunuyor: 2005\u2019teki oybirli\u011fiyle taahh\u00fcde ra\u011fmen, vahset su\u00e7lar\u0131 k\u00fcresel olarak artm\u0131\u015ft\u0131r. \u015eiddetli \u00e7at\u0131\u015fmalar II. D\u00fcnya Sava\u015f\u0131\u2019ndan bu yana en y\u00fcksek seviyededir. 123 milyon insan yerinden edilmi\u015ftir (2005\u2019te 37 milyondu). Rapor, \u2018se\u00e7ici uygulamalar, \u00e7ifte standartlar ve somut eylem al\u0131namamas\u0131\u2019n\u0131n R2P\u2019yi zay\u0131flatt\u0131\u011f\u0131 uyar\u0131s\u0131nda bulunuyor.",
-     q:"20 y\u0131l sonra R2P vahset su\u00e7lar\u0131ndaki art\u0131\u015f\u0131 engelleyemedi. Terk edilmeli mi?",
-     opts:["Evet \u2014 a\u00e7\u0131k\u00e7a ba\u015far\u0131s\u0131z oldu","Hay\u0131r \u2014 R2P\u2019nin de\u011feri yaln\u0131zca ba\u015far\u0131s\u0131zl\u0131klar\u0131yla \u00f6l\u00e7\u00fclmez; 2005 \u00f6ncesinde var olmayan normatif bir \u00e7er\u00e7eve, kurumsal altyap\u0131 ve hesap verebilirlik dili olu\u015fturmu\u015ftur \u2014 sorun ilke de\u011fil, uygulamak i\u00e7in gerekli siyasi irade eksikli\u011fidir","R2P modern \u00e7at\u0131\u015fmalarla ilgisizdir"],
-     correct:1,
-     model:"R2P\u2019den \u00f6nce egemenlik mutlak bir kalkand\u0131 \u2014 devletler kendi halklar\u0131n\u0131 cezas\u0131zl\u0131kla katledebilirdi. R2P normatif manzaray\u0131 de\u011fi\u015ftirdi: egemenli\u011fin sorumlulukla geldi\u011fini ve korumada ba\u015far\u0131s\u0131zl\u0131\u011f\u0131n uluslararas\u0131 y\u00fck\u00fcml\u00fcl\u00fck yaratt\u0131\u011f\u0131n\u0131 belirledi. R2P\u2019yi terk etmek siyasi sorunu \u00e7\u00f6zmez; en az\u0131ndan eylem bask\u0131s\u0131 yaratan normatif \u00e7er\u00e7eveyi ortadan kald\u0131r\u0131r."}
-  ]
-},
-secD:{
-  title:"D: Vaka \u00c7al\u0131\u015fmalar\u0131 \u2014 Sahada \u0130nsan Haklar\u0131",
-  desc:"Libya\u2019dan K\u0131br\u0131s\u2019a, insan haklar\u0131 pratikte nas\u0131l i\u015fler?",
-  items:[
-    {id:"d1",type:"video",title:"G\u00fcney Afrika\u2019da Apartheid Rejiminin Y\u00fckselisi ve Y\u0131k\u0131l\u0131\u015f\u0131 (Anadolu Ajans\u0131)",yt:"XpkT-O971FI",
-     q:"Bu video apartheid rejiminin nas\u0131l kuruldu\u011funu ve y\u0131k\u0131ld\u0131\u011f\u0131n\u0131 anlat\u0131yor. Apartheid, uluslararas\u0131 insan haklar\u0131 sistemi i\u00e7in neden \u00f6nemli bir test vakasyd\u0131?",
-     opts:["De\u011fildi \u2014 yaln\u0131zca yerel bir sorundu","Apartheid, insan haklar\u0131 normlar\u0131n\u0131n ger\u00e7ek d\u00fcnya de\u011fi\u015fikli\u011fi \u00fcretip \u00fcretemeyece\u011finin testi oldu: uluslararas\u0131 yapt\u0131r\u0131mlar, BM silah ambargolar\u0131, sivil toplum bask\u0131s\u0131 ve i\u00e7 direni\u015f birle\u015ferek rejimin sonunu getirdi \u2014 ancak bu s\u00fcre\u00e7 on y\u0131llar ald\u0131","Apartheid kendili\u011finden sona erdi"],
-     correct:1,
-     model:"Apartheid vakas\u0131, insan haklar\u0131 normlar\u0131n\u0131n \u2018isim koyma ve utand\u0131rma\u2019 yoluyla nas\u0131l somut sonu\u00e7lar \u00fcretebilece\u011fini g\u00f6sterir. BM, spor boykotlar\u0131, akademik boykotlar ve ekonomik yapt\u0131r\u0131mlar birle\u015ferek G\u00fcney Afrika\u2019y\u0131 uluslararas\u0131 olarak izole etti. Ancak bu s\u00fcre\u00e7 hemen olmad\u0131 \u2014 So\u011fuk Sava\u015f s\u0131ras\u0131nda ABD ve \u0130ngiltere stratejik nedenlerle G\u00fcney Afrika\u2019y\u0131 korudu. Yaln\u0131zca So\u011fuk Sava\u015f\u2019\u0131n bitmesiyle tam yapt\u0131r\u0131mlar m\u00fcmk\u00fcn oldu. Ders: insan haklar\u0131 bask\u0131s\u0131 i\u015fe yarar, ancak jeopolitik ko\u015fullar bunu kolayla\u015ft\u0131rd\u0131\u011f\u0131nda."},
-    {id:"d2",type:"case",title:"Vaka \u00c7al\u0131\u015fmas\u0131: Suriye \u2014 R2P\u2019nin En B\u00fcy\u00fck Ba\u015far\u0131s\u0131zl\u0131\u011f\u0131",
-     text:"Suriye i\u00e7 sava\u015f\u0131 (2011\u20132024) 500.000\u2019den fazla insan\u0131n \u00f6l\u00fcm\u00fcne ve n\u00fcfusun yar\u0131s\u0131n\u0131n yerinden edilmesine yol a\u00e7t\u0131. Esad h\u00fck\u00fcmeti kimyasal silahlar, varil bombalar\u0131, ku\u015fatma a\u00e7l\u0131\u011f\u0131 ve sistematik i\u015fkence kulland\u0131. Rusya, 2011\u20132024 aras\u0131nda en az 16 G\u00fcvenlik Konseyi karar\u0131n\u0131 veto etti. D\u00f6rt vahset su\u00e7unun da i\u015flendi\u011fi bu durumda uluslararas\u0131 toplum harekete ge\u00e7emedi.",
-     q:"Rusya, stratejik m\u00fcttefiki Esad\u2019\u0131 korumak i\u00e7in Suriye kararlar\u0131n\u0131 veto etti. Bu, R2P\u2019nin yaln\u0131zca g\u00fc\u00e7l\u00fc dostlar\u0131 olmayan devletlere uyguland\u0131\u011f\u0131 anlam\u0131na m\u0131 gelir?",
-     opts:["Hay\u0131r \u2014 R2P t\u00fcm devletlere e\u015fit uygulan\u0131r","Etkili bir \u015fekilde evet \u2014 R2P\u2019nin G\u00fcvenlik Konseyi\u2019ne ba\u011f\u0131ml\u0131l\u0131\u011f\u0131, P5 hamisi olan devletlerin m\u00fcdahaleden korunmas\u0131 anlam\u0131na gelir; bu se\u00e7icilik R2P\u2019nin en y\u0131k\u0131c\u0131 ele\u015ftirisidir","R2P G\u00fcvenlik Konseyi\u2019ne ba\u011fl\u0131 de\u011fildir"],
-     correct:1,
-     model:"Suriye, yap\u0131sal ele\u015ftiriyi kan\u0131tlayan vakad\u0131r. R2P yaln\u0131zca P5 anla\u015ft\u0131\u011f\u0131nda i\u015flerse, yaln\u0131zca zay\u0131f ve izole devletlere kar\u015f\u0131 i\u015fler. Veto reformu (Frans\u0131z-Meksika giri\u015fimi, ACT Grubu Davran\u0131\u015f Kurallar\u0131) \u00f6nerilen \u00e7\u00f6z\u00fcmlerden biridir, ancak P5\u2019in kendi g\u00fcc\u00fcn\u00fc s\u0131n\u0131rlama te\u015fviki yoktur."},
-    {id:"d3",type:"case",title:"Vaka \u00c7al\u0131\u015fmas\u0131: K\u0131br\u0131s\u2019ta \u0130nsan Haklar\u0131 \u2014 B\u00f6l\u00fcnme, Yerinden Edilme ve Kay\u0131plar",
-     text:"K\u0131br\u0131s 1974\u2019ten bu yana b\u00f6l\u00fcnm\u00fc\u015f durumdad\u0131r. Yakla\u015f\u0131k 200.000 K\u0131br\u0131sl\u0131 Rum kuzeyden, yakla\u015f\u0131k 60.000 K\u0131br\u0131sl\u0131 T\u00fcrk ise g\u00fcneyden yerinden edildi. Her iki toplumdan 1.500\u2019den fazla ki\u015fi hala kay\u0131pt\u0131r. Avrupa \u0130nsan Haklar\u0131 Mahkemesi, Loizidou / T\u00fcrkiye (1996) ve K\u0131br\u0131s / T\u00fcrkiye (2001) davalar\u0131nda T\u00fcrkiye aleyhine kararlar verdi. Kay\u0131p \u015eah\u0131slar Komitesi (K\u015eK) 2006\u2019dan bu yana kaz\u0131 ve kimlik belirleme \u00e7al\u0131\u015fmalar\u0131 y\u00fcr\u00fctmektedir.",
-     q:"K\u0131br\u0131s kay\u0131p \u015fah\u0131slar sorunu 50 y\u0131l\u0131 a\u015fk\u0131n s\u00fcredir devam ediyor. Bu, insan haklar\u0131 uygulamas\u0131 hakk\u0131nda bize ne s\u00f6yl\u00fcyor?",
-     opts:["\u0130nsan haklar\u0131 yaln\u0131zca s\u00f6ylemdir ve hi\u00e7bir zaman uygulanmaz","Uluslararas\u0131 mahkemeler karar verse ve mekanizmalar (\u0130HAM, K\u015eK) mevcut olsa bile, uygulama siyasi iradeye ba\u011fl\u0131d\u0131r \u2014 T\u00fcrkiye \u0130HAM kararlar\u0131na tam olarak uymam\u0131\u015ft\u0131r ve yeniden birle\u015fme \u00fczerindeki siyasi \u00e7\u0131kmaz, yerinden edilme ve m\u00fclkiyet haklar\u0131n\u0131n kapsaml\u0131 \u00e7\u00f6z\u00fcm\u00fcn\u00fc engellemektedir","K\u0131br\u0131s benzersiz bir vakad\u0131r ve daha geni\u015f dersleri yoktur"],
-     correct:1,
-     model:"\u0130HAM kararlar\u0131 \u00f6nemli emsal olu\u015fturdu \u2014 Loizidou, bir devletin s\u0131n\u0131rlar\u0131 d\u0131\u015f\u0131nda i\u015fgal etti\u011fi topraklardaki insan haklar\u0131 ihlallerinden sorumlu tutulabilece\u011fini teyit etti. Ancak T\u00fcrkiye\u2019nin uymamas\u0131, uluslararas\u0131 insan haklar\u0131 hukukunun ancak siyasi ko\u015fullar uygulamaya izin verdi\u011finde etkili oldu\u011funu g\u00f6sterir. K\u015eK\u2019n\u0131n yava\u015f ve ac\u0131 verici kimlik belirleme \u00e7al\u0131\u015fmas\u0131, tam hesap verebilirlik olmasa bile hakikat aray\u0131\u015f\u0131 ve tan\u0131man\u0131n adalet bi\u00e7imleri oldu\u011funu g\u00f6sterir. DA\u00dc\u2019deki \u00f6\u011frenciler i\u00e7in bu soyut de\u011fildir \u2014 kamp\u00fcs\u00fcn\u00fcz\u00fcn, adan\u0131z\u0131n, ailelerinizin ya\u015fanm\u0131\u015f ger\u00e7ekli\u011fidir."}
-  ]
-}
-  const SORT_DATA=[
-  {text:"\u0130nsan haklar\u0131 tamamen Bat\u0131l\u0131 bir icatt\u0131r ve Bat\u0131 d\u0131\u015f\u0131 k\u00fclt\u00fcrlerde k\u00f6k\u00fc yoktur.",zone:"mit",explain:"Pek \u00e7ok Bat\u0131 d\u0131\u015f\u0131 gelenekte haklar benzeri kavramlar bulunur: \u0130slam hukukunda insan onuru, Ubuntu felsefesi, Konf\u00fc\u00e7y\u00fcs\u00e7\u00fc y\u00f6neticilerin halka kar\u015f\u0131 y\u00fck\u00fcml\u00fcl\u00fckleri, Budist merhamet eti\u011fi."},
-  {text:"\u0130nsan Haklar\u0131 Evrensel Beyannamesi t\u00fcm BM \u00fcye devletlerini hukuken ba\u011flar.",zone:"mit",explain:"\u0130HEB bir bildirge olup antla\u015fma de\u011fildir. Do\u011frudan hukuken ba\u011flay\u0131c\u0131 de\u011fildir, ancak h\u00fck\u00fcmlerin bir\u00e7o\u011fu \u015fimdi \u00f6rf ve adet uluslararas\u0131 hukuku olarak kabul edilmektedir."},
-  {text:"BM \u0130nsan Haklar\u0131 Konseyi t\u00fcm g\u00fc\u00e7l\u00fc devletleri e\u015fit \u015fekilde hesap verir k\u0131lmada etkili olmu\u015ftur.",zone:"mit",explain:"HRC, baz\u0131 devletlere orant\u0131s\u0131z odaklanma ve di\u011ferlerini ihmal etme konusunda ele\u015ftirilmi\u015ftir; insan haklar\u0131 sicili zay\u0131f devletler d\u00fczenli olarak \u00fcyelik kazanm\u0131\u015ft\u0131r."},
-  {text:"\u0130nsan haklar\u0131 antla\u015fmalar\u0131n\u0131 onaylayan devletler her zaman bunlara uyar.",zone:"mit",explain:"Onaylama ve uyum \u00e7ok farkl\u0131 \u015feylerdir. Pek \u00e7ok devlet me\u015fruiyet i\u00e7in antla\u015fmalar\u0131 onaylar ama uygulamaz. Kuzey Kore MSHUS\u2019u, Suudi Arabistan \u00c7HS\u2019yi onaylam\u0131\u015ft\u0131r."},
-  {text:"R2P, insan haklar\u0131 ihlal edildi\u011finde herhangi bir devletin askeri m\u00fcdahalede bulunmas\u0131na yetki verir.",zone:"mit",explain:"R2P tek tarafl\u0131 m\u00fcdahaleye yetki vermez. \u00dc\u00e7\u00fcnc\u00fc ayg\u0131t\u0131, BM G\u00fcvenlik Konseyi arac\u0131l\u0131\u011f\u0131yla kolektif eylem gerektirir."},
-  {text:"K\u00fclt\u00fcrel g\u00f6recelilik her zaman bask\u0131y\u0131 me\u015frula\u015ft\u0131rmak i\u00e7in k\u00f6t\u00fc niyetle kullan\u0131l\u0131r.",zone:"karmasik",explain:"K\u00fclt\u00fcrel g\u00f6recelilik, evrensel ilkeler ile yerel ba\u011flamlar aras\u0131ndaki ili\u015fki hakk\u0131nda ger\u00e7ek felsefi sorular ortaya koyar. S\u0131kl\u0131kla silah olarak kullan\u0131lsa da, \u2018evrenseli kim tan\u0131mlar?\u2019 sorusu me\u015frudur."},
-  {text:"Ekonomik ve sosyal haklar (g\u0131da, bar\u0131nma, sa\u011fl\u0131k), medeni ve siyasi haklarla (ifade, toplanma, adil yarg\u0131lanma) ayn\u0131 derecede \u00f6nemlidir.",zone:"gercek",explain:"1993 Viyana Bildirisi, t\u00fcm insan haklar\u0131n\u0131n \u2018evrensel, b\u00f6l\u00fcnmez, birbirine ba\u011f\u0131ml\u0131 ve birbiriyle ili\u015fkili\u2019 oldu\u011funu teyit etti."},
-  {text:"Zorla yerinden edilen insan say\u0131s\u0131 2005\u2019te 37 milyondan 2024\u2019te 123 milyonun \u00fczerine \u00e7\u0131km\u0131\u015ft\u0131r.",zone:"gercek",explain:"BMMYK verileri bu dramatik art\u0131\u015f\u0131 do\u011fruluyor. Bu, II. D\u00fcnya Sava\u015f\u0131\u2019ndan bu yana en y\u00fcksek zorunlu yerinden edilme d\u00fczeyidir."},
-  {text:"\u0130nsani m\u00fcdahalenin rejim de\u011fi\u015fikli\u011fi i\u00e7in k\u0131l\u0131f olarak kullan\u0131lmas\u0131n\u0131n sorunlu bir ge\u00e7mi\u015fi vard\u0131r.",zone:"karmasik",explain:"Libya 2011 en a\u00e7\u0131k \u00f6rnektir: BM G\u00fcvenlik Konseyi Karar\u0131 1973 sivil korumay\u0131 yetkilendirdi, ancak NATO rejim de\u011fi\u015fikli\u011fi izledi."},
-  {text:"Uluslararas\u0131 Ceza Mahkemesi d\u00fcnyadaki herhangi bir lideri sava\u015f su\u00e7lar\u0131ndan yarg\u0131layabilir.",zone:"karmasik",explain:"UCM\u2019nin yarg\u0131 yetkisi s\u0131n\u0131rl\u0131d\u0131r: yaln\u0131zca taraf devlet vatanda\u015flar\u0131n\u0131 veya G\u00fcvenlik Konseyi taraf\u0131ndan havale edilen davalar\u0131 yarg\u0131layabilir. ABD, Rusya, \u00c7in, Hindistan ve \u0130srail UCM \u00fcyesi de\u011fildir."},
-  {text:"R2P, 2005\u2019ten bu yana t\u00fcm BM \u00fcye devletleri taraf\u0131ndan oybirli\u011fiyle onaylanm\u0131\u015ft\u0131r.",zone:"gercek",explain:"2005 D\u00fcnya Zirvesi Sonu\u00e7 Belgesi, t\u00fcm BM \u00fcye devletleri taraf\u0131ndan kabul edilen 138\u2013139. paragraflar\u0131nda R2P\u2019yi i\u00e7erir."},
-  {text:"\u0130nsan haklar\u0131 \u00f6rg\u00fctlerinin \u2018isim koyma ve utand\u0131rmas\u0131\u2019n\u0131n devlet davran\u0131\u015f\u0131 \u00fczerinde ger\u00e7ek bir etkisi yoktur.",zone:"mit",explain:"Ara\u015ft\u0131rmalar, isim koyma ve utand\u0131rman\u0131n belirli ihlalleri azaltabildi\u011fini g\u00f6sterir. HRW ve Uluslararas\u0131 Af \u00d6rg\u00fct\u00fc raporlar\u0131 yapt\u0131r\u0131mlar\u0131, kovu\u015fturmalar\u0131 ve politika de\u011fi\u015fikliklerini etkilemi\u015ftir."},
-  {text:"Suriye \u00e7at\u0131\u015fmas\u0131 R2P\u2019nin bir norm olarak \u00f6ld\u00fc\u011f\u00fcn\u00fc kan\u0131tlad\u0131.",zone:"karmasik",explain:"Suriye R2P\u2019nin en b\u00fcy\u00fck ba\u015far\u0131s\u0131zl\u0131\u011f\u0131d\u0131r, ancak norm hayatta kald\u0131: 2025 BM Genel Sekreter raporu onu yeniden teyit ediyor, K\u00fcresel R2P Merkezi \u00e7a\u011fr\u0131da bulunmaya devam ediyor. R2P zay\u0131flat\u0131lm\u0131\u015ft\u0131r ama \u00f6lmemi\u015ftir."},
-  {text:"Kad\u0131n haklar\u0131 insan haklar\u0131d\u0131r \u2014 ancak CEDAW en fazla \u00e7ekince konulan insan haklar\u0131 antla\u015fmas\u0131d\u0131r.",zone:"gercek",explain:"CEDAW (1979) neredeyse evrensel onaya sahiptir ama di\u011fer t\u00fcm insan haklar\u0131 antla\u015fmalar\u0131ndan daha fazla \u00e7ekince i\u00e7erir."},
-  {text:"Koruma Sorumlulu\u011fu yaln\u0131zca d\u00f6rt kitle vahset su\u00e7u i\u00e7in ge\u00e7erlidir: soyk\u0131r\u0131m, sava\u015f su\u00e7lar\u0131, etnik temizlik ve insanl\u0131\u011fa kar\u015f\u0131 su\u00e7lar.",zone:"gercek",explain:"R2P bilin\u00e7li olarak bu d\u00f6rt su\u00e7la s\u0131n\u0131rl\u0131d\u0131r. Do\u011fal afetler, yoksulluk veya genel insan haklar\u0131 ihlalleri i\u00e7in ge\u00e7erli de\u011fildir."},
-  {text:"Uluslararas\u0131 mahkemeler Kuzey K\u0131br\u0131s\u2019taki insan haklar\u0131 ihlalleri nedeniyle T\u00fcrkiye aleyhine karar vermi\u015ftir.",zone:"gercek",explain:"A\u0130HM, Loizidou / T\u00fcrkiye (1996) ve K\u0131br\u0131s / T\u00fcrkiye (2001) davalar\u0131nda T\u00fcrkiye\u2019nin m\u00fclkiyet haklar\u0131n\u0131n reddi ve yerinden edilen K\u0131br\u0131sl\u0131 Rumlar\u0131n geri d\u00f6n\u00fc\u015f hakk\u0131 konusunda sorumlu oldu\u011funa h\u00fckmetmi\u015ftir."}
-];
-
-const THEORY_DATA=[
-  {text:"Devletler yurt d\u0131\u015f\u0131nda insan haklar\u0131n\u0131 asla ger\u00e7ekten korumayacakt\u0131r \u00e7\u00fcnk\u00fc her zaman insani kayg\u0131lar yerine ulusal \u00e7\u0131kar\u0131 ve egemenli\u011fi \u00f6nceliklendirir.",theory:"Realizm",explain:"Realistler insan haklar\u0131 s\u00f6yleminin iktidar siyasetine tabi oldu\u011funu savunur."},
-  {text:"Uluslararas\u0131 insan haklar\u0131 antla\u015fmalar\u0131, HRC ve UCM, devletleri uyuma kademeli olarak sosyalle\u015ftiren bir kurumlar a\u011f\u0131 olu\u015fturur.",theory:"Liberal Kurumsalc\u0131l\u0131k",explain:"Liberaller kurumlar\u0131n \u00f6nemli oldu\u011funu savunur: kusurlu olanlar bile zamanla bask\u0131, bilgi ve hesap verebilirlik \u00fcretir."},
-  {text:"\u0130nsan haklar\u0131 normlar\u0131 bir \u2018norm \u00e7\u0131\u011f\u0131\u2019 yoluyla yay\u0131l\u0131r \u2014 yeterince devlet benimsedi\u011finde, me\u015fru devlet olman\u0131n kabul g\u00f6rm\u00fc\u015f standartlar\u0131 haline gelir.",theory:"Konstr\u00fcktivizm",explain:"Finnemore ve Sikkink\u2019in norm ya\u015fam d\u00f6ng\u00fcs\u00fc modeli do\u011frudan uygulanabilir."},
-  {text:"Uluslararas\u0131 insan haklar\u0131 rejimi, Bat\u0131l\u0131 devletlerin kontrol ettikleri kurumlar arac\u0131l\u0131\u011f\u0131yla de\u011ferlerini d\u00fcnyan\u0131n geri kalan\u0131na dayatma g\u00fcc\u00fcn\u00fc yans\u0131t\u0131r.",theory:"Marksizm / Ele\u015ftirel Teori",explain:"Ele\u015ftirel teorisyenler, insan haklar\u0131 evrenselcili\u011finin iktidar\u0131 gizledi\u011fini savunur."},
-  {text:"\u0130nsan haklar\u0131 s\u00f6ylemi kad\u0131nlar\u0131n deneyimlerini sistematik olarak g\u00f6rmezden gelir: \u2018kamusal/\u00f6zel\u2019 ayr\u0131m\u0131, ev i\u00e7i \u015fiddeti ve \u00fcreme haklar\u0131n\u0131 \u00f6zel meseleler olarak ele al\u0131r.",theory:"Feminizm",explain:"Feminist U\u0130 akademisyenleri insan haklar\u0131 \u00e7er\u00e7evesinin kamusal alandaki erkek deneyimleri etraf\u0131nda in\u015fa edildi\u011fini savunur."},
-  {text:"R2P, \u2018uygarla\u015ft\u0131rma misyonu\u2019nun en son versiyonudur \u2014 g\u00fc\u00e7l\u00fc Bat\u0131l\u0131 devletler insan haklar\u0131n\u0131 koruma k\u0131l\u0131f\u0131 alt\u0131nda daha zay\u0131f devletlere m\u00fcdahale etme hakk\u0131 talep eder.",theory:"Post-koloniyalizm",explain:"Post-koloniyal akademisyenler insani m\u00fcdahalenin s\u00f6m\u00fcrgeci yank\u0131lar\u0131 oldu\u011funu belirtir. R2P\u2019nin se\u00e7ici uygulanmas\u0131 (Libya ama Filistin de\u011fil) bu ele\u015ftiriyi g\u00fc\u00e7lendirir."},
-  {text:"ABD\u2019nin \u0130srail\u2019i hesap verebilirlikten korumak i\u00e7in G\u00fcvenlik Konseyi\u2019nde veto kullanmas\u0131, b\u00fcy\u00fck g\u00fc\u00e7lerin evrensel ilkeler yerine stratejik \u00e7\u0131karlar\u0131na hizmet etmek i\u00e7in uluslararas\u0131 kurumlar\u0131 kulland\u0131\u011f\u0131n\u0131 g\u00f6sterir.",theory:"Realizm",explain:"Veto kal\u0131b\u0131 (Filistin kararlar\u0131nda 14\u20131) ders kitab\u0131 realist vakad\u0131r."},
-  {text:"118 \u00fclkede ulusal insan haklar\u0131 kurumlar\u0131n\u0131n yay\u0131lmas\u0131, insan haklar\u0131 normunun i\u00e7 d\u00fczeyde i\u00e7selle\u015ftirildi\u011fini g\u00f6sterir.",theory:"Konstr\u00fcktivizm",explain:"Konstr\u00fcktivistler UHKK\u2019lar\u0131 norm yay\u0131l\u0131m\u0131n\u0131n kan\u0131t\u0131 olarak g\u00f6r\u00fcr."},
-  {text:"COVID-19 s\u0131ras\u0131ndaki TRIPS muafiyeti tart\u0131\u015fmas\u0131 ve Kay\u0131p ve Zarar Fonu\u2019nun yetersiz finansman\u0131, k\u00fcresel y\u00f6neti\u015fimin kurumsal k\u00e2r\u0131 ve zengin devletlerin \u00e7\u0131karlar\u0131n\u0131 savunmas\u0131z n\u00fcfuslar\u0131n haklar\u0131n\u0131n \u00f6n\u00fcne koydu\u011funu g\u00f6sterir.",theory:"Marksizm / Ele\u015ftirel Teori",explain:"Marksist analiz, insan haklar\u0131 s\u00f6ylemi ile ekonomik ger\u00e7eklik aras\u0131ndaki u\u00e7urumu yap\u0131sal olarak g\u00f6r\u00fcr."},
-  {text:"1993 Viyana Bildirisi\u2019nin uzla\u015fmas\u0131 \u2014 evrenselli\u011fi teyit ederken \u2018ulusal ve b\u00f6lgesel \u00f6zellikleri\u2019 tan\u0131mas\u0131 \u2014 normlar\u0131n dayat\u0131lmad\u0131\u011f\u0131n\u0131, diplomatik pratikle m\u00fczakere edildi\u011fini g\u00f6sterir.",theory:"Konstr\u00fcktivizm",explain:"Viyana form\u00fcl\u00fc konstr\u00fcktivist vaka \u00e7al\u0131\u015fmas\u0131d\u0131r: evrensellik nesnel bir olgu de\u011fil, m\u00fczakere edilmi\u015f bir uzla\u015f\u0131 olarak yeniden teyit edildi."},
-  {text:"\u0130nsani m\u00fcdahale, kitle vahsetlerini \u00f6nledi\u011finde me\u015frudur, \u00e7\u00fcnk\u00fc masum hayatlar\u0131n korunmas\u0131 egemenli\u011fi ge\u00e7ersiz k\u0131lan ahlaki bir y\u00fck\u00fcml\u00fcl\u00fck yarat\u0131r.",theory:"Liberal Kurumsalc\u0131l\u0131k",explain:"R2P i\u00e7in liberal gerek\u00e7e, egemenli\u011fin ko\u015fullu oldu\u011fu fikrine dayan\u0131r."},
-  {text:"Suriye\u2019de kad\u0131nlar, BM G\u00fcvenlik Konseyi Karar\u0131 1325\u2019in kad\u0131nlar\u0131n dahil edilmesini zorunlu k\u0131lmas\u0131na ra\u011fmen ge\u00e7i\u015f d\u00f6nemi karar alma s\u00fcre\u00e7lerinden b\u00fcy\u00fck \u00f6l\u00e7\u00fcde d\u0131\u015flanm\u0131\u015ft\u0131r.",theory:"Feminizm",explain:"Suriye ge\u00e7i\u015fi, normatif taahh\u00fctler (2000\u2019de kabul edilen 1325) ile ger\u00e7eklik aras\u0131ndaki u\u00e7urumu g\u00f6sterir."}
-];
-
-const MATCH_DATA=[
-  {term:"\u0130HEB (1948)",def:"\u0130nsan Haklar\u0131 Evrensel Beyannamesi \u2014 BM Genel Kurulu taraf\u0131ndan kabul edilen 30 madde; hukuken ba\u011flay\u0131c\u0131 de\u011fil ama insan haklar\u0131 rejiminin temelini olu\u015fturur"},
-  {term:"MSH\u00dcS",def:"Medeni ve Siyasi Haklara \u0130li\u015fkin Uluslararas\u0131 S\u00f6zle\u015fme (1966) \u2014 ifade, toplanma, adil yarg\u0131lanma \u00f6zg\u00fcrl\u00fcklerini koruyan hukuken ba\u011flay\u0131c\u0131 antla\u015fma"},
-  {term:"ESSKHS",def:"Ekonomik, Sosyal ve K\u00fclt\u00fcrel Haklara \u0130li\u015fkin Uluslararas\u0131 S\u00f6zle\u015fme (1966) \u2014 g\u0131da, bar\u0131nma, sa\u011fl\u0131k, e\u011fitim haklar\u0131n\u0131 koruyan hukuken ba\u011flay\u0131c\u0131 antla\u015fma"},
-  {term:"R2P (Koruma Sorumlulu\u011fu)",def:"2005 taahh\u00fcd\u00fc: egemenlik sorumluluk gerektirir; devlet halk\u0131n\u0131 d\u00f6rt vahset su\u00e7undan korumada ba\u015far\u0131s\u0131z olursa uluslararas\u0131 toplum harekete ge\u00e7melidir"},
-  {term:"K\u00fclt\u00fcrel G\u00f6recelilik",def:"\u0130nsan haklar\u0131n\u0131n k\u00fclt\u00fcrel ba\u011flam \u0131\u015f\u0131\u011f\u0131nda yorumlanmas\u0131 ve d\u0131\u015far\u0131dan evrensel standartlar olarak dayat\u0131lamayaca\u011f\u0131 arg\u00fcman\u0131"},
-  {term:"BM \u0130nsan Haklar\u0131 Konseyi (HRC)",def:"2006\u2019da olu\u015fturulan 47 \u00fcyeli organ; t\u00fcm BM \u00fcyelerinin Evrensel Periyodik De\u011ferlendirmesini (UPR) y\u00fcr\u00fct\u00fcr"},
-  {term:"\u00d6ED / UPR",def:"Evrensel Periyodik De\u011ferlendirme \u2014 her BM \u00fcye devletinin insan haklar\u0131 sicilinin 4,5 y\u0131lda bir HRC taraf\u0131ndan g\u00f6zden ge\u00e7irildi\u011fi mekanizma"},
-  {term:"\u0130nsani M\u00fcdahale",def:"Bir devlet veya devlet grubunun, hedef devletin r\u0131zas\u0131 olsun veya olmas\u0131n, ba\u015fka bir devletteki kitle vahsetlerini durdurmak i\u00e7in askeri g\u00fc\u00e7 kullanmas\u0131"},
-  {term:"Eleanor Roosevelt",def:"\u0130HEB\u2019i haz\u0131rlayan BM komitesinin ba\u015fkan\u0131; insan haklar\u0131n\u0131n II. D\u00fcnya Sava\u015f\u0131 sonras\u0131 uluslararas\u0131 d\u00fczenin temel dire\u011fi olmas\u0131 i\u00e7in savunucu"},
-  {term:"Amartya Sen",def:"Nobel \u00f6d\u00fcll\u00fc ekonomist; \u00e7e\u015fitli Asya geleneklerinin insan onuru ve \u00f6zg\u00fcrl\u00fc\u011f\u00fc destekledi\u011fini g\u00f6stererek \u2018Asya de\u011ferleri\u2019 arg\u00fcman\u0131na meydan okudu"},
-  {term:"CEDAW",def:"Kad\u0131nlara Kar\u015f\u0131 Her T\u00fcrl\u00fc Ayr\u0131mc\u0131l\u0131\u011f\u0131n \u00d6nlenmesi S\u00f6zle\u015fmesi (1979) \u2014 en fazla \u00e7ekince konulan insan haklar\u0131 antla\u015fmas\u0131"},
-  {term:"Loizidou / T\u00fcrkiye (1996)",def:"T\u00fcrkiye\u2019nin Kuzey K\u0131br\u0131s\u2019ta i\u015fgal etti\u011fi topraklardaki insan haklar\u0131 ihlallerinden sorumlu oldu\u011funu belirleyen \u00f6nemli A\u0130HM karar\u0131"}
-];
-
-const TL_DATA=[
-  {year:1215,text:"Magna Carta \u2014 \u0130ngiliz ferman\u0131; haklar temelli y\u00f6neti\u015fimin erken \u00f6nc\u00fcs\u00fc"},
-  {year:1789,text:"Frans\u0131z \u0130nsan ve Yurtta\u015f Haklar\u0131 Bildirisi"},
-  {year:1948,text:"\u0130nsan Haklar\u0131 Evrensel Beyannamesi BM Genel Kurulu taraf\u0131ndan kabul edildi"},
-  {year:1948,text:"Soyk\u0131r\u0131m Su\u00e7unun \u00d6nlenmesi ve Cezaland\u0131r\u0131lmas\u0131 S\u00f6zle\u015fmesi"},
-  {year:1966,text:"MSH\u00dcS ve ESSKHS kabul edildi \u2014 hukuken ba\u011flay\u0131c\u0131 \u2018Uluslararas\u0131 Haklar Bildirgesi\u2019"},
-  {year:1979,text:"CEDAW kabul edildi \u2014 Kad\u0131nlara Kar\u015f\u0131 Her T\u00fcrl\u00fc Ayr\u0131mc\u0131l\u0131\u011f\u0131n \u00d6nlenmesi S\u00f6zle\u015fmesi"},
-  {year:1993,text:"Viyana D\u00fcnya \u0130nsan Haklar\u0131 Konferans\u0131 \u2014 evrenselli\u011fi yeniden teyit etti, OHCHR olu\u015fturuldu"},
-  {year:1994,text:"Ruanda Soyk\u0131r\u0131m\u0131 \u2014 100 g\u00fcnde 800.000 Tutsi \u00f6ld\u00fcr\u00fcld\u00fc; BM bar\u0131\u015f g\u00fcc\u00fc geri \u00e7ekildi"},
-  {year:1995,text:"Srebrenitsa Katliam\u0131 \u2014 BM \u2018g\u00fcvenli b\u00f6lge\u2019 ilan\u0131na ra\u011fmen 8.000 Bo\u015fnak erkek ve erkek \u00e7ocuk \u00f6ld\u00fcr\u00fcld\u00fc"},
-  {year:1996,text:"Loizidou / T\u00fcrkiye \u2014 A\u0130HM, T\u00fcrkiye\u2019nin Kuzey K\u0131br\u0131s\u2019taki insan haklar\u0131 ihlallerinden sorumlu oldu\u011funa h\u00fckmetti"},
-  {year:1998,text:"Roma Stat\u00fcs\u00fc kabul edildi \u2014 Uluslararas\u0131 Ceza Mahkemesi kuruldu"},
-  {year:2001,text:"ICISS \u2018Koruma Sorumlulu\u011fu\u2019 raporunu yay\u0131mlad\u0131"},
-  {year:2005,text:"BM D\u00fcnya Zirvesi \u2014 t\u00fcm \u00fcye devletler oybirli\u011fiyle R2P\u2019yi kabul etti (138\u2013139. paragraflar)"},
-  {year:2006,text:"BM \u0130nsan Haklar\u0131 Konseyi, itibar\u0131n\u0131 yitirmi\u015f \u0130nsan Haklar\u0131 Komisyonu\u2019nun yerine ge\u00e7ti"},
-  {year:2011,text:"BM G\u00fcvenlik Konseyi Karar\u0131 1973 \u2014 Libya\u2019da sivilleri korumak i\u00e7in m\u00fcdahaleye yetki verdi (R2P\u2019nin doruk noktas\u0131)"},
-  {year:2022,text:"Rusya Ukrayna\u2019y\u0131 i\u015fgal etti \u2014 UCM, Putin i\u00e7in tutuklama emri \u00e7\u0131kard\u0131 (Mart 2023)"},
-  {year:2025,text:"BM Genel Sekreteri\u2019nin 17. R2P raporu: \u201820 Y\u0131ll\u0131k Taahh\u00fct\u2019 \u2014 normatif ilerlemeye ra\u011fmen artan vahset su\u00e7lar\u0131 uyar\u0131s\u0131"},
-  {year:2025,text:"K\u00fcresel R2P Merkezi Filistin i\u00e7in acil \u00e7a\u011fr\u0131; HRW 2026 D\u00fcnya Raporu Suriye ge\u00e7i\u015f ihlallerini belgeledi"}
-];
-
-const DEBATE_DATA=[
-  {prompt:"<strong>M\u00fcfredat Sorusu 1:</strong> \u0130nsan haklar\u0131 ger\u00e7ekten evrensel mi, yoksa Bat\u0131l\u0131 bir ihra\u00e7 \u00fcr\u00fcn\u00fc m\u00fc?<br><br>D\u00fc\u015f\u00fcn\u00fcn: \u0130HEB\u2019in s\u00f6m\u00fcrge d\u00f6nemi k\u00f6kenleri ile s\u00f6m\u00fcrge sonras\u0131 devletler taraf\u0131ndan benimsenmesi; \u2018Asya de\u011ferleri\u2019 tart\u0131\u015fmas\u0131; Amartya Sen\u2019in yan\u0131t\u0131; Viyana Bildirisi\u2019nin uzla\u015fma form\u00fcl\u00fc; Bat\u0131l\u0131 olmayan taslak \u00fcyelerin rol\u00fc (P.C. Chang, Charles Malik, Hansa Mehta)."},
-  {prompt:"<strong>M\u00fcfredat Sorusu 2:</strong> \u0130nsani m\u00fcdahale ne zaman (e\u011fer olacaksa) me\u015frudur?<br><br>D\u00fc\u015f\u00fcn\u00fcn: R2P\u2019nin \u00fc\u00e7 ayg\u0131t\u0131; Libya m\u00fcdahalesi (Bingazi\u2019de ba\u015far\u0131, sonras\u0131nda ba\u015far\u0131s\u0131zl\u0131k); Suriye\u2019nin 500.000 \u00f6l\u00fcs\u00fc; \u2018\u00e7ifte standart\u2019 ele\u015ftirisi; m\u00fcdahalenin rejim de\u011fi\u015fikli\u011fi k\u0131l\u0131f\u0131 olarak kullan\u0131lma riski; m\u00fcdahale etmemenin bedeli (Ruanda, Srebrenitsa)."},
-  {prompt:"<strong>M\u00fcfredat Sorusu 3:</strong> R2P neden tutarl\u0131 bir \u015fekilde uygulanam\u0131yor?<br><br>D\u00fc\u015f\u00fcn\u00fcn: P5 vetosu; failleri koruyan stratejik ittifaklar; Libya tepkisi; erken uyar\u0131 ile siyasi eylem aras\u0131ndaki u\u00e7urum; Genel Sekreter\u2019in 2025 raporu; K\u00fcresel R2P Merkezi\u2019nin Filistin \u00e7a\u011fr\u0131s\u0131."},
-  {prompt:"<strong>Suriye\u2019nin Ge\u00e7i\u015fi:</strong> 13 y\u0131ll\u0131k i\u00e7 sava\u015ftan \u00e7\u0131kan bir devlet g\u00fcvenilir bir insan haklar\u0131 \u00e7er\u00e7evesi olu\u015fturabilir mi? HRW 2026 D\u00fcnya Raporu zorluklar hakk\u0131nda ne ortaya koyuyor?<br><br>D\u00fc\u015f\u00fcn\u00fcn: se\u00e7ici ge\u00e7i\u015f adaleti; kimlik temelli katliamlar; %90 yoksulluk oran\u0131; d\u0131\u015f akt\u00f6rlerin rol\u00fc."},
-  {prompt:"<strong>Veto Sorunu:</strong> P5 vetosu kitle vahset su\u00e7lar\u0131 i\u00e7eren durumlarda reform edilmeli veya kald\u0131r\u0131lmal\u0131 m\u0131?<br><br>D\u00fc\u015f\u00fcn\u00fcn: Frans\u0131z-Meksika veto k\u0131s\u0131tlama giri\u015fimi; ACT Grubu Davran\u0131\u015f Kurallar\u0131; Genel Kurul Karar\u0131 76/262; Filistin\u2019deki 14\u20131 oy kal\u0131b\u0131; Rusya\u2019n\u0131n Suriye\u2019de 16+ vetosu."},
-  {prompt:"<strong>K\u0131br\u0131s\u2019ta \u0130nsan Haklar\u0131:</strong> 1974 \u00e7at\u0131\u015fmas\u0131ndan bu yana 1.500\u2019den fazla ki\u015fi kay\u0131pt\u0131r. A\u0130HM T\u00fcrkiye aleyhine karar vermi\u015ftir. On binlerce ki\u015fi hala yerinden edilmi\u015f durumdad\u0131r. K\u0131br\u0131s vakas\u0131, insan haklar\u0131 hukuku ile insan haklar\u0131 prati\u011fi aras\u0131ndaki u\u00e7urumu nas\u0131l g\u00f6sterir?"},
-  {prompt:"<strong>UCM\u2019nin G\u00fcvenirli\u011fi:</strong> UCM, g\u00fc\u00e7l\u00fc devletler (ABD, Rusya, \u00c7in, \u0130srail) eri\u015fim d\u0131\u015f\u0131nda kal\u0131rken orant\u0131s\u0131z \u015fekilde Afrikal\u0131 liderleri hedef almakla ele\u015ftirilmi\u015ftir. UCM bir adalet arac\u0131 m\u0131 yoksa iktidar arac\u0131 m\u0131?"},
-  {prompt:"<strong>Noktalar\u0131 Birle\u015ftirin:</strong> Bu haftan\u0131n temalar\u0131 \u00f6nceki haftalarla nas\u0131l ba\u011flant\u0131l\u0131? D\u00fc\u015f\u00fcn\u00fcn: egemenlik ve insan haklar\u0131 (Hafta 1\u20132); BM\u2019nin rol\u00fc (Hafta 6); toplumsal cinsiyet ve insan haklar\u0131 (Hafta 7); \u0131rk ve insan haklar\u0131 (Hafta 10); \u00e7evre ve insan haklar\u0131 (Hafta 12)."}
-];
-
-// ======== BUILD FUNCTIONS ========
-function buildLanding(){
-  const qr=QR.generate();
-  document.getElementById('qr-container').appendChild(qr);
-  document.getElementById('startBtn').addEventListener('click',()=>{
-    document.getElementById('landing').style.display='none';
-    document.getElementById('tabBar').style.display='flex';
-    document.querySelector('[data-tab="videos"]').click();
-  });
-}
-function initTabs(){
-  document.querySelectorAll('.tab-btn').forEach(b=>{
-    b.addEventListener('click',()=>{
-      document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-      document.getElementById('panel-'+b.dataset.tab).classList.add('active');
-      if(b.dataset.tab==='stats') buildStats();
-    });
-  });
-}
-function buildVideos(){
-  const wrap=document.getElementById('vidSections');
-  const nav=document.getElementById('vidSubNav');
-  let first=true;
-  for(const[secKey,sec] of Object.entries(VID_DATA)){
-    const sdiv=document.createElement('div');sdiv.id=secKey;sdiv.style.display=first?'block':'none';
-    sdiv.innerHTML=`<div class="section-header"><h3>${sec.title}</h3><p>${sec.desc}</p></div>`;
-    sec.items.forEach(item=>{
-      const card=document.createElement('div');card.className='card';card.id='vcard-'+item.id;
-      let media='';
-      if(item.type==='video') media=`<h4>${item.title}</h4><div class="video-wrap"><iframe src="https://www.youtube.com/embed/${item.yt}" allowfullscreen loading="lazy"></iframe></div>`;
-      else media=`<h4>${item.title}</h4><div class="reflect-q">${item.text}</div>`;
-      let optsHtml=item.opts.map((o,i)=>`<div class="reflect-opt" data-idx="${i}">${o}</div>`).join('');
-      card.innerHTML=`${media}<div class="reflect-q">${item.q}</div><div class="reflect-options">${optsHtml}</div><button class="reflect-btn" disabled>G\u00f6nder</button><div class="model-answer" id="model-${item.id}">\u2705 <strong>Model Cevap:</strong> ${item.model}</div>`;
-      sdiv.appendChild(card);
-      setTimeout(()=>{
-        const opts=card.querySelectorAll('.reflect-opt');const btn=card.querySelector('.reflect-btn');let sel=null;
-        opts.forEach(o=>{o.addEventListener('click',()=>{if(done.videos[item.id])return;opts.forEach(x=>x.classList.remove('selected'));o.classList.add('selected');sel=parseInt(o.dataset.idx);btn.disabled=false;});});
-        btn.addEventListener('click',()=>{if(done.videos[item.id])return;done.videos[item.id]=true;btn.disabled=true;
-          opts.forEach(o=>{const idx=parseInt(o.dataset.idx);if(idx===item.correct)o.classList.add('correct');else if(idx===sel)o.classList.add('wrong');o.style.pointerEvents='none';});
-          if(sel===item.correct){addXP(10);addStreak();}else{breakStreak();}
-          document.getElementById('model-'+item.id).classList.add('show');
-        });
-      },0);
-    });
-    wrap.appendChild(sdiv);first=false;
+  secA:{
+    title:"A — Evrensel İnsan Hakları",
+    desc:"İnsan hakları kavramının temelleri, İHEB ve evrensellik tartışması.",
+    items:[
+      {type:"video",title:"İnsan Hakları Evrensel Beyannamesi Animasyonu",yt:"SFMBniadS3M",
+       q:"Bu videonun temel mesajı nedir?",
+       options:["İnsan hakları sadece Batı toplumlarına aittir","İnsan hakları evrenseldir ve herkes için geçerlidir","İnsan hakları yalnızca devletlerin iç meselesidir","İnsan hakları hukuki bağlayıcılığı olmayan idealler listesidir"],
+       correct:1,
+       model:"Video, İnsan Hakları Evrensel Beyannamesi'nin (İHEB) 1948'de kabul edildiğini ve tüm insanların doğuştan sahip olduğu hakları tanımladığını anlatır. Temel mesaj, bu hakların evrensel olduğu — ırk, din, cinsiyet veya milliyet fark etmeksizin herkes için geçerli olduğudur."},
+      {type:"case",title:"Vaka İncelemesi: Asya Değerleri Tartışması",
+       text:"1990'larda Singapur'un Lee Kuan Yew'i ve Malezya'nın Mahathir Mohamad'ı, Batılı bireysel haklar anlayışının Asya toplumlarına uygun olmadığını savunarak 'Asya değerleri' kavramını öne sürdü. Topluluk hakları, disiplin ve kalkınmanın bireysel özgürlüklerden önce geldiğini iddia ettiler.",
+       q:"'Asya değerleri' argümanı evrenselcilik için ne anlama gelir?",
+       options:["İnsan haklarının kültürel göreliliğini destekler","İnsan hakları evrenselliğini tamamen reddeder","Evrensel haklar ile kültürel bağlam arasındaki gerilimi gösterir","Yalnızca ekonomik haklarla ilgilidir"],
+       correct:2,
+       model:"'Asya değerleri' tartışması, insan haklarının evrensel olup olmadığı sorusunu gündeme getirmiştir. Bu argüman, evrenselciliği tamamen reddetmese de, hakların uygulanmasında kültürel bağlamın önemine dikkat çeker. Eleştirmenler ise bunun otoriter yönetimlerin hak ihlallerini meşrulaştırma aracı olduğunu savunur."}
+    ]
+  },
+  secB:{
+    title:"B — İnsan Hakları Rejimi",
+    desc:"Uluslararası antlaşma organları, İnsan Hakları Konseyi ve denetim mekanizmaları.",
+    items:[
+      {type:"video",title:"İnsan Hakları ve Demokrasi: Üç Kuşak Haklar",yt:"XL1QRp-ijcY",
+       q:"Üç kuşak haklar nelerdir?",
+       options:["Siyasi, ekonomik ve çevresel haklar","Medeni-siyasi, ekonomik-sosyal-kültürel ve dayanışma hakları","Bireysel, toplumsal ve devlet hakları","Ulusal, bölgesel ve uluslararası haklar"],
+       correct:1,
+       model:"Karel Vasak'ın üç kuşak sınıflandırması: Birinci kuşak medeni ve siyasi haklar (yaşam, ifade özgürlüğü); İkinci kuşak ekonomik, sosyal ve kültürel haklar (eğitim, sağlık); Üçüncü kuşak dayanışma hakları (kalkınma, temiz çevre, barış hakkı)."},
+      {type:"case",title:"Vaka İncelemesi: HRW Dünya Raporu 2026 — Suriye",
+       text:"Human Rights Watch 2026 Dünya Raporu, Esad rejiminin düşüşü sonrası Suriye'deki geçiş sürecini değerlendiriyor. Rapor, hesap verebilirlik mekanizmalarının kurulması gerektiğini, geçmişte işlenen savaş suçları ve insanlığa karşı suçlar için adalet arayışının devam ettiğini vurguluyor.",
+       q:"Suriye geçiş süreci insan hakları rejimi açısından ne gösterir?",
+       options:["Uluslararası insan hakları hukuku artık geçersizdir","Hesap verebilirlik çatışma sonrası bile önemli kalır","Devlet egemenliği her zaman insan haklarından önce gelir","BM sistemi tamamen başarısız olmuştur"],
+       correct:1,
+       model:"Suriye vakası, çatışma döneminde denetim mekanizmalarının yetersiz kalabilmesine rağmen, çatışma sonrası dönemde hesap verebilirlik ve geçiş dönemi adaletinin hâlâ mümkün ve gerekli olduğunu gösterir. HRW raporu, belgeleme çalışmalarının uzun vadeli adalet süreçlerine katkısını ortaya koyar."},
+      {type:"case",title:"Vaka İncelemesi: BM İnsan Hakları Konseyi — Koruyucu mu, İkiyüzlü mü?",
+       text:"BM İnsan Hakları Konseyi (İHK), 47 üye devletten oluşur ve Evrensel Periyodik İnceleme (UPR) aracılığıyla tüm BM üyelerinin insan hakları durumunu değerlendirir. Ancak Konsey, Çin, Suudi Arabistan ve Rusya gibi insan hakları sicili tartışmalı ülkeleri üye olarak kabul ettiği için sıklıkla eleştirilir.",
+       q:"İHK'nın meşruiyet sorunu nereden kaynaklanır?",
+       options:["Çok fazla üyesi vardır","İnsan hakları ihlalcisi devletlerin üyelik yapabilmesi","Sadece Batılı devletlerden oluşması","Bağlayıcı kararlar alabilmesi"],
+       correct:1,
+       model:"İHK'nın en büyük meşruiyet sorunu, ciddi insan hakları ihlalleri yapan devletlerin Konsey üyesi olabilmesidir. Bu durum, Konsey'in 'seçici' ve 'siyasallaşmış' olduğu eleştirilerine yol açar. Yine de UPR mekanizması, tüm devletlerin periyodik olarak değerlendirilmesini sağlayarak bir miktar hesap verebilirlik sunar."}
+    ]
+  },
+  secC:{
+    title:"C — Koruma Sorumluluğu (R2P) ve İnsani Müdahale",
+    desc:"R2P doktrini, insani müdahale tartışması ve uygulama zorlukları.",
+    items:[
+      {type:"video",title:"Koruma Sorumluluğu Nedir? Libya Örneği",yt:"ptqpzc9e3hg",
+       q:"R2P'nin üç sütunu nedir?",
+       options:["Önleme, tepki ve yeniden inşa","Devletin sorumluluğu, uluslararası yardım, uluslararası müdahale","Diplomasi, yaptırım ve savaş","İzleme, raporlama ve cezalandırma"],
+       correct:1,
+       model:"R2P'nin üç sütunu: (1) Her devletin kendi halkını soykırım, savaş suçları, etnik temizlik ve insanlığa karşı suçlardan koruma sorumluluğu; (2) Uluslararası toplumun bu devletlere yardım etme sorumluluğu; (3) Devlet açıkça başarısız olduğunda uluslararası toplumun kolektif eylem sorumluluğu."},
+      {type:"video",title:"İnsani Müdahale Nedir? (Akademik Pusula)",yt:"Im88lMZnUn4",
+       q:"İnsani müdahalenin en tartışmalı boyutu nedir?",
+       options:["Ekonomik maliyeti","Devlet egemenliği ile insan hakları arasındaki gerilim","Medya kapsamı","Sivil toplum katılımı"],
+       correct:1,
+       model:"İnsani müdahalenin en tartışmalı boyutu, devlet egemenliği ilkesi ile insan haklarının korunması arasındaki gerilimdir. Westphalia düzeninin temel ilkesi olan iç işlerine karışmama, kitlesel insan hakları ihlalleri karşısında sorgulanır. Realistler egemenliğin kutsallığını savunurken, kozmopolitanlar insani değerlerin önceliğini vurgular."},
+      {type:"case",title:"Vaka İncelemesi: Global Centre for R2P — Filistin Halkını Koruma Çağrısı (2025)",
+       text:"Global Centre for the Responsibility to Protect, Eylül 2025'te uluslararası topluma acil bir çağrıda bulunarak Filistin halkının korunması sorumluluğunun yerine getirilmesini talep etti. Çağrı, Gazze'deki insani krizin R2P kapsamında değerlendirilmesi gerektiğini vurguladı.",
+       q:"Filistin vakası R2P için neden önemli bir sınavdır?",
+       options:["R2P sadece Afrika için geçerlidir","Güçlü müttefikleri olan devletlere karşı R2P uygulanması siyasi açıdan zordur","R2P artık uluslararası hukukta yoktur","Filistin bir devlet olmadığı için R2P geçersizdir"],
+       correct:1,
+       model:"Filistin vakası, R2P'nin 'seçici uygulanma' eleştirisini somutlaştırır. Libya'da (2011) hızla harekete geçen uluslararası toplum, güçlü müttefikleri olan devletlerin dahil olduğu vakalarda benzer kararlılık gösteremez. Bu durum, R2P'nin norm olarak gücünü zayıflatır ve 'çifte standart' algısını güçlendirir."},
+      {type:"case",title:"Vaka İncelemesi: BM Genel Sekreteri R2P 20. Yıl Raporu (2025)",
+       text:"BM Genel Sekreteri, Mayıs 2025'te R2P'nin 20. yılı vesilesiyle yayımladığı raporda, normun başarılarını ve eksikliklerini değerlendirdi. Rapor, erken uyarı mekanizmalarının güçlendirilmesi ve Güvenlik Konseyi'nde veto kullanımının sınırlandırılması çağrısında bulundu.",
+       q:"R2P neden tutarlı biçimde uygulanamamaktadır?",
+       options:["Uluslararası hukukta tanımı yoktur","Güvenlik Konseyi'nde veto yetkisi ve büyük güç çıkarları","Sivil toplum buna karşıdır","Sadece soğuk savaş döneminde geçerliydi"],
+       correct:1,
+       model:"R2P'nin tutarsız uygulanmasının başlıca nedeni BM Güvenlik Konseyi'ndeki veto mekanizmasıdır. P5 üyelerinin stratejik çıkarları — Rusya'nın Suriye'yi, Çin'in devlet egemenliği ilkesini koruması — müdahale kararlarını engeller. Bu yapısal sorun, normun evrensel uygulanmasını imkânsız kılar."}
+    ]
+  },
+  secD:{
+    title:"D — Vaka Çalışmaları ve Yerel Boyut",
+    desc:"Libya, Suriye, Kıbrıs ve bölgesel insan hakları meseleleri.",
+    items:[
+      {type:"video",title:"Güney Afrika'da Apartheid: Yükselişi ve Yıkılışı",yt:"XpkT-O971FI",
+       q:"Apartheid rejiminin sona ermesinde en etkili faktör neydi?",
+       options:["Sadece uluslararası yaptırımlar","İç direniş, uluslararası baskı ve müzakere sürecinin birleşimi","Askeri müdahale","BM Güvenlik Konseyi kararı"],
+       correct:1,
+       model:"Apartheid'ın sona ermesi tek bir faktöre bağlanamaz. ANC'nin iç direnişi, uluslararası yaptırımlar ve izolasyon baskısı, ve De Klerk-Mandela müzakere süreci bir arada etkili olmuştur. Bu vaka, insan hakları mücadelesinin çok boyutlu doğasını gösterir."},
+      {type:"case",title:"Vaka İncelemesi: Kıbrıs — Kayıp Şahıslar ve İnsan Hakları",
+       text:"Kıbrıs'ta 1963-64 ve 1974 olayları sırasında her iki toplumdan yaklaşık 2.000 kişi kaybolmuştur. Kayıp Şahıslar Komitesi (CMP) iki toplumlu bir yapıda çalışarak kalıntıların tespiti ve iadesi konusunda önemli ilerlemeler kaydetmiştir. AİHM, Türkiye aleyhine birçok karar vererek kayıp kişilerin ailelerinin hakları konusunda emsal kararlar oluşturmuştur.",
+       q:"Kıbrıs kayıp şahıslar meselesi hangi insan hakları boyutunu öne çıkarır?",
+       options:["Yalnızca mülkiyet hakları","Hakikat hakkı, ailelerin acılarının tanınması ve geçiş dönemi adaleti","Sadece göç hakkı","Yalnızca siyasi haklar"],
+       correct:1,
+       model:"Kıbrıs kayıp şahıslar meselesi, 'hakikat hakkı' ve 'geçiş dönemi adaleti' kavramlarını somutlaştırır. Ailelerin sevdiklerinin akıbetini öğrenme hakkı, AİHM içtihadında madde 2 (yaşam hakkı), madde 3 (insanlık dışı muamele yasağı) ve madde 5 (özgürlük hakkı) kapsamında değerlendirilmiştir. CMP'nin iki toplumlu yapısı, barış inşası aracı olarak insan hakları mekanizmalarının potansiyelini gösterir."},
+      {type:"case",title:"Vaka İncelemesi: Gazze — Uluslararası İnsancıl Hukuk",
+       text:"Türkiye İnsan Hakları ve Eşitlik Kurumu (TİHEK), Gazze'deki insani krizi uluslararası insan hakları hukuku çerçevesinde değerlendiren kapsamlı bir rapor yayımlamıştır. Rapor, sivillerin korunması, insani yardıma erişim ve hesap verebilirlik mekanizmaları konularını ele almaktadır.",
+       q:"Gazze krizi uluslararası insan hakları hukuku için ne gibi zorluklar ortaya koymaktadır?",
+       options:["Hiçbir zorluk yoktur; mevcut hukuk yeterlidir","Uygulama mekanizmalarının zayıflığı ve siyasi iradenin eksikliği","İnsancıl hukuk sadece devletlerarası savaşlar için geçerlidir","BM bu konuda yetkisizdir"],
+       correct:1,
+       model:"Gazze krizi, uluslararası insan hakları ve insancıl hukukun en temel zorluğunu ortaya koyar: normlar ile uygulama arasındaki uçurum. Cenevre Sözleşmeleri sivillerin korunmasını emreder, ancak uygulama mekanizmalarının bağlayıcılığı siyasi iradeye bağlıdır. Güvenlik Konseyi'ndeki veto mekanizması, hesap verebilirliği engelleyen başlıca yapısal sorundur."}
+    ]
   }
-  nav.querySelectorAll('.sub-btn').forEach(b=>{b.addEventListener('click',()=>{nav.querySelectorAll('.sub-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');wrap.querySelectorAll(':scope > div').forEach(d=>d.style.display='none');document.getElementById(b.dataset.sec).style.display='block';});});
-}
-function buildSorter(){
-  const cont=document.getElementById('sorterItems');const data=shuffle([...SORT_DATA]);const placed={};
-  data.forEach((item,i)=>{const el=document.createElement('div');el.className='sort-item';el.textContent=item.text;el.dataset.idx=i;
-    el.addEventListener('click',()=>{if(el.classList.contains('placed'))return;document.querySelectorAll('.sort-item').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');});cont.appendChild(el);});
-  document.querySelectorAll('.sort-zone').forEach(zone=>{zone.addEventListener('click',()=>{const sel=document.querySelector('.sort-item.selected');if(!sel)return;const idx=parseInt(sel.dataset.idx);sel.classList.remove('selected');sel.classList.add('placed');placed[idx]=zone.dataset.zone;
-    const tag=document.createElement('div');tag.className='sorted-item';tag.textContent=data[idx].text.substring(0,60)+'...';tag.dataset.idx=idx;zone.querySelector('.zone-items').appendChild(tag);});});
-  document.getElementById('checkSorter').addEventListener('click',()=>{if(done.sorter)return;done.sorter=true;let score=0;
-    document.querySelectorAll('.sorted-item').forEach(tag=>{const idx=parseInt(tag.dataset.idx);if(placed[idx]===data[idx].zone){tag.classList.add('correct');score++;}else tag.classList.add('wrong');});
-    addXP(score*10);const res=document.getElementById('sorterResult');const pct=Math.round(score/data.length*100);
-    if(pct>=80)res.innerHTML=`<div class="result-banner great">${score}/${data.length} do\u011fru (${pct}%) \u2014 M\u00fckemmel!</div>`;
-    else if(pct>=50)res.innerHTML=`<div class="result-banner good">${score}/${data.length} do\u011fru (${pct}%) \u2014 \u0130yi \u00e7aba!</div>`;
-    else res.innerHTML=`<div class="result-banner try">${score}/${data.length} do\u011fru (${pct}%) \u2014 Kavramlar\u0131 g\u00f6zden ge\u00e7irin.</div>`;
-    data.forEach(item=>{const ex=document.createElement('div');ex.className='model-answer show';ex.innerHTML=`<strong>"${item.text.substring(0,80)}..."</strong><br>Do\u011fru kategori: <strong>${item.zone.toUpperCase()}</strong><br>${item.explain}`;res.appendChild(ex);});
+};
+
+/* ============  SORT DATA  ============ */
+const SORT_DATA=[
+  {text:"İnsan hakları tamamen Batı icadıdır ve diğer kültürlerde karşılığı yoktur.",cat:"mit",exp:"Her ne kadar modern insan hakları hukuku Batı'da kodifiye edilmiş olsa da, adalet, merhamet ve insan onuru kavramları tüm büyük medeniyet ve dinlerde mevcuttur."},
+  {text:"BM İnsan Hakları Evrensel Beyannamesi hukuki olarak bağlayıcıdır.",cat:"mit",exp:"İHEB bir Genel Kurul kararıdır ve başlı başına hukuki bağlayıcılığı yoktur. Ancak birçok hükmü uluslararası örf ve adet hukuku haline gelmiştir."},
+  {text:"R2P, BM Güvenlik Konseyi'nin onayı olmadan tek taraflı askeri müdahaleye izin verir.",cat:"mit",exp:"R2P doktrininin üçüncü sütunu, kolektif eylemi BM Güvenlik Konseyi kararına bağlar. Tek taraflı müdahale R2P çerçevesinde meşrulaştırılmaz."},
+  {text:"Devlet egemenliği artık mutlak değildir; R2P ile birlikte 'koşullu egemenlik' anlayışı güçlenmiştir.",cat:"gercek",exp:"2005 Dünya Zirvesi'nde kabul edilen R2P, egemenliğin bir ayrıcalık değil sorumluluk olduğunu vurgular. Devlet halkını koruyamazsa egemenlik kalkanı delinilebilir."},
+  {text:"Uluslararası Ceza Mahkemesi (UCM) tüm devletleri yargılama yetkisine sahiptir.",cat:"mit",exp:"UCM yalnızca Roma Statüsü'nü onaylayan devletlerin vatandaşlarını veya BM Güvenlik Konseyi'nin sevk ettiği vakaları yargılayabilir. ABD, Rusya ve Çin taraf değildir."},
+  {text:"Ekonomik ve sosyal haklar, medeni ve siyasi haklar kadar önemlidir.",cat:"gercek",exp:"Viyana Deklarasyonu (1993), tüm insan haklarının evrensel, bölünmez, birbirine bağlı ve birbiriyle ilişkili olduğunu teyit etmiştir."},
+  {text:"Kültürel görelilik, insan haklarının evrenselliğini tamamen çürütür.",cat:"mit",exp:"Kültürel görelilik farklı toplumsal bağlamları anlamaya yardımcı olsa da, işkence, soykırım ve kölelik gibi temel ihlalleri meşrulaştırmak için kullanılamaz."},
+  {text:"İnsan hakları normları ile bunların pratikte uygulanması arasında ciddi bir boşluk vardır.",cat:"gercek",exp:"'Norm-uygulama boşluğu' insan hakları alanının en temel sorunudur. Devletler antlaşmaları onaylar ancak ihlalleri sürer; uygulama mekanizmaları genellikle yetersizdir."},
+  {text:"BM İnsan Hakları Konseyi her zaman tarafsız ve etkili çalışır.",cat:"mit",exp:"İHK siyasallaşma, bölgesel blok oylamaları ve çifte standart eleştirileriyle karşı karşıyadır. Yine de UPR gibi mekanizmalar bir miktar hesap verebilirlik sağlar."},
+  {text:"İnsan hakları ihlallerinin belgelenmesi, uzun vadede hesap verebilirliğe katkı sağlar.",cat:"gercek",exp:"HRW, Amnesty International ve BM soruşturma komisyonlarının belgeleme çalışmaları, geçiş dönemi adaleti süreçlerinde ve uluslararası mahkemelerde kritik delil oluşturur."},
+  {text:"Suriye krizi R2P'nin bir norm olarak öldüğünü kanıtlamıştır.",cat:"karmasik",exp:"Suriye'de R2P uygulanamadı ancak norm tamamen ölmedi. Normatif çerçeve hâlâ mevcuttur; sorun uygulamadadır. Libya (2011) R2P'nin işleyebildiğini göstermiştir."},
+  {text:"Kadın hakları evrensel insan haklarının ayrılmaz bir parçasıdır.",cat:"gercek",exp:"CEDAW (1979) ve Viyana Deklarasyonu (1993) kadın haklarını evrensel insan hakları çerçevesine kesin olarak dahil etmiştir. 'Kadın hakları insan haklarıdır' ifadesi normatif bir ilke haline gelmiştir."},
+  {text:"İnsani müdahale her zaman insani amaçlarla yapılır.",cat:"mit",exp:"Tarihsel olarak 'insani müdahale' etiketi altında yapılan birçok operasyonun arkasında stratejik ve jeopolitik çıkarlar yatmaktadır. Libya müdahalesinin (2011) rejim değişikliğine dönüşmesi buna örnektir."},
+  {text:"AİHM kararları iç hukuku doğrudan değiştirme yetkisine sahiptir.",cat:"karmasik",exp:"AİHM kararları bağlayıcıdır ancak iç hukuku doğrudan değiştirmez. Devletler kararları uygulamakla yükümlüdür; ancak uygulama biçimi devletin takdirine bırakılır. Bakanlar Komitesi uygulama sürecini izler."},
+  {text:"Soğuk Savaş'ın sona ermesiyle insan hakları ihlalleri büyük ölçüde azalmıştır.",cat:"mit",exp:"Soğuk Savaş sonrası insan hakları söylemi güçlenmiş olsa da, ihlaller farklı biçimlerde devam etmiştir. Ruanda soykırımı (1994), Srebrenica katliamı (1995) ve günümüz krizleri bunu kanıtlar."},
+  {text:"Sivil toplum kuruluşları uluslararası insan hakları rejiminin vazgeçilmez aktörleridir.",cat:"gercek",exp:"HRW, Amnesty International, FIDH gibi STK'lar izleme, belgeleme, savunuculuk ve kamuoyu baskısı oluşturma işlevleriyle insan hakları rejiminin kritik bileşenleridir."}
+];
+
+/* ============  THEORY DATA  ============ */
+const THEORY_DATA=[
+  {text:"Devletler insan haklarını ancak ulusal çıkarlarına hizmet ettiğinde destekler.",theory:"Realizm",exp:"Realizm, devletlerin güç ve güvenlik öncelikli hareket ettiğini savunur. İnsan hakları söylemi, stratejik çıkarlara uygun olduğunda araçsal olarak kullanılır."},
+  {text:"Uluslararası antlaşmalar ve kurumlar, devletleri insan hakları normlarına uyma konusunda kısıtlar.",theory:"Liberal Kurumsalcılık",exp:"Liberal kurumsalcılık, uluslararası kurumların işbirliğini kolaylaştırdığını ve normları yaydığını savunur. Antlaşma denetim organları devlet davranışını sınırlar."},
+  {text:"İnsan hakları normları toplumsal etkileşim ve söylem yoluyla inşa edilir ve devlet kimliklerini dönüştürür.",theory:"Konstrüktivizm",exp:"Konstrüktivizm, normların sosyal olarak inşa edildiğini vurgular. 'Norm girişimcileri' ve 'norm kaskadı' süreçleri insan haklarının yayılmasını açıklar (Finnemore & Sikkink)."},
+  {text:"Evrensel insan hakları söylemi, kapitalist sistemi ve küresel eşitsizlikleri meşrulaştırır.",theory:"Marksizm / Eleştirel Teori",exp:"Marksist perspektif, liberal insan hakları söyleminin mülkiyet hakları ve bireysel özgürlükleri ön plana çıkararak yapısal ekonomik eşitsizlikleri gizlediğini savunur."},
+  {text:"Kadın hakları ihlalleri genellikle 'kültürel gelenek' veya 'özel alan' gerekçesiyle görmezden gelinir.",theory:"Feminizm",exp:"Feminist Uİ teorisi, kamusal/özel alan ayrımının kadın hakları ihlallerini görünmez kıldığını savunur. 'Kişisel olan politiktir' ilkesi, ev içi şiddet ve toplumsal cinsiyet eşitsizliğini uluslararası gündemin parçası yapar."},
+  {text:"R2P, güçlü devletlerin zayıf devletlere müdahalesini meşrulaştıran yeni bir emperyalizm biçimidir.",theory:"Post-kolonyalizm",exp:"Post-kolonyalist perspektif, R2P'nin Batılı güçlerin eski sömürge bölgelerine müdahalesini meşrulaştıran 'uygarlaştırma misyonu'nun modern versiyonu olduğunu ileri sürer."},
+  {text:"İnsan Hakları Konseyi'ndeki oy dağılımı, küresel güç dengesini yansıtır.",theory:"Realizm",exp:"Realist bakış açısı, İHK'daki bölgesel blok oylamalarının ve seçici gündem oluşturmanın devletlerin güç politikasının bir yansıması olduğunu vurgular."},
+  {text:"BM antlaşma organlarının periyodik raporlama mekanizmaları, devletleri 'utandırma' yoluyla normlara uymaya teşvik eder.",theory:"Liberal Kurumsalcılık",exp:"'Adlandır ve utandır' (naming and shaming) stratejisi liberal kurumsalcılığın temel araçlarından biridir. Şeffaflık ve kamuoyu baskısı, devlet davranışını yumuşak güçle değiştirmeye çalışır."},
+  {text:"İnsan hakları anlayışı tarihsel süreçte değişir; bugün evrensel kabul edilen normlar bir zamanlar tartışmalıydı.",theory:"Konstrüktivizm",exp:"Konstrüktivizm, normların sabit olmadığını ve tarihsel süreçte evrildiğini savunur. Köleliğin kaldırılması, kadınların oy hakkı ve dekolonizasyon, norm değişiminin örnekleridir."},
+  {text:"Uluslararası insan hakları hukuku, Güney yarımküre halklarının sömürgecilik deneyimlerini yeterince yansıtmaz.",theory:"Post-kolonyalizm",exp:"Post-kolonyalist eleştiri, mevcut insan hakları çerçevesinin tarihsel sömürgeciliğin mirasını — toprak gaspı, kültürel yıkım, ekonomik sömürü — yeterince ele almadığını ve yapısal adalet yerine bireysel haklara odaklandığını savunur."}
+];
+
+/* ============  MATCH DATA  ============ */
+const MATCH_DATA=[
+  {term:"İHEB (1948)",def:"Tüm insanların temel hak ve özgürlüklerini tanımlayan BM Genel Kurul beyannamesi"},
+  {term:"Koruma Sorumluluğu (R2P)",def:"Devletin halkını koruyamadığında uluslararası toplumun kolektif eylem sorumluluğu"},
+  {term:"Kültürel Görelilik",def:"İnsan hakları normlarının kültürel bağlama göre yorumlanması gerektiği görüşü"},
+  {term:"Evrenselcilik",def:"İnsan haklarının tüm insanlar için geçerli, bölünmez ve devredilemez olduğu ilkesi"},
+  {term:"UPR (Evrensel Periyodik İnceleme)",def:"İHK'nın tüm BM üyelerinin insan hakları durumunu periyodik olarak değerlendirmesi"},
+  {term:"CEDAW",def:"Kadınlara Karşı Her Türlü Ayrımcılığın Önlenmesi Sözleşmesi (1979)"},
+  {term:"Geçiş Dönemi Adaleti",def:"Çatışma sonrası toplumlarda hesap verebilirlik, hakikat ve uzlaşma süreçleri"},
+  {term:"Uluslararası Ceza Mahkemesi (UCM)",def:"Soykırım, insanlığa karşı suçlar ve savaş suçlarını yargılayan sürekli uluslararası mahkeme"},
+  {term:"İnsani Müdahale",def:"İnsan hakları ihlallerini durdurmak amacıyla bir devletin iç işlerine dışarıdan askeri güç kullanılması"},
+  {term:"Norm Kaskadı",def:"Finnemore ve Sikkink'in modeli: yeterli sayıda devlet bir normu benimsediğinde hızlı yayılma süreci"}
+];
+
+/* ============  TIMELINE DATA  ============ */
+const TL_DATA=[
+  {year:1215,text:"Magna Carta — İngiltere'de kralın yetkilerinin sınırlandırılması"},
+  {year:1789,text:"Fransız İnsan ve Yurttaş Hakları Bildirisi"},
+  {year:1948,text:"BM İnsan Hakları Evrensel Beyannamesi kabul edildi"},
+  {year:1948,text:"Soykırım Suçunun Önlenmesi ve Cezalandırılması Sözleşmesi"},
+  {year:1950,text:"Avrupa İnsan Hakları Sözleşmesi imzalandı"},
+  {year:1966,text:"ICCPR ve ICESCR — iki temel BM insan hakları sözleşmesi"},
+  {year:1979,text:"CEDAW — Kadınlara Karşı Ayrımcılığın Önlenmesi Sözleşmesi"},
+  {year:1993,text:"Viyana Dünya İnsan Hakları Konferansı ve Viyana Deklarasyonu"},
+  {year:1994,text:"Ruanda Soykırımı — yaklaşık 800.000 kişinin öldürülmesi"},
+  {year:1995,text:"Srebrenica Katliamı — Bosna'da 8.000'den fazla Boşnak öldürüldü"},
+  {year:1998,text:"Roma Statüsü — Uluslararası Ceza Mahkemesi'nin kuruluş antlaşması"},
+  {year:2005,text:"BM Dünya Zirvesi'nde Koruma Sorumluluğu (R2P) kabul edildi"},
+  {year:2006,text:"BM İnsan Hakları Konseyi kuruldu (İnsan Hakları Komisyonu'nun yerine)"},
+  {year:2011,text:"Libya'da R2P kapsamında BM onaylı askeri müdahale"},
+  {year:2025,text:"BM Genel Sekreteri R2P 20. Yıl Raporu; Global Centre for R2P Filistin çağrısı"}
+];
+
+/* ============  DEBATE DATA  ============ */
+const DEBATE_DATA=[
+  {prompt:"İnsan hakları gerçekten evrensel midir, yoksa Batılı bir ihracat ürünü müdür?",hint:"Evrenselcilik ile kültürel görelilik arasındaki gerilimi, Asya değerleri tartışmasını, İHEB'in hazırlanma sürecindeki farklı kültürel katkıları ve Viyana Deklarasyonu'nu değerlendirin."},
+  {prompt:"İnsani müdahale ne zaman (eğer varsa) meşrudur?",hint:"Devlet egemenliği ile insan hakları arasındaki gerilimi, R2P doktrinini, Libya ve Suriye örneklerini, BM Güvenlik Konseyi'nin rolünü ve 'seçici müdahale' sorununu tartışın."},
+  {prompt:"R2P neden tutarlı biçimde uygulanamamaktadır?",hint:"Veto mekanizmasını, büyük güç çıkarlarını, Libya müdahalesinin sonuçlarını, Suriye'deki başarısızlığı ve normun geleceğini ele alın."},
+  {prompt:"İnsan hakları rejimi devlet davranışını gerçekten değiştirebilir mi?",hint:"'Norm-uygulama boşluğu'nu, utandırma stratejisinin etkinliğini, antlaşma organlarının gücünü ve STK'ların rolünü değerlendirin."},
+  {prompt:"AİHM kararları Kıbrıs sorununa nasıl bir katkı sağlamıştır?",hint:"Loizidou v. Türkiye, Varnava ve diğerleri v. Türkiye kararlarını, mülkiyet hakları ve kayıp şahıslar meselesini, CMP'nin rolünü tartışın."},
+  {prompt:"Gazze krizi, uluslararası insan hakları hukukunun sınırlarını nasıl ortaya koymaktadır?",hint:"Uygulama mekanizmalarının zayıflığını, Güvenlik Konseyi'ndeki siyasi tıkanıklığı, sivil koruma normlarını ve hesap verebilirlik sorununu ele alın."},
+  {prompt:"Üçüncü kuşak haklar (dayanışma hakları) birinci ve ikinci kuşak haklar kadar önemli midir?",hint:"Kalkınma hakkı, temiz çevre hakkı, barış hakkı kavramlarını; ekonomik kalkınma ve insan hakları ilişkisini; Küresel Güney'in taleplerini değerlendirin."},
+  {prompt:"İnsan hakları eğitimi toplumsal değişimin motoru olabilir mi?",hint:"Eğitimin farkındalık yaratma ve norm içselleştirme işlevini, formal ve informal eğitim kanallarını, sivil toplumun rolünü ve eğitimin sınırlarını tartışın."}
+];
+
+/* ============  BUILD FUNCTIONS  ============ */
+
+/* --- Landing --- */
+document.getElementById('startBtn').addEventListener('click',function(){
+  document.getElementById('landing').style.display='none';
+  document.getElementById('tabBar').style.display='flex';
+  document.querySelector('[data-tab="videos"]').click();
+});
+
+/* --- QR Code --- */
+(function(){
+  try{
+    var c=QRCode.createCanvas(location.href);
+    document.getElementById('qr-container').appendChild(c);
+  }catch(e){}
+})();
+
+/* --- Tabs --- */
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+    btn.classList.add('active');
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+    var target=document.getElementById('panel-'+btn.dataset.tab);
+    if(target) target.classList.add('active');
   });
-}
-function buildTheory(){
-  const cont=document.getElementById('theoryItems');const theories=["Realizm","Liberal Kurumsalc\u0131l\u0131k","Konstr\u00fcktivizm","Marksizm / Ele\u015ftirel Teori","Feminizm","Post-koloniyalizm"];
-  const data=shuffle([...THEORY_DATA]);const answers={};
-  data.forEach((item,i)=>{const card=document.createElement('div');card.className='dim-card';card.id='th-'+i;
-    let pills=theories.map(t=>`<div class="dim-pill" data-theory="${t}">${t}</div>`).join('');
-    card.innerHTML=`<div class="scenario">${item.text}</div><div class="dim-options">${pills}</div><div class="dim-explain" id="thex-${i}">${item.explain}</div>`;cont.appendChild(card);
-    setTimeout(()=>{card.querySelectorAll('.dim-pill').forEach(p=>{p.addEventListener('click',()=>{card.querySelectorAll('.dim-pill').forEach(x=>x.classList.remove('selected'));p.classList.add('selected');answers[i]=p.dataset.theory;});});},0);
+});
+
+/* --- Videos --- */
+(function(){
+  var nav=document.getElementById('vidSubNav');
+  var container=document.getElementById('vidSections');
+  var keys=Object.keys(VID_DATA);
+  keys.forEach(function(k,i){
+    var sec=VID_DATA[k];
+    var btn=document.createElement('button');
+    btn.className='sub-btn'+(i===0?' active':'');
+    btn.dataset.sec=k;
+    btn.textContent=sec.title;
+    nav.appendChild(btn);
+
+    var div=document.createElement('div');
+    div.id='vsec-'+k;
+    div.style.display=i===0?'block':'none';
+
+    var hdr=document.createElement('div');
+    hdr.className='section-header';
+    hdr.innerHTML='<h3>'+sec.title+'</h3><p>'+sec.desc+'</p>';
+    div.appendChild(hdr);
+
+    sec.items.forEach(function(item,idx){
+      var card=document.createElement('div');
+      card.className='card';
+      var h='<h4>'+item.title+'</h4>';
+      if(item.type==='video'){
+        h+='<div class="video-wrap"><iframe src="https://www.youtube.com/embed/'+item.yt+'" allowfullscreen loading="lazy"></iframe></div>';
+      }
+      if(item.type==='case'){
+        h+='<p style="font-size:.88em;line-height:1.6;margin-bottom:12px">'+item.text+'</p>';
+      }
+      if(item.q){
+        h+='<div class="reflect-q"><strong>Soru:</strong> '+item.q+'</div>';
+        h+='<div class="reflect-options" data-key="'+k+'-'+idx+'">';
+        item.options.forEach(function(o,oi){
+          h+='<div class="reflect-opt" data-idx="'+oi+'">'+o+'</div>';
+        });
+        h+='</div>';
+        h+='<button class="reflect-btn" data-key="'+k+'-'+idx+'">Cevabı Kontrol Et</button>';
+        h+='<div class="model-answer" id="ma-'+k+'-'+idx+'"><strong>Model Cevap:</strong> '+item.model+'</div>';
+      }
+      card.innerHTML=h;
+      div.appendChild(card);
+    });
+    container.appendChild(div);
   });
-  document.getElementById('checkTheory').addEventListener('click',()=>{if(done.theory)return;done.theory=true;let score=0;
-    data.forEach((item,i)=>{const card=document.getElementById('th-'+i);card.querySelectorAll('.dim-pill').forEach(p=>{if(p.dataset.theory===item.theory)p.classList.add('correct');else if(p.classList.contains('selected'))p.classList.add('wrong');p.style.pointerEvents='none';});
-      if(answers[i]===item.theory){score++;addStreak();}else{breakStreak();}document.getElementById('thex-'+i).classList.add('show');});
-    addXP(score*15);const res=document.getElementById('theoryResult');const pct=Math.round(score/data.length*100);
-    if(pct>=80)res.innerHTML=`<div class="result-banner great">${score}/${data.length} do\u011fru (${pct}%) \u2014 M\u00fckemmel!</div>`;
-    else if(pct>=50)res.innerHTML=`<div class="result-banner good">${score}/${data.length} do\u011fru (${pct}%) \u2014 \u0130yi \u00e7aba!</div>`;
-    else res.innerHTML=`<div class="result-banner try">${score}/${data.length} do\u011fru (${pct}%) \u2014 Teorileri g\u00f6zden ge\u00e7irin.</div>`;
+
+  /* sub-nav clicks */
+  nav.addEventListener('click',function(e){
+    if(!e.target.classList.contains('sub-btn')) return;
+    nav.querySelectorAll('.sub-btn').forEach(function(b){b.classList.remove('active')});
+    e.target.classList.add('active');
+    keys.forEach(function(k){
+      document.getElementById('vsec-'+k).style.display=k===e.target.dataset.sec?'block':'none';
+    });
   });
-}
-function buildMatch(){
-  const grid=document.getElementById('matchGrid');const terms=shuffle([...MATCH_DATA]);const defs=shuffle([...MATCH_DATA]);const all=[];
-  terms.forEach(m=>all.push({type:'term',text:m.term,pair:m.def}));defs.forEach(m=>all.push({type:'def',text:m.def,pair:m.term}));
-  const shuffled=shuffle(all);let sel=null,matched=0;
-  shuffled.forEach((item,i)=>{const el=document.createElement('div');el.className='match-item';el.textContent=item.text;el.dataset.idx=i;
-    el.addEventListener('click',()=>{if(el.classList.contains('matched'))return;
-      if(!sel){sel={el,item};el.classList.add('sel');}else{if(sel.el===el){sel.el.classList.remove('sel');sel=null;return;}
-        if(sel.item.type===item.type){sel.el.classList.remove('sel');sel={el,item};el.classList.add('sel');return;}
-        if((sel.item.type==='term'&&sel.item.pair===item.text)||(sel.item.type==='def'&&item.pair===sel.item.text)){sel.el.classList.add('matched');sel.el.classList.remove('sel');el.classList.add('matched');matched++;addXP(15);addStreak();
-          if(matched===MATCH_DATA.length){document.getElementById('matchResult').innerHTML='<div class="result-banner great">T\u00fcm\u00fc e\u015fle\u015ftirildi! Tebrikler!</div>';done.match=true;}}
-        else{el.classList.add('wrong-flash');sel.el.classList.add('wrong-flash');sel.el.classList.remove('sel');breakStreak();setTimeout(()=>{el.classList.remove('wrong-flash');},500);}sel=null;}});
-    grid.appendChild(el);});
-}
-function buildTimeline(){
-  const cont=document.getElementById('tlItems');const data=shuffle([...TL_DATA]);
-  data.forEach((item,i)=>{const el=document.createElement('div');el.className='tl-item';el.draggable=true;el.dataset.year=item.year;el.dataset.idx=i;
-    el.innerHTML=`<span class="handle">\u2195</span><span>${item.text}</span>`;
-    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);el.classList.add('dragging');});
-    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
-    el.addEventListener('dragover',e=>{e.preventDefault();el.style.borderTopColor='var(--gold)';});
-    el.addEventListener('dragleave',()=>el.style.borderTopColor='');
-    el.addEventListener('drop',e=>{e.preventDefault();el.style.borderTopColor='';const fromIdx=parseInt(e.dataTransfer.getData('text/plain'));const fromEl=cont.children[fromIdx];const toIdx=[...cont.children].indexOf(el);if(fromIdx<toIdx)el.after(fromEl);else el.before(fromEl);});
-    cont.appendChild(el);});
-  document.getElementById('checkTL').addEventListener('click',()=>{if(done.timeline)return;done.timeline=true;const sorted=[...TL_DATA].sort((a,b)=>a.year-b.year);const items=[...cont.children];let score=0;
-    items.forEach((el,i)=>{const yr=parseInt(el.dataset.year);if(yr===sorted[i].year){el.classList.add('correct');score++;}else el.classList.add('wrong');el.draggable=false;el.querySelector('.handle').textContent=sorted[i].year;});
-    if(score===sorted.length){addXP(20);addStreak();}else{breakStreak();}const pct=Math.round(score/sorted.length*100);const res=document.getElementById('tlResult');
-    if(pct>=80)res.innerHTML=`<div class="result-banner great">${score}/${sorted.length} do\u011fru konumda (${pct}%) \u2014 M\u00fckemmel!</div>`;
-    else if(pct>=50)res.innerHTML=`<div class="result-banner good">${score}/${sorted.length} do\u011fru konumda (${pct}%) \u2014 \u0130yi \u00e7aba!</div>`;
-    else res.innerHTML=`<div class="result-banner try">${score}/${sorted.length} do\u011fru konumda (${pct}%) \u2014 Zaman \u00e7izelgesini g\u00f6zden ge\u00e7irin.</div>`;
+
+  /* reflect options */
+  container.addEventListener('click',function(e){
+    if(e.target.classList.contains('reflect-opt')){
+      var wrap=e.target.parentElement;
+      if(wrap.dataset.done) return;
+      wrap.querySelectorAll('.reflect-opt').forEach(function(o){o.classList.remove('selected')});
+      e.target.classList.add('selected');
+    }
+    if(e.target.classList.contains('reflect-btn')){
+      var key=e.target.dataset.key;
+      var wrap=document.querySelector('.reflect-options[data-key="'+key+'"]');
+      if(wrap.dataset.done) return;
+      var sel=wrap.querySelector('.reflect-opt.selected');
+      if(!sel) return;
+      var parts=key.split('-');
+      var sec=VID_DATA[parts[0]];
+      var item=sec.items[parseInt(parts[1])];
+      var chosen=parseInt(sel.dataset.idx);
+      wrap.dataset.done='1';
+      e.target.disabled=true;
+      if(chosen===item.correct){
+        sel.classList.add('correct');
+        addXP(10);
+      }else{
+        sel.classList.add('wrong');
+        wrap.querySelectorAll('.reflect-opt')[item.correct].classList.add('correct');
+      }
+      document.getElementById('ma-'+key).classList.add('show');
+    }
   });
-}
-function buildDebate(){const cont=document.getElementById('debateItems');DEBATE_DATA.forEach(item=>{const card=document.createElement('div');card.className='card';card.innerHTML=`<div class="debate-prompt">${item.prompt}</div>`;cont.appendChild(card);});}
-function buildStats(){
-  const grid=document.getElementById('statGrid');grid.innerHTML='';
-  const vidCount=Object.keys(VID_DATA).reduce((s,k)=>s+VID_DATA[k].items.length,0);const vidDone=Object.keys(done.videos).length;
-  [{lbl:'Toplam XP',num:xp},{lbl:'En Y\u00fcksek Seri',num:maxStreak},{lbl:'Videolar / Vakalar',num:`${vidDone}/${vidCount}`},{lbl:'S\u0131ralay\u0131c\u0131',num:done.sorter?'\u2705':'\u274c'},{lbl:'Teori',num:done.theory?'\u2705':'\u274c'},{lbl:'E\u015fle\u015ftirme',num:done.match?'\u2705':'\u274c'},{lbl:'Zaman \u00c7izelgesi',num:done.timeline?'\u2705':'\u274c'}].forEach(a=>{
-    const c=document.createElement('div');c.className='stat-card';c.innerHTML=`<span class="num">${a.num}</span><span class="lbl">${a.lbl}</span>`;grid.appendChild(c);});
-  const prog=document.getElementById('activityProgress');const total=4+(vidCount>0?1:0);let completed=(done.sorter?1:0)+(done.theory?1:0)+(done.match?1:0)+(done.timeline?1:0)+(vidDone===vidCount&&vidCount>0?1:0);const pct=Math.round(completed/total*100);
-  prog.innerHTML=`<h3>Aktivite Tamamlanma</h3><div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div><p style="font-size:.85em;color:#666">${pct}% tamamland\u0131 (${completed}/${total} aktivite)</p>`;
-}
-document.getElementById('resetBtn').addEventListener('click',()=>{if(confirm('T\u00fcm ilerleme s\u0131f\u0131rlans\u0131n m\u0131? Bu geri al\u0131namaz.')){location.reload();}});
-buildLanding();initTabs();buildVideos();buildSorter();buildTheory();buildMatch();buildTimeline();buildDebate();
+})();
+
+/* --- Sorter --- */
+(function(){
+  var items=shuffle(SORT_DATA);
+  var pool=document.getElementById('sortItems');
+  var zones=document.getElementById('sortZones');
+  var selected=null;
+
+  items.forEach(function(d,i){
+    var el=document.createElement('div');
+    el.className='sort-item';
+    el.textContent=d.text;
+    el.dataset.idx=i;
+    el.addEventListener('click',function(){
+      if(el.classList.contains('placed')) return;
+      document.querySelectorAll('.sort-item').forEach(function(s){s.style.borderColor=''});
+      el.style.borderColor='var(--navy)';
+      selected=i;
+    });
+    pool.appendChild(el);
+  });
+
+  zones.querySelectorAll('.sort-zone').forEach(function(zone){
+    zone.addEventListener('click',function(){
+      if(selected===null) return;
+      var el=pool.querySelector('[data-idx="'+selected+'"]');
+      if(el.classList.contains('placed')) return;
+      el.classList.add('placed');
+      var chip=document.createElement('div');
+      chip.className='sorted-item';
+      chip.textContent=items[selected].text;
+      chip.dataset.idx=selected;
+      chip.dataset.cat=zone.dataset.cat;
+      zone.appendChild(chip);
+      selected=null;
+    });
+  });
+
+  document.getElementById('checkSort').addEventListener('click',function(){
+    var chips=zones.querySelectorAll('.sorted-item');
+    var correct=0;
+    chips.forEach(function(c){
+      var idx=parseInt(c.dataset.idx);
+      if(c.dataset.cat===items[idx].cat){
+        c.classList.add('correct');
+        correct++;
+      }else{
+        c.classList.add('wrong');
+        c.title='Doğrusu: '+items[idx].cat.toUpperCase()+' — '+items[idx].exp;
+      }
+    });
+    addXP(correct*10);
+    var pct=Math.round(correct/items.length*100);
+    var cls=pct>=80?'great':pct>=50?'good':'try';
+    document.getElementById('sortResult').innerHTML='<div class="result-banner '+cls+'">'+correct+'/'+items.length+' doğru ('+pct+'%)</div>';
+  });
+})();
+
+/* --- Theory Identifier --- */
+(function(){
+  var items=shuffle(THEORY_DATA);
+  var container=document.getElementById('theoryItems');
+  var theories=[...new Set(THEORY_DATA.map(function(d){return d.theory}))];
+
+  items.forEach(function(d,i){
+    var card=document.createElement('div');
+    card.className='dim-card';
+    card.innerHTML='<div class="scenario">'+d.text+'</div><div class="dim-options" data-idx="'+i+'">'+
+      theories.map(function(t){return '<div class="dim-pill" data-t="'+t+'">'+t+'</div>'}).join('')+
+      '</div><div class="dim-explain" id="thexp-'+i+'">'+d.exp+'</div>';
+    container.appendChild(card);
+  });
+
+  container.addEventListener('click',function(e){
+    if(!e.target.classList.contains('dim-pill')) return;
+    var wrap=e.target.parentElement;
+    if(wrap.dataset.done) return;
+    wrap.querySelectorAll('.dim-pill').forEach(function(p){p.classList.remove('selected')});
+    e.target.classList.add('selected');
+  });
+
+  document.getElementById('checkTheory').addEventListener('click',function(){
+    var correct=0;
+    items.forEach(function(d,i){
+      var wrap=document.querySelector('.dim-options[data-idx="'+i+'"]');
+      if(wrap.dataset.done) return;
+      wrap.dataset.done='1';
+      var sel=wrap.querySelector('.dim-pill.selected');
+      if(sel&&sel.dataset.t===d.theory){
+        sel.classList.add('correct');
+        correct++;
+        addXP(15);
+      }else{
+        if(sel) sel.classList.add('wrong');
+        wrap.querySelectorAll('.dim-pill').forEach(function(p){if(p.dataset.t===d.theory) p.classList.add('correct')});
+      }
+      document.getElementById('thexp-'+i).classList.add('show');
+    });
+    var pct=Math.round(correct/items.length*100);
+    var cls=pct>=80?'great':pct>=50?'good':'try';
+    document.getElementById('theoryResult').innerHTML='<div class="result-banner '+cls+'">'+correct+'/'+items.length+' doğru ('+pct+'%)</div>';
+  });
+})();
+
+/* --- Match --- */
+(function(){
+  var grid=document.getElementById('matchGrid');
+  var pairs=shuffle(MATCH_DATA);
+  var terms=shuffle(pairs.map(function(p,i){return {text:p.term,type:'term',idx:i}}));
+  var defs=shuffle(pairs.map(function(p,i){return {text:p.def,type:'def',idx:i}}));
+  var all=[];
+  terms.forEach(function(t){all.push(t)});
+  defs.forEach(function(d){all.push(d)});
+  /* interleave: terms left, defs right */
+  for(var i=0;i<terms.length;i++){
+    var t=document.createElement('div');
+    t.className='match-item';
+    t.textContent=terms[i].text;
+    t.dataset.type='term';
+    t.dataset.idx=terms[i].idx;
+    grid.appendChild(t);
+    var d=document.createElement('div');
+    d.className='match-item';
+    d.textContent=defs[i].text;
+    d.dataset.type='def';
+    d.dataset.idx=defs[i].idx;
+    grid.appendChild(d);
+  }
+  var first=null;
+  grid.addEventListener('click',function(e){
+    var el=e.target;
+    if(!el.classList.contains('match-item')||el.classList.contains('matched')) return;
+    if(!first){
+      el.classList.add('sel');
+      first=el;
+    }else{
+      if(first===el){first.classList.remove('sel');first=null;return}
+      if(first.dataset.type===el.dataset.type){first.classList.remove('sel');first=el;el.classList.add('sel');return}
+      if(first.dataset.idx===el.dataset.idx){
+        first.classList.remove('sel');first.classList.add('matched');
+        el.classList.add('matched');
+        addXP(15);
+      }else{
+        el.classList.add('wrong-flash');
+        first.classList.add('wrong-flash');
+        var a=first;
+        setTimeout(function(){a.classList.remove('wrong-flash','sel');el.classList.remove('wrong-flash')},500);
+      }
+      first=null;
+    }
+  });
+})();
+
+/* --- Timeline --- */
+(function(){
+  var container=document.getElementById('tlItems');
+  var items=shuffle(TL_DATA);
+  var dragIdx=null;
+
+  function render(){
+    container.innerHTML='';
+    items.forEach(function(d,i){
+      var el=document.createElement('div');
+      el.className='tl-item';
+      el.draggable=true;
+      el.dataset.idx=i;
+      el.innerHTML='<span class="handle">☰</span> '+d.text;
+      el.addEventListener('dragstart',function(e){dragIdx=i;el.classList.add('dragging')});
+      el.addEventListener('dragend',function(){el.classList.remove('dragging')});
+      el.addEventListener('dragover',function(e){e.preventDefault()});
+      el.addEventListener('drop',function(e){
+        e.preventDefault();
+        if(dragIdx===null||dragIdx===i) return;
+        var moved=items.splice(dragIdx,1)[0];
+        items.splice(i,0,moved);
+        dragIdx=null;
+        render();
+      });
+      /* touch support */
+      el.addEventListener('touchstart',function(e){dragIdx=i},{passive:true});
+      el.addEventListener('touchend',function(e){
+        var touch=e.changedTouches[0];
+        var target=document.elementFromPoint(touch.clientX,touch.clientY);
+        if(target){
+          var tgt=target.closest('.tl-item');
+          if(tgt&&tgt.dataset.idx!=dragIdx){
+            var j=parseInt(tgt.dataset.idx);
+            var moved=items.splice(dragIdx,1)[0];
+            items.splice(j,0,moved);
+            render();
+          }
+        }
+        dragIdx=null;
+      });
+      container.appendChild(el);
+    });
+  }
+  render();
+
+  document.getElementById('checkTL').addEventListener('click',function(){
+    var sorted=[...TL_DATA].sort(function(a,b){return a.year-b.year});
+    var correct=0;
+    container.querySelectorAll('.tl-item').forEach(function(el,i){
+      if(items[i].year===sorted[i].year&&items[i].text===sorted[i].text){
+        el.classList.add('correct');
+        correct++;
+      }else{
+        el.classList.add('wrong');
+      }
+    });
+    if(correct===items.length) addXP(20);
+    var pct=Math.round(correct/items.length*100);
+    var cls=pct>=80?'great':pct>=50?'good':'try';
+    document.getElementById('tlResult').innerHTML='<div class="result-banner '+cls+'">'+correct+'/'+items.length+' doğru sırada ('+pct+'%)</div>';
+  });
+})();
+
+/* --- Debate --- */
+(function(){
+  var container=document.getElementById('debatePrompts');
+  DEBATE_DATA.forEach(function(d){
+    var div=document.createElement('div');
+    div.className='debate-prompt';
+    div.innerHTML='<strong>Tartışma Sorusu:</strong> '+d.prompt+'<br><br><em style="font-size:.82em;color:#666">İpucu: '+d.hint+'</em>';
+    container.appendChild(div);
+  });
+})();
+
+/* --- Stats --- */
+(function(){
+  var grid=document.getElementById('statGrid');
+  grid.innerHTML='<div class="stat-card"><span class="num" id="sXP">'+xp+'</span><span class="lbl">Toplam XP</span></div>'+
+    '<div class="stat-card"><span class="num" id="sStreak">'+streak+'</span><span class="lbl">Seri</span></div>'+
+    '<div class="stat-card"><span class="num">7</span><span class="lbl">Aktivite</span></div>';
+})();
+
+/* --- Reset --- */
+document.getElementById('resetBtn').addEventListener('click',function(){
+  if(confirm('Tüm ilerlemenizi sıfırlamak istediğinize emin misiniz?')){
+    localStorage.removeItem(LS_KEY);
+    location.reload();
+  }
+});
 </script>
 </body>
 </html>
 
-};
 
